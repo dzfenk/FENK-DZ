@@ -1,0 +1,65 @@
+name: Deploy FENK
+
+on:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare website
+        run: |
+          rm -rf site
+          mkdir site
+
+          ZIP_FILE=$(find . -maxdepth 1 -type f -name "*.zip" | head -n 1)
+
+          if [ -z "$ZIP_FILE" ]; then
+            echo "No ZIP file found"
+            exit 1
+          fi
+
+          unzip -o "$ZIP_FILE" -d site
+
+          if [ -f "site/index.html" ]; then
+            echo "Website ready"
+          else
+            INDEX=$(find site -name index.html -type f | head -n 1)
+            if [ -z "$INDEX" ]; then
+              echo "index.html not found"
+              exit 1
+            fi
+
+            ROOT=$(dirname "$INDEX")
+            cp -r "$ROOT"/. site/
+          fi
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
