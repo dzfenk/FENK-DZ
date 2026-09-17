@@ -39,6 +39,8 @@ jobs:
 
           unzip -o "$ZIP_FILE" -d site
 
+          find . -maxdepth 1 -type f -name "google*.html" -exec cp {} site/ \;
+
           if [ -f "site/index.html" ]; then
             echo "Website ready"
           else
