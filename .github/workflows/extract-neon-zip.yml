@@ -1,0 +1,39 @@
+name: Extract FENK ZIP
+
+on:
+  push:
+    branches:
+      - neon-auth-test
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: neon-auth-test
+
+      - name: Extract ZIP
+        run: |
+          ZIP_FILE=$(find . -maxdepth 1 -type f -name "FENK-NEON-AUTH-INTEGRATION-STAGE1*.zip" | head -n 1)
+          if [ -z "$ZIP_FILE" ]; then
+            echo "ZIP file not found"
+            exit 1
+          fi
+          mkdir -p extracted
+          unzip -o "$ZIP_FILE" -d extracted
+          rm -rf extracted/.github
+          cp -r extracted/. ./
+          rm -rf extracted
+          rm -f "$ZIP_FILE"
+
+      - name: Save extracted files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || git commit -m "Extract FENK integration ZIP"
+          git push origin HEAD:neon-auth-test
