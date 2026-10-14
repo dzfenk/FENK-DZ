@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>FENK Marketplace 🛍️</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--g:#063d33;--g2:#087c5b;--mint:#eaf8f3;--line:#dbe9e4;--ink:#173c4c;--muted:#6d7d79;--red:#d92d4c}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f5faf8;color:var(--ink);font-family:Arial,"Noto Sans Arabic",sans-serif}a{text-decoration:none;color:inherit}.wrap{width:min(1180px,calc(100% - 24px));margin:auto}
+.topbar{height:52px;background:#032c25;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;z-index:20}.brand{font-size:19px;font-weight:1000}.brand span{color:#19d394}.back{border:1px solid #ffffff33;border-radius:10px;padding:8px 11px;font-size:11px}
+.hero{margin:16px 0 12px;background:linear-gradient(135deg,#063d33,#087c5b);border-radius:20px;color:#fff;padding:22px 18px;box-shadow:0 15px 35px #063d331c}.hero h1{margin:0 0 7px;font-size:28px}.hero p{margin:0;color:#d8f4eb;font-size:12px;line-height:1.8}.hero-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}.hero-actions a{background:#fff;color:#075d47;padding:10px 13px;border-radius:10px;font-size:11px;font-weight:900}.hero-actions a.secondary{background:#ffffff12;color:#fff;border:1px solid #ffffff33}
+.categories{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin:12px 0}.cat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 8px;text-align:center;font-weight:900;font-size:11px;box-shadow:0 5px 16px #063d3308;transition:.2s}.cat:hover,.cat.active{border-color:#10aa7a;transform:translateY(-2px)}.cat .ico{font-size:24px;display:block;margin-bottom:5px}
+.publish-card{margin:16px 0;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;align-items:center;justify-content:space-between;gap:12px}.publish-card h2{font-size:16px;margin:0 0 4px}.publish-card p{font-size:10px;color:var(--muted);margin:0}.publish-btn{border:0;background:linear-gradient(135deg,#0b9a6b,#087c5b);color:#fff;border-radius:11px;padding:11px 14px;font-weight:900;white-space:nowrap;cursor:pointer}
+.head{display:flex;justify-content:space-between;align-items:end;margin:20px 0 10px}.head h2{margin:0;font-size:20px}.head small{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}.marketplace-card .delete-own-ad{position:relative;z-index:2}.card{background:#fff;border:1px solid var(--line);border-radius:15px;overflow:hidden}.card img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:#eef5f2}.marketplace-card{position:relative}.marketplace-card-link{display:block}.marketplace-card .body{padding:9px 10px 11px}.marketplace-card .body h3{font-size:13px;margin:0 0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.price-chip{display:inline-flex!important;font-size:11px!important;margin:0!important}.no-image{aspect-ratio:1/1;display:grid;place-items:center;background:#eaf8f3;font-size:38px}.marketplace-card .delete-own-ad{margin:0 9px 9px}.body{padding:11px}.type{font-size:9px;color:#087c5b;font-weight:900}.body h3{font-size:13px;margin:5px 0;line-height:1.5}.body p{font-size:10px;color:var(--muted);line-height:1.7;margin:0;min-height:34px}.contact{display:inline-block;margin-top:8px;background:var(--mint);color:#075d47;border-radius:8px;padding:7px 9px;font-size:9px;font-weight:900}
+.empty{grid-column:1/-1;background:#fff;border:1px dashed #cfe0da;border-radius:15px;text-align:center;padding:28px;color:var(--muted);font-size:11px}
+.prices{background:#f0faf6;border:1px solid #d7ebe4;border-radius:13px;padding:10px;margin-top:9px;color:#075d47}.prices b{font-size:11px;color:#075d47}.prices .chips{color:#075d47}.prices .chip{color:#075d47}.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}.chip{background:#fff;border:1px solid #dbe9e4;border-radius:999px;padding:6px 8px;font-size:9px;font-weight:800}
+.modal{display:none;position:fixed;inset:0;background:#0009;z-index:100;align-items:flex-end;justify-content:center;padding:8px}.modal.show{display:flex}.sheet{background:#fff;width:min(720px,100%);max-height:94vh;overflow:auto;border-radius:20px 20px 0 0;padding:16px}.close{float:left;border:0;background:#eef2f0;border-radius:50%;width:34px;height:34px;font-size:20px;cursor:pointer}.form{display:grid;grid-template-columns:1fr 1fr;gap:9px;clear:both;padding-top:8px}.field{font-size:10px;font-weight:900}.field.full{grid-column:1/-1}.field input,.field textarea,.field select{width:100%;margin-top:5px;padding:10px;border:1px solid #d6e2de;border-radius:9px;font:inherit}.field textarea{min-height:80px}.pay{grid-column:1/-1;background:#f2faf7;border:1px solid #d7ebe4;padding:10px;border-radius:11px;font-size:10px;line-height:1.7}.submit{grid-column:1/-1;border:0;background:#087c5b;color:#fff;border-radius:10px;padding:12px;font-weight:900;cursor:pointer}.msg{grid-column:1/-1;font-size:11px;font-weight:800;min-height:18px}
+@media(max-width:800px){.categories{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.wrap{width:min(100% - 18px,1180px)}.topbar{height:48px}.brand{font-size:17px}.hero{padding:18px 14px;border-radius:16px}.hero h1{font-size:23px}.hero p{font-size:10px}.categories{grid-template-columns:repeat(2,1fr);gap:7px}.cat{padding:11px 6px}.publish-card{align-items:flex-start}.publish-card h2{font-size:14px}.publish-btn{padding:9px 10px;font-size:10px}.grid{gap:8px}.body{padding:9px}.body h3{font-size:11px}.form{grid-template-columns:1fr}.field.full,.pay,.submit,.msg{grid-column:auto}}
+
+/* V90 Marketplace visual category cards */
+.categories{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:15px 0 18px}
+.cat{background:#fff;border:1px solid #dce9e4;border-radius:18px;padding:0 0 11px;text-align:center;font-weight:900;font-size:12px;overflow:hidden;box-shadow:0 7px 20px rgba(6,61,51,.07);transition:transform .18s,border-color .18s,box-shadow .18s}
+.cat:hover,.cat.active{border-color:#10b981;transform:translateY(-2px);box-shadow:0 10px 25px rgba(6,61,51,.12)}
+.cat img{display:block;width:100%;height:105px;object-fit:cover;background:#eaf5f1}
+.cat span{display:block;padding:9px 5px 0;color:#173c4c}
+@media(max-width:600px){.categories{grid-template-columns:repeat(2,1fr);gap:9px}.cat img{height:94px}.cat{border-radius:15px;font-size:11px}}
+.hero{padding:25px 18px;border-radius:22px;background:linear-gradient(135deg,#063d33,#087c5b 70%,#10a879);position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:190px;height:190px;border-radius:50%;background:#fff1;right:-70px;top:-70px}
+.publish-card{border-radius:18px;padding:15px 16px}
+
+
+.details-panel{grid-column:1/-1;background:#f7fbf9;border:1px solid #d9e9e4;border-radius:12px;padding:11px;display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.details-panel .detail-title{grid-column:1/-1;font-size:12px;font-weight:1000;color:#075d47}
+.details-panel label{font-size:10px;font-weight:900}.details-panel input,.details-panel textarea,.details-panel select{width:100%;margin-top:4px;padding:9px;border:1px solid #d6e2de;border-radius:9px;font:inherit;background:#fff}.details-panel .wide{grid-column:1/-1}.payment-account{margin-top:8px;padding:10px;background:#fff;border:1px dashed #b9d8ce;border-radius:10px;color:#075d47;line-height:1.8}
+@media(max-width:600px){.details-panel{grid-template-columns:1fr}.details-panel .wide{grid-column:auto}}
+
+
+.optional-label{font-size:9px;color:#0a8a64;font-weight:800;margin-right:4px}
+.field input[type=file]{background:#fbfdfc}
+<style>/* V94 fixes */
+.prices,.prices b,.prices .chip{color:#075d47 !important}
+.prices{background:#f0faf6 !important;opacity:1 !important}
+.prices .chip{background:#fff !important;border-color:#bfe4d7 !important;display:inline-flex;align-items:center;min-height:28px}
+.cat{cursor:pointer;text-decoration:none}
+.cat img{width:100%;height:132px;object-fit:cover;display:block;border-radius:12px 12px 0 0}
+@media(max-width:520px){.cat img{height:150px}.categories{gap:8px}.cat{padding:0 0 10px;overflow:hidden}.cat span{display:block;padding-top:8px;font-size:12px}}
+
+/* V95 — real Marketplace category image */
+.cat img{
+  width:100%;
+  height:150px;
+  display:block;
+  object-fit:cover;
+  object-position:center;
+  background:#063d33;
+}
+@media(max-width:600px){
+  .cat img{height:150px;object-fit:cover}
+}
+
+
+/* V96 — Marketplace has exactly four category cards */
+.categories{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:18px 0}
+.categories .cat{min-width:0}
+.categories .cat img{width:100%;height:145px;object-fit:cover;display:block}
+@media(max-width:600px){.categories{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.categories .cat img{height:125px}}
+
+
+.delete-own-ad{display:block;margin-top:9px;width:100%;border:1px solid #f0b9b9;background:#fff5f5;color:#a92c2c;border-radius:9px;padding:8px;font-size:10px;font-weight:900;cursor:pointer}
+.delete-own-ad:active{transform:scale(.98)}
+
+.error-chip{color:#b42318!important;border-color:#f3c1bc!important;background:#fff7f6!important}
+
+/* V101 — Marketplace promotional banners: neutral presentation to match FENK */
+.promo-wrap{margin:14px 0 18px;background:#fff;border:1px solid #dfe9e5;border-radius:20px;padding:10px;box-shadow:0 8px 24px rgba(6,61,51,.06)}
+.promo-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:2px 5px 9px}
+.promo-head h2{margin:0;font-size:15px;color:#173c4c}
+.promo-head span{font-size:9px;color:#6d7d79}
+.promo-slider{position:relative;overflow:hidden;border-radius:15px;background:#101214;aspect-ratio:3/2}
+.promo-track{display:flex;direction:ltr;width:100%;height:100%;transition:transform .45s ease}
+.promo-slide{min-width:100%;height:100%;position:relative;display:block;background:#111}
+.promo-slide img{width:100%;height:100%;display:block;object-fit:cover}
+.promo-slide:after{content:"";position:absolute;inset:auto 0 0;height:28%;background:linear-gradient(transparent,rgba(0,0,0,.38));pointer-events:none}
+.promo-nav{position:absolute;left:10px;right:10px;top:50%;transform:translateY(-50%);display:flex;justify-content:space-between;pointer-events:none}
+.promo-arrow{pointer-events:auto;border:0;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.9);color:#173c4c;font-size:20px;cursor:pointer;box-shadow:0 4px 12px #0004}
+.promo-dots{display:flex;justify-content:center;gap:6px;padding:9px 0 2px;direction:ltr}
+.promo-dot{width:7px;height:7px;border:0;border-radius:50%;background:#cbd8d4;padding:0;cursor:pointer}
+.promo-dot.active{background:#087c5b;transform:scale(1.25)}
+@media(max-width:600px){.promo-wrap{margin:11px 0 14px;padding:8px;border-radius:17px}.promo-slider{border-radius:13px}.promo-head h2{font-size:13px}.promo-head span{font-size:8px}.promo-arrow{width:30px;height:30px;font-size:17px}.promo-dots{padding-top:7px}}
+
+/* V102 — Automotive spare-parts icon strip, matched to FENK automotive banners */
+.parts-strip{margin:14px 0 20px;background:#f7faf9;border:1px solid #dce9e4;border-radius:20px;padding:12px;box-shadow:0 8px 24px rgba(6,61,51,.05)}
+.parts-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;padding:0 4px}
+.parts-head h2{margin:0;color:#173c4c;font-size:16px}
+.parts-head span{font-size:9px;color:#6d7d79}
+.parts-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px}
+.part-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;min-height:104px;padding:10px 6px;background:linear-gradient(145deg,#102c28,#183b35);border:1px solid #28594f;border-radius:15px;color:#fff;text-decoration:none;box-shadow:0 6px 16px rgba(6,61,51,.10);transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.part-item:hover{transform:translateY(-2px);border-color:#63c6a6;box-shadow:0 9px 20px rgba(6,61,51,.16)}
+.part-icon{width:58px;height:58px;border-radius:50%;display:block;object-fit:cover;object-position:center;background:#f4f7f6;border:3px solid #a7d7c8;box-shadow:0 0 0 4px #e4eeeb,0 5px 12px rgba(0,0,0,.18);flex:0 0 auto}
+.part-item b{font-size:10px;text-align:center;line-height:1.2;display:block}
+@media(max-width:520px){.part-icon{width:50px;height:50px;border-width:2px;box-shadow:0 0 0 3px #e4eeeb,0 4px 10px rgba(0,0,0,.16)}}
+.part-item b{font-size:10px;text-align:center;line-height:1.2}
+@media(max-width:800px){.parts-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.part-item{min-height:98px}}
+@media(max-width:520px){.parts-strip{padding:9px;border-radius:17px}.parts-head h2{font-size:13px}.parts-head span{font-size:8px}.parts-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.part-item{min-height:91px;padding:8px 4px;border-radius:13px}.part-icon{width:46px;height:46px}.part-icon svg{width:25px;height:25px}.part-item b{font-size:9px}}
+
+
+/* V103 — promotional hero is the first Marketplace content */
+.promo-wrap{margin:12px 0 14px}
+.publish-first-cta{margin:0 0 16px}
+.publish-first-cta h2{margin:0 0 3px;font-size:15px}
+.publish-first-cta p{margin:0;color:#6d7d79;font-size:10px}
+@media(max-width:520px){.promo-wrap{margin:8px 0 10px}.publish-first-cta{margin-bottom:12px}}
+
+/* V105 — simpler publish form with realistic category preview */
+.ad-reference{grid-column:1/-1;display:flex;gap:12px;align-items:center;background:#f6faf8;border:1px solid #d8e9e3;border-radius:16px;padding:10px;overflow:hidden}
+.ad-reference img{width:118px;height:82px;object-fit:cover;border-radius:12px;display:block}
+.ad-reference b{display:block;font-size:14px;color:#0b3e36;margin-bottom:4px}
+.ad-reference small{display:block;color:#71817d;font-size:9px;line-height:1.6}
+@media(max-width:520px){.ad-reference img{width:105px;height:76px}.ad-reference b{font-size:13px}.ad-reference small{font-size:8px}}
+.ai-ad-tools{padding:10px;background:#f1faf7;border:1px dashed #b8d8ce;border-radius:11px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.ai-analyze-btn{border:0;background:#0b8a68;color:#fff;border-radius:10px;padding:9px 12px;font-weight:900;cursor:pointer}.ai-analyze-btn:disabled{opacity:.6}.ai-ad-tools small{color:#56706a;font-size:9px}.ad-details{margin-top:8px;display:grid;gap:4px;background:#f6faf8;border-radius:10px;padding:8px;font-size:10px;color:#425e57}.ad-details span{line-height:1.5}.ad-details b{color:#0b6d54}</style>
+<link rel="stylesheet" href="marketplace-mobile-unified.css">
+
+<style id="fenk-v152-marketplace-tools">
+.mp-home-tools{display:grid;gap:8px;margin:10px 0 14px}.mp-home-search{display:flex;gap:7px;background:#fff;border:1px solid #dce9e4;border-radius:14px;padding:7px}.mp-home-search input{flex:1;min-width:0;border:0;outline:0;font:inherit;font-size:12px;padding:7px}.mp-home-search a{background:#087c5b;color:#fff;border-radius:9px;padding:8px 11px;font-size:10px;font-weight:900}.mp-home-filters{display:flex;gap:6px;overflow:auto;scrollbar-width:none}.mp-home-filters::-webkit-scrollbar{display:none}.mp-home-filters a{background:#fff;border:1px solid #dbe9e4;border-radius:999px;padding:7px 10px;font-size:9px;font-weight:900;white-space:nowrap}.mp-home-location{display:flex;justify-content:space-between;align-items:center;background:#f0faf6;border:1px solid #cfe7dd;border-radius:12px;padding:8px 10px;font-size:10px}.mp-home-location b{font-size:11px}.mp-home-location a{background:#fff;border:1px solid #bfe1d6;border-radius:8px;padding:6px 9px;color:#075d47;font-weight:900;font-size:9px}
+@media(min-width:380px) and (max-width:600px){#ads .grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:3px!important}.mp-home-search input{font-size:11px}}
+</style>
+  <link rel="stylesheet" href="fenk-global-share.css?v=1">
+<script src="marketplace-control.js?v=20260923-v2"></script>
+</head>
+<body>
+<header class="mp-header"><a class="mp-back" href="index.html">← الرئيسية</a><a class="mp-brand" href="marketplace.html"><span>FENK</span> Marketplace</a><a class="mp-cart" href="product-cart.html" aria-label="السلة">🛒 <span class="mp-cart-count" id="headerCartCount"></span></a></header>
+<main class="wrap"><section class="mp-compact-hero" id="mpMarketplaceTitle"><h1>FENK Marketplace</h1><p>منتجات وإعلانات وأقسام Marketplace في مكان واحد.</p></section>
+<section class="promo-wrap" aria-label="إعلانات Marketplace المميزة">
+  <div class="promo-head"><h2>📢 إعلانات Marketplace</h2><span>تصفح عروض FENK</span></div>
+  <div class="promo-slider" id="promoSlider">
+    <div class="promo-track" id="promoTrack">
+      <a class="promo-slide" href="spare-parts.html" aria-label="قطع غيار السيارات"><img src="assets/marketplace/promos/auto-parts.jpg" alt="FENK قطع غيار السيارات" loading="eager"></a>
+      <a class="promo-slide" href="products.html" aria-label="إلكترونيات ومنتجات تقنية"><img src="assets/marketplace/promos/electronics.jpg" alt="FENK Electronics" loading="lazy"></a>
+      <a class="promo-slide" href="marketplace-category.html?category=cars" aria-label="سواق السيارات"><img src="assets/marketplace/promos/cars.jpg" alt="FENK Cars" loading="lazy"></a>
+      <a class="promo-slide" href="#ads" aria-label="إعلانات Marketplace"><img src="assets/marketplace/promos/advertising.jpg" alt="FENK Advertising" loading="lazy"></a>
+      <a class="promo-slide" href="marketplace-category.html?category=realestate" aria-label="عقارات وأراضي"><img src="assets/marketplace/promos/real-estate.jpg" alt="FENK Real Estate" loading="lazy"></a>
+    </div>
+    <div class="promo-nav"><button class="promo-arrow" id="promoPrev" type="button" aria-label="السابق">‹</button><button class="promo-arrow" id="promoNext" type="button" aria-label="التالي">›</button></div>
+  </div>
+  <div class="promo-dots" id="promoDots" aria-label="شرائح الإعلانات"></div>
+</section>
+
+<section class="publish-card publish-first-cta" id="publish">
+  <div><h2>📢 انشر إعلانك</h2><p>أضف إعلانك وأرسله للمراجعة. <span id="publishModeMessage">جارٍ التحقق من رسوم النشر…</span></p></div>
+  <div style="display:flex;gap:7px;flex-wrap:wrap"><a class="publish-btn" href="./marketplace-my-ads.html">📋 إعلاناتي</a><a class="publish-btn" id="openPublish" href="./marketplace-publish.html?v=199">انشر إعلانك</a></div>
+</section>
+
+<nav id="categories" class="categories" aria-label="أقسام Marketplace">
+  <a class="cat" data-category="cars" href="marketplace-category.html?category=cars">
+    <img src="assets/marketplace/cars.jpg" alt="سواق السيارات" loading="lazy"><span>سواق السيارات</span>
+  </a>
+  <a class="cat" data-category="products" href="products.html">
+    <img src="assets/marketplace/marketplace-products.png" alt="سواق المنتجات" loading="lazy"><span>سواق المنتجات</span>
+  </a>
+  <a class="cat" data-category="realestate" href="marketplace-category.html?category=realestate">
+    <img src="assets/marketplace/realestate.jpg" alt="عقارات وأراضي" loading="lazy"><span>عقارات / أراضي</span>
+  </a>
+  <a class="cat" data-category="ads" href="marketplace-category.html?category=ads">
+    <img src="assets/marketplace/ads.gif" alt="الإعلانات" loading="lazy"><span>الإعلانات</span>
+  </a>
+  <a class="cat" data-category="spare_parts" href="spare-parts.html"><img src="assets/marketplace/promos/auto-parts.jpg" alt="قطع غيار السيارات" loading="lazy"><span>قطع غيار السيارات</span></a>
+</nav>
+
+<section class="parts-strip" aria-label="قطع غيار السيارات">
+  <div class="parts-head"><h2>🚗 قطع غيار السيارات</h2><span>اختر القسم الذي تبحث عنه</span></div>
+  <div class="parts-grid">
+    <a class="part-item" href="spare-parts.html?part=engines"><img class="part-icon" src="https://images.pexels.com/photos/3686360/pexels-photo-3686360.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300" alt="محركات" loading="lazy"><b>محركات</b></a>
+    <a class="part-item" href="spare-parts.html?part=gearbox"><img class="part-icon" src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Car-Transmission%20%283008657069%29.jpg" alt="ناقل الحركة" loading="lazy"><b>ناقل الحركة</b></a>
+    <a class="part-item" href="spare-parts.html?part=tires_rims"><img class="part-icon" src="https://images.pexels.com/photos/29537012/pexels-photo-29537012.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300" alt="إطارات وجنوط" loading="lazy"><b>إطارات وجنوط</b></a>
+    <a class="part-item" href="spare-parts.html?part=brakes"><img class="part-icon" src="https://images.pexels.com/photos/4022545/pexels-photo-4022545.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300" alt="فرامل" loading="lazy"><b>فرامل</b></a>
+    <a class="part-item" href="spare-parts.html?part=electrical"><img class="part-icon" src="https://images.pexels.com/photos/37177070/pexels-photo-37177070.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300" alt="كهرباء السيارات" loading="lazy"><b>كهرباء</b></a>
+    <a class="part-item" href="spare-parts.html?part=lighting"><img class="part-icon" src="https://images.pexels.com/photos/1428408/pexels-photo-1428408.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300" alt="إضاءة السيارات" loading="lazy"><b>إضاءة</b></a>
+    <a class="part-item" href="spare-parts.html?part=cooling"><img class="part-icon" src="https://images.pexels.com/photos/34351909/pexels-photo-34351909.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300" alt="تبريد ورادياتير" loading="lazy"><b>تبريد</b></a>
+    <a class="part-item" href="spare-parts.html?part=oils_filters"><img class="part-icon" src="https://images.pexels.com/photos/4517073/pexels-photo-4517073.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300" alt="زيوت وفلاتر" loading="lazy"><b>زيوت وفلاتر</b></a>
+    <a class="part-item" href="spare-parts.html?part=batteries"><img class="part-icon" src="https://images.pexels.com/photos/37177070/pexels-photo-37177070.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300" alt="بطاريات" loading="lazy"><b>بطاريات</b></a>
+    <a class="part-item" href="spare-parts.html?part=body"><img class="part-icon" src="https://images.pexels.com/photos/18038882/pexels-photo-18038882.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300" alt="هيكل السيارة" loading="lazy"><b>هيكل</b></a>
+    <a class="part-item" href="spare-parts.html?part=interior"><img class="part-icon" src="https://images.pexels.com/photos/10466259/pexels-photo-10466259.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300" alt="داخلية السيارة" loading="lazy"><b>داخلية</b></a>
+    <a class="part-item" href="spare-parts.html?part=exhaust"><img class="part-icon" src="https://images.pexels.com/photos/5233282/pexels-photo-5233282.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300" alt="عادم السيارة" loading="lazy"><b>عادم</b></a>
+    <a class="part-item" href="spare-parts.html?part=other"><img class="part-icon" src="https://images.pexels.com/photos/4116195/pexels-photo-4116195.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300" alt="قطع غيار أخرى" loading="lazy"><b>أخرى</b></a>
+  </div>
+</section>
+
+
+<section class="mp-home-tools" aria-label="بحث وفلاتر Marketplace">
+  <div class="mp-home-search"><input id="homeSearch" type="search" placeholder="ما الذي تريد شراءه؟" aria-label="ما الذي تريد شراءه؟"><a id="homeSearchGo" href="marketplace-search.html">بحث</a></div>
+  <div class="mp-home-filters"><a href="marketplace-search.html">🔎 بحث</a><a href="#categories">☰ الفئات</a><a href="marketplace-location.html">📍 الموقع</a><a href="marketplace-search.html">💰 السعر</a><a href="#ads">🕒 الأحدث</a></div>
+  <div class="mp-home-location"><div>📍 <b id="homeLocationName">الجزائر</b> <span id="homeRadiusText">· النطاق المقترح</span></div><a href="marketplace-location.html" onclick="sessionStorage.setItem('fenk_marketplace_return',location.pathname.split('/').pop()+(location.search||''))">تغيير</a></div>
+</section>
+
+<section id="ads" aria-live="polite">
+  <div class="head"><h2>آخر الإعلانات</h2><small id="count"></small></div>
+  <div id="grid" class="grid"><div class="empty mp-loading" aria-live="polite"><span class="skeleton-line"></span><span class="skeleton-line short"></span></div></div>
+</section>
+</main>
+
+<div class="modal" id="modal" aria-hidden="true">
+<div class="sheet">
+<button class="close" id="close">×</button>
+<h2>📢 انشر إعلانك</h2>
+<p style="font-size:11px;color:#6d7d79">اختر نوع الإعلان، أضف التفاصيل التي تريدها، وارفع صورة الإعلان وإثبات الدفع. العنوان والوصف يتم توليدهما تلقائيًا من نوع الإعلان والتفاصيل.</p>
+<form class="form" id="form">
+<div class="ad-reference full" id="adReference">
+  <img id="adReferenceImage" src="assets/marketplace/cars.jpg" alt="صورة حقيقية توضيحية للإعلان" loading="lazy">
+  <div><b id="adReferenceTitle">سيارة للبيع</b><small>صورة توضيحية حقيقية من Marketplace — يمكنك استبدالها بصورة إعلانك.</small></div>
+</div>
+<label class="field full">نوع الإعلان<select id="type">
+<option value="product">📦 منتج</option><option value="service">🛠️ خدمة</option><option value="store">🏪 متجر</option>
+<option value="car">🚗 سيارة للبيع</option><option value="realestate">🏠 مسكن / عقار للبيع</option>
+<option value="land">🌳 أرض للبيع</option><option value="app">📱 تطبيق</option><option value="game">🎮 لعبة</option><option value="other">📢 أخرى</option>
+</select></label>
+<div class="details-panel full" id="categoryDetails"></div>
+<label class="field">رابط التواصل <small class="optional-label">(اختياري)</small><input id="url" name="contact_url" type="url" autocomplete="off" placeholder="https://..."></label>
+<label class="field">رقم الهاتف <small class="optional-label">(اختياري)</small><input id="phone" name="contact_phone" inputmode="tel" autocomplete="tel" placeholder="+213..."></label>
+<label class="field full">صورة إعلانك <small class="optional-label">(اختياري)</small><input id="image" type="file" accept="image/jpeg,image/png,image/webp"></label>
+<div class="ai-ad-tools full" id="aiAdTools" style="display:none">
+  <button type="button" class="ai-analyze-btn" id="aiAnalyzeBtn">🤖 حلّل الصورة واكتب وصفًا</button>
+  <small id="aiAnalyzeMsg">سيستخدم FENK AI ما يظهر في الصورة فقط، ويمكنك تعديل النتيجة قبل الإرسال.</small>
+</div>
+<div class="pay" id="legacyPaymentBox" style="display:none"><b>💳 الدفع عبر بريد موب</b><div id="paymentAccountBox"></div><div id="paymentFeeBox" class="payment-account"></div><small>الدفع يتم خارج الموقع. بعد التحويل، ارفع صورة الوصل هنا. لا يتم نشر الإعلان تلقائيًا.</small></div>
+<label class="field full" id="legacyProofField" style="display:none">إثبات الدفع<input id="proof" type="file" accept="image/jpeg,image/png,image/webp"></label>
+<button class="submit" type="submit">إرسال للمراجعة</button><div id="msg" class="msg"></div>
+</form></div></div>
+
+<script>
+const SUPABASE_URL='https://wqfnzahjwlukncxlxdkp.supabase.co';
+const SUPABASE_KEY='sb_publishable__QR4tJ9p5RYOQkIuHkoYKQ_mbDa9tuA';
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{flowType:'pkce',persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+const money=v=>Number(v||0).toLocaleString('ar-DZ')+' دج';
+async function loadPublishModeMessage(){const el=$('publishModeMessage');if(!el)return;const {data,error}=await db.from('site_settings').select('ad_posting_payment_enabled').eq('id',true).maybeSingle();if(error||data?.ad_posting_payment_enabled===false){el.textContent='🎉 النشر مجاني حاليًا';}else{el.textContent='الدفع عبر بريد موب مطلوب حاليًا.'}}
+let prices=[];
+const typeNames={product:'منتج',service:'خدمة',store:'متجر',car:'سيارة للبيع',realestate:'عقار للبيع',land:'أرض للبيع',app:'تطبيق',game:'لعبة',other:'إعلان'};
+const categoryType={products:'product',stores:'store',cars:'car',realestate:'realestate',land:'land'};
+
+
+function renderCategoryDetails(){
+ const t=$('type').value, box=$('categoryDetails'); if(!box)return;
+ const common=`<div class="detail-title">تفاصيل الإعلان — اكتب فقط ما تعرفه، ولا نخمن أي معلومة</div>
+ <label>الولاية<input id="dWilaya" placeholder="مثال: الجزائر"></label>
+ <label>البلدية<input id="dMunicipality" placeholder="مثال: باب الزوار"></label>`;
+ if(t==='car'){
+  box.innerHTML=common+`
+   <label>ماركة السيارة<input id="dCarBrand" placeholder="مثال: Renault"></label>
+   <label>موديل السيارة<input id="dCarModel" placeholder="مثال: Clio 4"></label>
+   <label>السنة<input id="dCarYear" inputmode="numeric" placeholder="2020"></label>
+   <label>المحرك<input id="dEngine" placeholder="مثال: 1.4 بنزين"></label>
+   <label>الوقود<input id="dFuel" placeholder="بنزين / ديزل"></label>
+   <label>علبة السرعة<select id="dGear"><option value="">غير محدد</option><option>يدوية</option><option>أوتوماتيك</option></select></label>
+   <label>المسافة المقطوعة<input id="dMileage" placeholder="120,000 كم"></label>
+   <label>الحالة<input id="dCondition" placeholder="مستعملة / ممتازة"></label>
+   <label>السعر (اختياري)<input id="dPrice" inputmode="decimal" placeholder="مثال: 2,800,000 دج"></label>
+   <label class="wide">معلومات إضافية<textarea id="dNotes" placeholder="مثال: السيارة نظيفة، أوراقها كاملة، فيها بعض الخدوش..."></textarea></label>`;
+ } else if(t==='realestate'){
+  box.innerHTML=common+`
+   <label>نوع العقار<input id="dPropertyType" placeholder="مسكن / فيلا / شقة..."></label>
+   <label>المساحة<input id="dArea" placeholder="مثال: 180 م²"></label>
+   <label>عدد الغرف<input id="dRooms" placeholder="مثال: 4"></label>
+   <label>الطابق<input id="dFloor" placeholder="مثال: 2"></label>
+   <label>السعر (اختياري)<input id="dPrice" inputmode="decimal" placeholder="مثال: 18,000,000 دج"></label>
+   <label class="wide">معلومات إضافية<textarea id="dNotes" placeholder="الموقع، الحالة، الوثائق، الحي..."></textarea></label>`;
+ } else if(t==='land'){
+  box.innerHTML=common+`
+   <label>المساحة<input id="dArea" placeholder="مثال: 500 م²"></label>
+   <label>نوع الأرض<input id="dLandType" placeholder="سكنية / فلاحية / تجارية"></label>
+   <label>طبيعة الوثائق<input id="dDocuments" placeholder="دفتر عقاري..."></label>
+   <label>واجهة / طريق<input id="dRoad" placeholder="مثال: طريق رئيسي"></label>
+   <label>السعر (اختياري)<input id="dPrice" inputmode="decimal" placeholder="مثال: 12,000,000 دج"></label>
+   <label class="wide">معلومات إضافية<textarea id="dNotes" placeholder="الموقع، القرب من الطريق، الماء والكهرباء..."></textarea></label>`;
+ } else if(t==='product'){
+  box.innerHTML=common+`<label>اسم المنتج<input id="dProductName" placeholder="مثال: iPhone 15"></label><label>الحالة<input id="dCondition" placeholder="جديد / مستعمل"></label><label>السعر (اختياري)<input id="dPrice" inputmode="decimal" placeholder="مثال: 120,000 دج"></label><label class="wide">معلومات إضافية<textarea id="dNotes" placeholder="المواصفات، الذاكرة، اللون، العيوب..."></textarea></label>`;
+ } else {
+  box.innerHTML=common+`<label class="wide">معلومات إضافية<textarea id="dNotes" placeholder="اكتب كل التفاصيل التي تريد ظهورها للمشتري..."></textarea></label>`;
+ }
+}
+function collectDetails(){
+ const ids=['dWilaya','dMunicipality','dCarBrand','dCarModel','dCarYear','dEngine','dFuel','dGear','dMileage','dCondition','dPrice','dProductName','dPropertyType','dArea','dRooms','dFloor','dLandType','dDocuments','dRoad','dNotes'];
+ const labels={wilaya:'الولاية',municipality:'البلدية',carbrand:'ماركة السيارة',carmodel:'موديل السيارة',caryear:'السنة',engine:'المحرك',fuel:'الوقود',gear:'علبة السرعة',mileage:'المسافة المقطوعة',condition:'الحالة',price:'السعر',productname:'اسم المنتج',propertytype:'نوع العقار',area:'المساحة',rooms:'عدد الغرف',floor:'الطابق',landtype:'نوع الأرض',documents:'الوثائق',road:'الطريق',notes:'معلومات إضافية'};
+ const o={}; ids.forEach(id=>{const e=$(id);if(e&&e.value.trim()){const key=id.replace(/^d/,'').toLowerCase();o[key]=e.value.trim();o['_labels']=o['_labels']||{};o['_labels'][key]=labels[key]||key;}}); return o;
+}
+function formatGeneratedDescription(details){
+ const labels=details?._labels||{};
+ return Object.entries(details||{}).filter(([k,v])=>k!=='_labels'&&v).map(([k,v])=>`${labels[k]||k}: ${v}`).join(' | ') || null;
+}
+async function fileToDataUrlLocal(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(String(r.result||''));r.onerror=reject;r.readAsDataURL(file);});}
+async function analyzeMarketplaceImage(){
+ const file=$('image')?.files?.[0], btn=$('aiAnalyzeBtn'), status=$('aiAnalyzeMsg');
+ if(!file){if(status)status.textContent='اختر صورة أولًا.';return;}
+ if(!/^image\/(png|jpeg|webp)$/.test(file.type)||file.size>5*1024*1024){if(status)status.textContent='اختر JPG أو PNG أو WEBP بحجم لا يتجاوز 5MB.';return;}
+ const {data:{session}}=await db.auth.getSession(); if(!session){if(status)status.textContent='سجّل الدخول أولًا لاستخدام FENK AI.';return;}
+ btn.disabled=true; if(status)status.textContent='🦊 FENK AI يحلل الصورة…';
+ try{
+  const image=await fileToDataUrlLocal(file), t=$('type').value;
+  const prompt=t==='car'?'حلل صورة إعلان سيارة للبيع. استخرج فقط المعلومات المرئية أو المكتوبة بوضوح: الماركة/الموديل إن ظهرا، نوع السيارة، أي سنة أو محرك أو وقود أو ناقل حركة ظاهر، والحالة المرئية. لا تخمن. اكتب وصفًا عربيًا مرتبًا، واذكر ما لا يمكن التأكد منه.':`حلل صورة الإعلان. اذكر فقط ما يظهر بوضوح، واكتب وصفًا عربيًا مرتبًا ومناسبًا للإعلان. لا تخمن أي سعر أو مواصفة غير ظاهرة.`;
+  const res=await fetch(`${SUPABASE_URL}/functions/v1/fenk-ai`,{method:'POST',headers:{'content-type':'application/json','apikey':SUPABASE_KEY,'Authorization':`Bearer ${session.access_token}`},body:JSON.stringify({message:prompt,image,uiLanguage:'ar'})});
+  const data=await res.json().catch(()=>({})); if(!res.ok)throw new Error(data.message||'تعذر تشغيل FENK AI.');
+  const text=String(data.reply||'').trim(); if(!text)throw new Error('لم يرجع FENK AI وصفًا.');
+  const notes=$('dNotes'); if(notes)notes.value=text;
+  if(status)status.textContent='✓ تم إنشاء وصف من الصورة. راجعه وعدّله قبل الإرسال.';
+ }catch(err){if(status)status.textContent=err?.message||'تعذر تحليل الصورة.';}finally{btn.disabled=false;}
+}
+let adPaymentRequired=false;
+async function loadAdPostingPaymentMode(){
+ const {data,error}=await db.from('site_settings').select('ad_posting_payment_enabled').eq('id',true).maybeSingle();
+ // نفس مصدر الحقيقة المستخدم في صفحة النشر: site_settings.ad_posting_payment_enabled
+ adPaymentRequired=error ? false : Boolean(data?.ad_posting_payment_enabled===true);
+ const box=$('legacyPaymentBox'),proof=$('legacyProofField');
+ if(box) box.style.display=adPaymentRequired?'block':'none';
+ if(proof) proof.style.display=adPaymentRequired?'block':'none';
+ if(!adPaymentRequired){ $('paymentAccountBox').textContent=''; $('paymentFeeBox').textContent=''; }
+}
+async function loadAdPaymentSettings(){
+ const {data}=await db.from('payment_settings').select('method,display_name,account_number,phone_number,instructions').eq('method','barid_mob').eq('is_active',true).order('updated_at',{ascending:false}).limit(1).maybeSingle();
+ const box=$('paymentAccountBox');
+ if(!box)return;
+ if(!data){box.innerHTML='<div class="payment-account">سيظهر حساب بريد موب هنا بعد إعداده من Admin.</div>';return}
+ box.innerHTML=`<div class="payment-account"><b>بريد موب</b><br>${data.display_name?`اسم الحساب: ${esc(data.display_name)}<br>`:''}${data.account_number?`رقم الحساب: <b>${esc(data.account_number)}</b><br>`:''}${data.phone_number?`الهاتف: <b>${esc(data.phone_number)}</b><br>`:''}${data.instructions?esc(data.instructions):'اتبع تعليمات FENK للدفع.'}</div>`;
+}
+
+async function loadPrices(){
+ const {data,error}=await db.from('marketplace_packages').select('id,duration_days,fee_dzd,is_active,sort_order').eq('is_active',true).order('duration_days',{ascending:false});
+ if(error){ console.error('marketplace_packages:',error); prices=[]; return; }
+ prices=(data||[]).sort((a,b)=>Number(b.duration_days)-Number(a.duration_days));
+ const pack=prices.find(p=>Number(p.duration_days)===30)||prices[0]||null;
+ const feeBox=$('paymentFeeBox'); if(feeBox) feeBox.innerHTML=pack?`<b>رسوم نشر الإعلان: ${money(pack.fee_dzd)}</b>`:'رسوم الإعلان غير متاحة حاليًا.';
+}
+function getDefaultPackage(){
+ return prices.find(p=>Number(p.duration_days)===30) || prices[0] || null;
+}
+window.currentUserId=null;
+async function refreshCurrentUser(){
+ const {data:{session}}=await db.auth.getSession();
+ window.currentUserId=session?.user?.id||null;
+}
+async function notifyTelegram(event,id,snapshot={}){try{const {data:{session}}=await db.auth.getSession();if(!session?.access_token)return;await fetch(`${SUPABASE_URL}/functions/v1/marketplace-telegram-notify`,{method:'POST',headers:{'content-type':'application/json',apikey:SUPABASE_KEY,Authorization:`Bearer ${session.access_token}`},body:JSON.stringify({event,ad_id:id,snapshot})})}catch(e){console.warn(e)}}
+async function cleanupAdFiles(row){const urls=Array.isArray(row.image_urls)?row.image_urls:(row.image_url?[row.image_url]:[]);const paths=urls.map(u=>{try{const x=new URL(u);const m=x.pathname.match(/\/storage\/v1\/object\/public\/marketplace-images\/(.+)$/);return m?decodeURIComponent(m[1]):null}catch{return null}}).filter(Boolean);if(paths.length)await db.storage.from('marketplace-images').remove(paths);if(row.payment_proof_path)await db.storage.from('marketplace-payment-proofs').remove([row.payment_proof_path]);}
+async function deleteMyMarketplaceAd(id){if(!window.currentUserId){alert('سجّل الدخول أولًا.');return}if(!confirm('هل أنت متأكد من حذف هذا الإعلان؟'))return;const {data:row,error:readErr}=await db.from('marketplace_ads').select('id,ad_code,user_id,title,image_url,image_urls,payment_proof_path,details,wilaya,municipality,price_dzd,payment_status,status').eq('id',id).maybeSingle();if(readErr||!row){alert('الإعلان غير موجود.');return}if(row.user_id!==window.currentUserId){alert('لا يمكنك حذف إعلان لا يخص حسابك.');return}const {error}=await db.from('marketplace_ads').delete().eq('id',id);if(error){alert('تعذر حذف الإعلان: '+error.message);return}await cleanupAdFiles(row);await notifyTelegram('deleted',id,row);await loadAds();}
+
+
+const FENK_LOC_KEY='fenk_marketplace_location_v1';
+const WILAYA_COORDS={
+'Alger':{lat:36.7538,lng:3.0588},'الجزائر':{lat:36.7538,lng:3.0588},'Oran':{lat:35.6971,lng:-0.6308},'وهران':{lat:35.6971,lng:-0.6308},'Relizane':{lat:35.7373,lng:0.55599},'غليزان':{lat:35.7373,lng:0.55599},'Blida':{lat:36.4700,lng:2.8277},'البليدة':{lat:36.4700,lng:2.8277},'Boumerdes':{lat:36.7564,lng:3.4728},'البويرة':{lat:36.3736,lng:3.9009},'Bouira':{lat:36.3736,lng:3.9009},'Tipaza':{lat:36.5897,lng:2.4470},'تيبازة':{lat:36.5897,lng:2.4470},'Tizi Ouzou':{lat:36.7118,lng:4.0459},'تيزي وزو':{lat:36.7118,lng:4.0459},'Setif':{lat:36.1898,lng:5.4108},'سطيف':{lat:36.1898,lng:5.4108},'Constantine':{lat:36.3650,lng:6.6147},'قسنطينة':{lat:36.3650,lng:6.6147},'Annaba':{lat:36.9000,lng:7.7667},'عنابة':{lat:36.9000,lng:7.7667},'Batna':{lat:35.5550,lng:6.1741},'باتنة':{lat:35.5550,lng:6.1741},'Djelfa':{lat:34.6728,lng:3.2630},'الجلفة':{lat:34.6728,lng:3.2630},'Medea':{lat:36.2642,lng:2.7539},'المدية':{lat:36.2642,lng:2.7539},'Chlef':{lat:36.1653,lng:1.3345},'الشلف':{lat:36.1653,lng:1.3345},'Mostaganem':{lat:35.9333,lng:0.0903},'مستغانم':{lat:35.9333,lng:0.0903},'Mascara':{lat:35.3966,lng:0.1403},'معسكر':{lat:35.3966,lng:0.1403},'Tlemcen':{lat:34.8828,lng:-1.3167},'تلمسان':{lat:34.8828,lng:-1.3167},'Bejaia':{lat:36.7509,lng:5.0567},'بجاية':{lat:36.7509,lng:5.0567},'Jijel':{lat:36.8206,lng:5.7667},'جيجل':{lat:36.8206,lng:5.7667},'Skikda':{lat:36.8762,lng:6.9092},'سكيكدة':{lat:36.8762,lng:6.9092},'Guelma':{lat:36.4621,lng:7.4261},'قالمة':{lat:36.4621,lng:7.4261},'Souk Ahras':{lat:36.2864,lng:7.9511},'سوق أهراس':{lat:36.2864,lng:7.9511},'El Oued':{lat:33.3683,lng:6.8674},'الوادي':{lat:33.3683,lng:6.8674},'Biskra':{lat:34.8504,lng:5.7281},'بسكرة':{lat:34.8504,lng:5.7281},'Laghouat':{lat:33.8000,lng:2.8651},'الأغواط':{lat:33.8000,lng:2.8651},'Ouargla':{lat:31.9520,lng:5.3330},'ورقلة':{lat:31.9520,lng:5.3330},'Ghardaia':{lat:32.4909,lng:3.6735},'غرداية':{lat:32.4909,lng:3.6735},'Adrar':{lat:27.8743,lng:-0.2939},'أدرار':{lat:27.8743,lng:-0.2939},'Tamanrasset':{lat:22.7850,lng:5.5228},'تمنراست':{lat:22.7850,lng:5.5228},'Bechar':{lat:31.6167,lng:-2.2167},'بشار':{lat:31.6167,lng:-2.2167},'Tiaret':{lat:35.3710,lng:1.3160},'تيارت':{lat:35.3710,lng:1.3160},'Saida':{lat:34.8303,lng:0.1517},'سعيدة':{lat:34.8303,lng:0.1517},'Sidi Bel Abbes':{lat:35.1899,lng:-0.6309},'سيدي بلعباس':{lat:35.1899,lng:-0.6309},'Ain Temouchent':{lat:35.2990,lng:-1.1400},'عين تموشنت':{lat:35.2990,lng:-1.1400},'Tissemsilt':{lat:35.6072,lng:1.8100},'تيسمسيلت':{lat:35.6072,lng:1.8100},'Ain Defla':{lat:36.2641,lng:1.9679},'عين الدفلى':{lat:36.2641,lng:1.9679},'Mila':{lat:36.4500,lng:6.2667},'ميلة':{lat:36.4500,lng:6.2667},'Oum El Bouaghi':{lat:35.8754,lng:7.1135},'أم البواقي':{lat:35.8754,lng:7.1135},'Khenchela':{lat:35.4358,lng:7.1433},'خنشلة':{lat:35.4358,lng:7.1433},'Tebessa':{lat:35.4042,lng:8.1242},'تبسة':{lat:35.4042,lng:8.1242},'Bordj Bou Arreridj':{lat:36.0737,lng:4.7611},'برج بوعريريج':{lat:36.0737,lng:4.7611},'M\'Sila':{lat:35.7058,lng:4.5419},'المسيلة':{lat:35.7058,lng:4.5419},'Bou Saada':{lat:35.2089,lng:4.1764},'Ain Beida':{lat:35.7964,lng:7.3928},'El Bayadh':{lat:33.6832,lng:1.0193},'البيض':{lat:33.6832,lng:1.0193},'Naama':{lat:33.2667,lng:-0.3167},'النعامة':{lat:33.2667,lng:-0.3167},'Tindouf':{lat:27.6742,lng:-8.1478},'تندوف':{lat:27.6742,lng:-8.1478},'Illizi':{lat:26.4833,lng:8.4667},'إليزي':{lat:26.4833,lng:8.4667},'Bordj Badji Mokhtar':{lat:21.3281,lng:0.9500},'برج باجي مختار':{lat:21.3281,lng:0.9500},'In Guezzam':{lat:19.5667,lng:5.7667},'عين قزام':{lat:19.5667,lng:5.7667},'In Salah':{lat:27.1936,lng:2.4600},'عين صالح':{lat:27.1936,lng:2.4600},'Djanet':{lat:24.5540,lng:9.4840},'جانت':{lat:24.5540,lng:9.4840},'Timimoun':{lat:29.2600,lng:0.2300},'تيميمون':{lat:29.2600,lng:0.2300},'Bordj Badji Mokhtar':{lat:21.3281,lng:0.9500},'El Meniaa':{lat:30.5833,lng:2.8833},'المنيعة':{lat:30.5833,lng:2.8833},'Touggourt':{lat:33.1000,lng:6.0667},'تقرت':{lat:33.1000,lng:6.0667},'El Meghaier':{lat:33.9500,lng:5.9167},'المغير':{lat:33.9500,lng:5.9167},'Beni Abbes':{lat:30.1300,lng:-2.1667},'بني عباس':{lat:30.1300,lng:-2.1667},'Ouled Djellal':{lat:34.4250,lng:5.0675},'أولاد جلال':{lat:34.4250,lng:5.0675},'M\'Ghair':{lat:33.9500,lng:5.9167}
+};
+const normalizeText=v=>String(v??'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/ؤ/g,'و').replace(/ئ/g,'ي').replace(/ـ/g,'').replace(/[ًٌٍَُِّْ]/g,'').replace(/[^\p{L}\p{N}]+/gu,' ').trim();
+function coordForName(name){const n=normalizeText(name).replace(/^ولاية\s*/,'');for(const [k,v] of Object.entries(WILAYA_COORDS)){if(normalizeText(k)===n||normalizeText(k).replace(/^ولاية\s*/,'')===n)return v}return null}
+function readMarketplaceLocation(){try{return JSON.parse(localStorage.getItem(FENK_LOC_KEY)||'{}')}catch{return{}}}
+function haversine(a,b){const R=6371,la=(b.lat-a.lat)*Math.PI/180,lo=(b.lng-a.lng)*Math.PI/180,x=Math.sin(la/2)**2+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(lo/2)**2;return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))}
+function adPoint(a){const d=a.details&&typeof a.details==='object'?a.details:{};const lat=Number(d.latitude??d.lat??d.location?.lat),lng=Number(d.longitude??d.lng??d.location?.lng);if(Number.isFinite(lat)&&Number.isFinite(lng)&&Math.abs(lat)<=90&&Math.abs(lng)<=180)return{lat,lng,exact:true};return coordForName(a.wilaya)||null}
+function locationDistance(a,loc){const p=adPoint(a),center=loc&&Number.isFinite(Number(loc.lat))?{lat:Number(loc.lat),lng:Number(loc.lng)}:coordForName(loc?.wilaya)||WILAYA_COORDS['الجزائر'];return p&&center?haversine(center,p):null}
+function filterByMarketplaceLocation(rows,loc){const mode=loc?.mode||'suggested';const radius=Number(loc?.radius_km||5);if(!loc?.wilaya)return rows;return rows.filter(a=>{const dist=locationDistance(a,loc);if(mode==='custom')return dist!=null&&dist<=radius;const adW=normalizeText(a.wilaya||a.municipality||a.commune||'');const selected=normalizeText(loc.wilaya);if(!adW)return true;return adW===selected||adW.includes(selected)||selected.includes(adW)})}
+
+async function loadAds(){
+ await refreshCurrentUser();
+ const grid=$('grid'), qs=new URLSearchParams(location.search), cat=qs.get('category');
+ document.querySelectorAll('.cat').forEach(a=>a.classList.toggle('active',(a.dataset.category||'all')===(cat||'all')));
+ const {data:catRow}=cat?await db.from('marketplace_categories').select('id,name').eq('slug',cat).eq('is_active',true).maybeSingle():{data:null};
+ const label=catRow?.name || (cat==='cars'?'سواق السيارات':cat==='realestate'?'عقارات / أراضي':cat==='land'?'أراضي للبيع':cat==='stores'?'متاجر':cat==='products'?'سواق المنتجات':cat==='spare_parts'?'🚗 قطع غيار السيارات':cat==='ads'?'الإعلانات':'كل الإعلانات');
+ const head=document.querySelector('#ads .head h2'); if(head)head.textContent=label;
+ let q=db.from('marketplace_ads').select('id,ad_code,user_id,title,description,price_dzd,contact,phone,image_url,image_urls,status,payment_status,start_at,end_at,created_at,category_id,details,wilaya,commune,municipality').eq('status','approved').order('created_at',{ascending:false}).limit(100);
+ if(catRow?.id) q=q.eq('category_id',catRow.id);
+ if(cat==='realestate'){
+   const {data:extraLand}=await db.from('marketplace_categories').select('id').eq('slug','land').eq('is_active',true).maybeSingle();
+   if(extraLand?.id && catRow?.id) q=db.from('marketplace_ads').select('id,ad_code,user_id,title,description,price_dzd,contact,phone,image_url,image_urls,status,payment_status,start_at,end_at,created_at,category_id,details,wilaya,commune,municipality').eq('status','approved').in('category_id',[catRow.id,extraLand.id]).order('created_at',{ascending:false}).limit(100);
+ }
+ const {data,error}=await q;
+ if(error){grid.innerHTML=`<div class="empty"><b>تعذر تحميل هذا القسم.</b><br><small>${esc(error.message||'خطأ غير معروف')}</small></div>`;return}
+ const now=Date.now(); const loc=readMarketplaceLocation(); let visible=(data||[]).filter(a=>!a.end_at||new Date(a.end_at).getTime()>now); visible=filterByMarketplaceLocation(visible,loc); const homeLimit=12; visible=visible.slice(0,homeLimit);
+ const locName=loc.wilaya||'الجزائر'; const radiusText=loc.mode==='custom'?` · ${Number(loc.radius_km||5)} كم`:' · نطاق مقترح'; const homeLoc=document.getElementById('homeLocationName'),homeRad=document.getElementById('homeRadiusText'); if(homeLoc)homeLoc.textContent=locName; if(homeRad)homeRad.textContent=radiusText;
+ $('count').textContent=visible.length+' إعلان';
+ grid.innerHTML=visible.map(a=>{const href=`marketplace-ad.html?id=${encodeURIComponent(a.id)}`;const dist=locationDistance(a,loc);const locText=a.wilaya||a.municipality||a.commune;const distanceText=dist!=null?` · ${dist<1?'<1':dist.toFixed(0)} كم`:'';return `<article class="card marketplace-card"><a class="marketplace-card-link" href="${href}" aria-label="عرض إعلان ${esc(a.title)}">${a.image_url?`<img src="${esc(a.image_url)}" alt="${esc(a.title)}" loading="lazy">`:`<div class="no-image">🦊</div>`}<div class="body"><h3>${esc(a.title)}</h3>${a.price_dzd!=null?`<div class="chip price-chip">${money(a.price_dzd)}</div>`:''}${locText?`<div style="font-size:8px;color:#71817d;margin-top:5px">📍 ${esc(locText)}${distanceText}</div>`:dist!=null?`<div style="font-size:8px;color:#71817d;margin-top:5px">📍 ${distanceText.replace(' · ','')}</div>`:''}</div></a>${window.currentUserId&&a.user_id===window.currentUserId?`<button type="button" class="delete-own-ad" onclick="event.stopPropagation();deleteMyMarketplaceAd('${esc(a.id)}')">🗑️ حذف إعلاني</button>`:''}</article>`}).join('')||`<div class="empty"><b>لا توجد إعلانات مطابقة للنطاق الحالي.</b><br><span>جرّب تغيير الولاية أو النطاق الجغرافي.</span><br><a class="publish-btn" style="display:inline-block;margin-top:10px" href="./marketplace-publish.html?v=199">📢 انشر إعلانك</a></div>`;
+}
+function openPublish(){ window.location.assign('./marketplace-publish.html?v=199'); }
+$('close').onclick=()=>{$('modal').classList.remove('show');$('modal').setAttribute('aria-hidden','true')};
+if(location.hash==='#publish') setTimeout(openPublish,250);
+
+$('form').addEventListener('submit',async e=>{
+ e.preventDefault();const msg=$('msg'),btn=e.submitter;
+ const {data:{session}}=await db.auth.getSession();if(!session){msg.textContent='سجّل الدخول أولًا.';return}
+ const image=$('image').files[0],proof=$('proof').files[0],pack=getDefaultPackage();
+ if(adPaymentRequired && (!proof||!pack)){msg.textContent=!pack?'لا توجد رسوم نشر مفعلة حاليًا.':'ارفع إثبات الدفع.';return}
+ if((image&&image.size>5*1024*1024)||(proof&&proof.size>5*1024*1024)){msg.textContent='الحد الأقصى لكل صورة 5MB.';return}
+ btn.disabled=true;msg.textContent='جارٍ الإرسال…';
+ try{
+  const uid=session.user.id,stamp=Date.now(),safe=n=>n.replace(/[^a-zA-Z0-9._-]/g,'_');let imageUrl=null;
+  if(image){const ip=`${uid}/${stamp}-${safe(image.name)}`;let r=await db.storage.from('marketplace-images').upload(ip,image,{contentType:image.type,upsert:false});if(r.error)throw r.error;imageUrl=db.storage.from('marketplace-images').getPublicUrl(ip).data.publicUrl;}
+  let pp=null; if(adPaymentRequired){pp=`${uid}/${stamp}-proof-${safe(proof.name)}`;let r=await db.storage.from('marketplace-payment-proofs').upload(pp,proof,{contentType:proof.type,upsert:false});if(r.error)throw r.error;}
+  const t=$('type').value, slug=t==='car'?'cars':t==='realestate'?'realestate':t==='land'?'land':t==='store'?'stores':'products';
+  const {data:cat,error:ce}=await db.from('marketplace_categories').select('id').eq('slug',slug).eq('is_active',true).maybeSingle();if(ce||!cat)throw ce||new Error('قسم الإعلان غير موجود');
+  const details={type:t,...collectDetails()};
+  const contact=$('phone').value.trim()||$('url').value.trim()||null;
+  const generatedTitle=(()=>{
+    if(t==='car') return [details.carbrand,details.carmodel,details.caryear].filter(Boolean).join(' ') || 'سيارة للبيع';
+    if(t==='product') return details.productname || 'منتج للبيع';
+    if(t==='realestate') return [details.propertytype,details.area].filter(Boolean).join(' — ') || 'عقار للبيع';
+    if(t==='land') return [details.landtype,details.area].filter(Boolean).join(' — ') || 'أرض للبيع';
+    return typeNames[t] || 'إعلان جديد';
+  })();
+  const generatedDescription=formatGeneratedDescription(details);
+  const {error}=await db.from('marketplace_ads').insert({user_id:uid,category_id:cat.id,package_id:adPaymentRequired?pack?.id:null,title:generatedTitle,description:generatedDescription,price_dzd:null,contact,image_url:imageUrl,payment_proof_path:pp,payment_method:adPaymentRequired?'barid_mob':null,ad_fee_dzd:adPaymentRequired?Number(pack?.fee_dzd||0):0,payment_status:adPaymentRequired?'proof_uploaded':'not_required',approval_status:'pending',status:'pending_review',details,phone:$('phone').value.trim()||null,wilaya:details.wilaya||null,municipality:details.municipality||null});
+  if(error)throw error;msg.textContent='تم إرسال إعلانك للمراجعة ✓';$('form').reset();renderCategoryDetails();await loadPrices();
+ }catch(err){console.error(err);msg.textContent='تعذر إرسال الإعلان: '+(err?.message||'خطأ غير معروف');}finally{btn.disabled=false;}
+});
+$('type')?.addEventListener('change',()=>{
+ renderCategoryDetails();
+ const t=$('type').value, img=$('adReferenceImage'), title=$('adReferenceTitle');
+ const map={product:['assets/marketplace/marketplace-products.png','منتج'],service:['assets/marketplace/ads.gif','خدمة'],store:['assets/marketplace/marketplace-products.png','متجر'],car:['assets/marketplace/cars.jpg','سيارة للبيع'],realestate:['assets/marketplace/realestate.jpg','مسكن / عقار للبيع'],land:['assets/marketplace/realestate.jpg','أرض للبيع'],app:['assets/marketplace/marketplace-products.png','تطبيق'],game:['assets/marketplace/marketplace-products.png','لعبة'],other:['assets/marketplace/ads.gif','إعلان']};
+ const m=map[t]||map.other; if(img)img.src=m[0]; if(title)title.textContent=m[1];
+});
+$('image')?.addEventListener('change',()=>{const tools=$('aiAdTools'); if(tools)tools.style.display=$('image').files?.[0]?'block':'none'; const msg=$('aiAnalyzeMsg'); if(msg)msg.textContent='سيستخدم FENK AI ما يظهر في الصورة فقط، ويمكنك تعديل النتيجة قبل الإرسال.';});
+$('aiAnalyzeBtn')?.addEventListener('click',analyzeMarketplaceImage);
+
+renderCategoryDetails();
+(function(){
+  try{const loc=JSON.parse(localStorage.getItem('fenk_marketplace_location_v1')||'{}');if(loc.wilaya)document.getElementById('homeLocationName').textContent=loc.wilaya;if(loc.mode==='custom')document.getElementById('homeRadiusText').textContent='· '+(loc.radius_km||5)+' كم';}catch{}
+  const input=document.getElementById('homeSearch'),go=document.getElementById('homeSearchGo');if(input&&go){input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();go.href='marketplace-search.html?q='+encodeURIComponent(input.value.trim());go.click()}});go.addEventListener('click',e=>{go.href='marketplace-search.html?q='+encodeURIComponent(input.value.trim())})}
+})();
+loadAds();
+
+// V101 — promotional banner carousel
+(async function(){
+ try{await window.FENKMarketplaceControlReady}catch{}
+ const track=document.getElementById('promoTrack'),dots=document.getElementById('promoDots'),prev=document.getElementById('promoPrev'),next=document.getElementById('promoNext'),slider=document.getElementById('promoSlider');
+ if(!track||!dots)return;
+ const slides=[...track.children]; let i=0,timer=null;
+ dots.innerHTML=slides.map((_,n)=>`<button class="promo-dot${n===0?' active':''}" type="button" aria-label="الإعلان ${n+1}"></button>`).join('');
+ const dotEls=[...dots.children];
+ function go(n){i=(n+slides.length)%slides.length;track.style.transform=`translateX(-${i*100}%)`;dotEls.forEach((d,k)=>d.classList.toggle('active',k===i));}
+ prev.onclick=()=>{go(i-1);restart()}; next.onclick=()=>{go(i+1);restart()}; dotEls.forEach((d,n)=>d.onclick=()=>{go(n);restart()});
+ function start(){timer=setInterval(()=>go(i+1),5000)} function stop(){if(timer)clearInterval(timer)} function restart(){stop();start()}
+ slider.addEventListener('mouseenter',stop); slider.addEventListener('mouseleave',start); slider.addEventListener('touchstart',stop,{passive:true}); slider.addEventListener('touchend',start,{passive:true}); start();
+})();
+
+</script>
+
+<style>
+/* FENK Marketplace Admin Control */
+#categories{grid-template-columns:repeat(var(--mc-cols,2),minmax(0,1fr));gap:var(--mc-gap,14px)}
+@media(max-width:600px){#categories{grid-template-columns:repeat(var(--mc-cols-mobile,2),minmax(0,1fr));gap:var(--mc-gap,10px)}}
+/* V139 — Mobile Marketplace grid: image + title + price only.
+   Details page marketplace-ad.html is intentionally untouched. */
+@media (max-width: 600px){
+  #ads .grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:2px;
+    margin-left:-9px;
+    margin-right:-9px;
+  }
+  #ads .marketplace-card{
+    border:0;
+    border-radius:0;
+    box-shadow:none;
+    background:#fff;
+  }
+  #ads .marketplace-card-link{
+    display:block;
+    width:100%;
+  }
+  #ads .marketplace-card img,
+  #ads .marketplace-card .no-image{
+    width:100%;
+    aspect-ratio:1/1;
+    height:auto;
+    object-fit:cover;
+    display:block;
+    border-radius:0;
+  }
+  #ads .marketplace-card .body{
+    padding:7px 7px 9px;
+    min-height:60px;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-start;
+    background:#fff;
+  }
+  #ads .marketplace-card .body h3{
+    margin:0;
+    font-size:13px;
+    line-height:1.35;
+    font-weight:800;
+    height:35px;
+    max-height:35px;
+    overflow:hidden;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+    white-space:normal;
+    text-overflow:ellipsis;
+  }
+  #ads .marketplace-card .price-chip{
+    display:block!important;
+    width:100%;
+    margin:2px 0 0!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+    color:#111!important;
+    font-size:12px!important;
+    line-height:1.35;
+    font-weight:800!important;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  /* Keep the existing owner-delete function available on Desktop without
+     adding extra content to the requested Mobile card appearance. */
+  #ads .marketplace-card .delete-own-ad{display:none}
+}
+</style>
+
+<script src="marketplace-cart-header.js"></script>
+  <script src="fenk-global-share.js?v=1"></script>
+</body></html>

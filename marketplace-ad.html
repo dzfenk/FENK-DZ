@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>FENK — تفاصيل الإعلان</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--g:#063d33;--g2:#087c5b;--mint:#eaf8f3;--line:#dbe9e4;--ink:#173c4c;--muted:#6d7d79;--white:#fff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f5f7f6;color:var(--ink);font-family:Arial,"Noto Sans Arabic",sans-serif}a{text-decoration:none;color:inherit}button{font:inherit}
+.top{height:56px;background:#fff;border-bottom:1px solid #e3ebe8;display:flex;align-items:center;justify-content:space-between;padding:0 max(14px,calc((100% - 920px)/2));position:sticky;top:0;z-index:50}.top .brand{font-size:18px;font-weight:1000;color:#173c4c}.top .brand span{color:#10a879}.top-btn{width:40px;height:40px;border:1px solid #dbe9e4;background:#fff;border-radius:50%;display:grid;place-items:center;color:#173c4c;font-size:20px;cursor:pointer}.top-actions{display:flex;gap:8px}
+.wrap{width:min(920px,100%);margin:0 auto}.gallery-shell{background:#000;position:relative;width:100%;overflow:hidden}.main-photo{width:100%;height:min(68vh,620px);min-height:330px;object-fit:contain;background:#101412;display:block;user-select:none;-webkit-user-drag:none}.gallery-empty{height:330px;display:grid;place-items:center;color:#b9cbc5;background:#10231f;font-size:15px}.counter{position:absolute;left:14px;bottom:14px;background:#000b;color:#fff;padding:7px 11px;border-radius:999px;font-size:12px;font-weight:900;direction:ltr}.gallery-arrow{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border:0;border-radius:50%;background:#fffdf;color:#173c4c;box-shadow:0 3px 12px #0005;cursor:pointer;font-size:22px}.gallery-arrow.prev{right:12px}.gallery-arrow.next{left:12px}.dots{position:absolute;right:50%;transform:translateX(50%);bottom:15px;display:flex;gap:5px;direction:ltr}.dot{width:6px;height:6px;border:0;border-radius:50%;padding:0;background:#ffffff80}.dot.active{width:18px;border-radius:999px;background:#fff}
+.content{padding:12px}.card{background:#fff;border:1px solid var(--line);border-radius:16px;margin:0 0 11px;padding:15px;box-shadow:0 5px 18px #063d3307}.headline{padding:16px}.title{font-size:23px;line-height:1.4;margin:0 0 8px;color:#102f3b}.price{font-size:20px;color:#087c5b;font-weight:1000;margin-bottom:7px}.meta{display:flex;flex-wrap:wrap;gap:10px;color:#637772;font-size:12px}.meta span{display:inline-flex;align-items:center;gap:4px}.section-title{font-size:17px;margin:0 0 11px;color:#173c4c}.details{display:grid;grid-template-columns:1fr 1fr;border:1px solid #e2ece8;border-radius:12px;overflow:hidden}.row{padding:11px 10px;border-bottom:1px solid #edf3f0;min-width:0}.row:nth-child(odd){border-left:1px solid #edf3f0}.row:nth-last-child(-n+2){border-bottom:0}.row b{display:block;color:#087c5b;font-size:10px;margin-bottom:4px}.row span{font-size:12px;line-height:1.5;word-break:break-word}.desc{font-size:13px;line-height:2;white-space:pre-wrap;color:#324f59}.contact-card{padding-bottom:13px}.contact-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}.action{min-height:50px;border:0;border-radius:12px;display:flex;align-items:center;justify-content:center;gap:7px;font-weight:1000;text-decoration:none;cursor:pointer}.call{background:#087c5b;color:#fff}.message{background:#eaf8f3;color:#075d47;border:1px solid #cde8dd}.share{background:#fff;color:#075d47;border:1px solid #cde8dd}.full{grid-column:1/-1}.published{font-size:10px;color:#7a8985;text-align:center}
+@media(min-width:700px){body{background:#eef4f2}.top{position:relative}.wrap{margin:18px auto}.gallery-shell{border-radius:18px 18px 0 0}.content{padding:14px 0}.headline{border-radius:0 0 16px 16px}.mobile-only{display:none}}
+@media(max-width:699px){.top{height:54px}.top .brand{font-size:16px}.main-photo{height:56vh;min-height:300px}.content{padding:8px}.card{border-radius:15px}.headline{padding:15px 14px}.title{font-size:20px}.price{font-size:19px}.details{grid-template-columns:1fr 1fr}.row{padding:10px 8px}.row:nth-child(odd){border-left:1px solid #edf3f0}.contact-actions{grid-template-columns:1fr 1fr}.top-btn{width:38px;height:38px}}
+@media(max-width:390px){.details{grid-template-columns:1fr}.row:nth-child(odd){border-left:0}.row{border-bottom:1px solid #edf3f0!important}.contact-actions{grid-template-columns:1fr}.main-photo{height:52vh}}
+</style>
+<link rel="stylesheet" href="marketplace-mobile-unified.css">
+  <link rel="stylesheet" href="fenk-global-share.css?v=1">
+</head>
+<body>
+<header class="mp-header"><a class="mp-back" id="back" href="marketplace.html" aria-label="رجوع">← رجوع</a><a class="mp-brand" href="marketplace.html"><span>FENK</span> Marketplace</a><a class="mp-cart" href="product-cart.html" aria-label="السلة">🛒 <span class="mp-cart-count"></span></a></header>
+<main class="wrap" id="app"><div style="display:flex;justify-content:flex-start;margin:8px 0"><button id="shareTop" class="mp-back" type="button">↗ مشاركة</button></div><div class="card">جارٍ تحميل الإعلان…</div></main>
+<script>
+const SUPABASE_URL='https://wqfnzahjwlukncxlxdkp.supabase.co',SUPABASE_KEY='sb_publishable__QR4tJ9p5RYOQkIuHkoYKQ_mbDa9tuA',db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}}),$=id=>document.getElementById(id),esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])),money=v=>Number(v).toLocaleString('ar-DZ')+' دج';
+let shareUrl=location.href;
+$('back').onclick=e=>{e.preventDefault();if(history.length>1)history.back();else location.href='marketplace.html'};
+async function shareAd(){const title=document.title;if(navigator.share){try{await navigator.share({title,url:shareUrl});return}catch(e){if(e?.name==='AbortError')return}}try{await navigator.clipboard.writeText(shareUrl);alert('تم نسخ رابط الإعلان.')}catch(e){alert('رابط الإعلان: '+shareUrl)}}
+$('shareTop').onclick=shareAd;
+(async()=>{
+ const id=new URLSearchParams(location.search).get('id');
+ if(!id){$('app').innerHTML='<div class="card">الإعلان غير محدد.</div>';return}
+ const {data:a,error}=await db.from('marketplace_ads').select('id,ad_code,user_id,title,description,price_dzd,contact,phone,image_url,image_urls,payment_status,status,approval_status,start_at,end_at,created_at,details,wilaya,commune,municipality').eq('id',id).maybeSingle();
+ if(error||!a||!(a.status==='approved'||a.approval_status==='published')||(a.end_at&&new Date(a.end_at)<new Date())){$('app').innerHTML='<div class="card"><h2>الإعلان غير متاح</h2><p class="published">قد يكون الإعلان غير منشور أو انتهت مدته.</p></div>';return}
+ shareUrl=location.href;document.title='FENK — '+a.title;
+ const d=a.details&&typeof a.details==='object'?a.details:{};const labels=d._labels&&typeof d._labels==='object'?d._labels:{};
+ const urls=Array.isArray(a.image_urls)&&a.image_urls.length?a.image_urls:(Array.isArray(d.image_urls)&&d.image_urls.length?d.image_urls:(a.image_url?[a.image_url]:[]));
+ const entries=Object.entries(d).filter(([k,v])=>k!=='type'&&k!=='_labels'&&k!=='image_urls'&&v!==null&&v!==undefined&&v!=='');
+ const loc=[a.wilaya,a.municipality||a.commune].filter(Boolean).join('، ');
+ let html='';
+ html+='<section class="gallery-shell" id="gallery">';
+ if(urls.length){html+=`<img id="mainPhoto" class="main-photo" src="${esc(urls[0])}" alt="${esc(a.title)}" loading="eager"><span class="counter" id="photoCount">1 / ${urls.length}</span>${urls.length>1?`<button class="gallery-arrow prev" id="prevPhoto" aria-label="الصورة السابقة">›</button><button class="gallery-arrow next" id="nextPhoto" aria-label="الصورة التالية">‹</button><div class="dots" id="dots">${urls.map((_,i)=>`<button class="dot ${i===0?'active':''}" data-photo="${i}" aria-label="الصورة ${i+1}"></button>`).join('')}</div>`:''}`}
+ else html+='<div class="gallery-empty">لا توجد صور لهذا الإعلان</div>';
+ html+='</section><div class="content">';
+ html+=`<section class="card headline"><h1 class="title">${esc(a.title)}</h1>${a.price_dzd!=null?`<div class="price">${money(a.price_dzd)}</div>`:''}<div class="meta">${loc?`<span>📍 ${esc(loc)}</span>`:''}${a.created_at?`<span>🕒 ${new Date(a.created_at).toLocaleDateString('ar-DZ')}</span>`:''}${a.ad_code?`<span>🆔 ${esc(a.ad_code)}</span>`:''}</div></section>`;
+ if(entries.length)html+='<section class="card"><h2 class="section-title">📋 التفاصيل</h2><div class="details">'+entries.map(([k,v])=>`<div class="row"><b>${esc(labels[k]||k)}</b><span>${esc(v)}</span></div>`).join('')+'</div></section>';
+ if(a.description)html+=`<section class="card"><h2 class="section-title">📝 الوصف</h2><div class="desc">${esc(a.description)}</div></section>`;
+ html+='<section class="card contact-card"><h2 class="section-title">📞 التواصل</h2><div class="contact-actions">';
+ if(a.phone)html+=`<a class="action call" href="tel:${esc(a.phone)}">📞 اتصال بالبائع</a>`;
+ if(a.contact&&/^https?:\/\//i.test(a.contact))html+=`<a class="action message" href="${esc(a.contact)}" target="_blank" rel="noopener">💬 مراسلة / تواصل</a>`;
+ html+=`<button class="action share full" id="shareCard" type="button">↗ مشاركة الإعلان</button></div></section>`;
+ html+=`<section class="card published">إعلان منشور على FENK Marketplace</section></div>`;
+ $('app').innerHTML=html;
+ $('shareCard')?.addEventListener('click',shareAd);
+ if(urls.length>1){let idx=0,startX=0,startY=0,moved=false;const main=$('mainPhoto'),count=$('photoCount'),show=i=>{idx=(i+urls.length)%urls.length;main.src=urls[idx];count.textContent=(idx+1)+' / '+urls.length;document.querySelectorAll('[data-photo]').forEach((b,j)=>b.classList.toggle('active',j===idx))};$('prevPhoto')?.addEventListener('click',()=>show(idx-1));$('nextPhoto')?.addEventListener('click',()=>show(idx+1));document.querySelectorAll('[data-photo]').forEach(b=>b.addEventListener('click',()=>show(Number(b.dataset.photo))));const g=$('gallery');g.addEventListener('touchstart',e=>{const t=e.changedTouches[0];startX=t.clientX;startY=t.clientY;moved=false},{passive:true});g.addEventListener('touchmove',e=>{const t=e.changedTouches[0];if(Math.abs(t.clientX-startX)>12)moved=true},{passive:true});g.addEventListener('touchend',e=>{const t=e.changedTouches[0],dx=t.clientX-startX,dy=t.clientY-startY;if(moved&&Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)){if(dx<0)show(idx+1);else show(idx-1)}},{passive:true});}
+})();
+</script>
+<script src="marketplace-cart-header.js"></script>
+  <script src="fenk-global-share.js?v=1"></script>
+</body></html>

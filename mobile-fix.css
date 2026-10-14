@@ -1,0 +1,131 @@
+/*
+ FENK — Products mobile responsive fix
+ Applies to the existing Products UI only.
+ Desktop/tablet layout is intentionally preserved.
+*/
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@media (max-width: 767px) {
+  .products-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 16px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 0 10px !important;
+    box-sizing: border-box !important;
+  }
+
+  .pcard {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    border-radius: 14px !important;
+  }
+
+  .pcard img {
+    display: block !important;
+    width: 100% !important;
+    height: 220px !important;
+    aspect-ratio: auto !important;
+    max-height: 220px !important;
+    object-fit: cover !important;
+    object-position: center !important;
+  }
+
+  .pcard-body {
+    padding: 11px !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .pcard-title {
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+    overflow: hidden !important;
+    min-height: 42px !important;
+    max-height: 42px !important;
+    line-height: 1.5 !important;
+    font-size: 15px !important;
+    margin: 0 !important;
+  }
+
+  .price {
+    direction: rtl !important;
+    text-align: right !important;
+    white-space: nowrap !important;
+    font-size: 18px !important;
+    line-height: 1.4 !important;
+    margin-top: 7px !important;
+  }
+
+  .old {
+    font-size: 12px !important;
+    margin-inline-start: 5px !important;
+  }
+
+  .discount {
+    display: inline-block !important;
+    white-space: nowrap !important;
+    margin-top: 7px !important;
+    padding: 4px 7px !important;
+    font-size: 10px !important;
+  }
+
+  .rating {
+    min-height: 20px !important;
+    margin-top: 6px !important;
+    line-height: 20px !important;
+  }
+
+  .choose {
+    display: block !important;
+    width: 100% !important;
+    min-height: 44px !important;
+    margin-top: 10px !important;
+    padding: 10px 12px !important;
+    box-sizing: border-box !important;
+    touch-action: manipulation !important;
+  }
+
+  .wrap {
+    width: 100% !important;
+    max-width: 1100px !important;
+    box-sizing: border-box !important;
+  }
+}
+
+@media (max-width: 430px) {
+  .products-grid {
+    gap: 14px !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+
+  .pcard img {
+    height: 200px !important;
+    max-height: 200px !important;
+  }
+
+  .pcard-body {
+    padding: 10px !important;
+  }
+
+  .pcard-title {
+    font-size: 14px !important;
+  }
+
+  .price {
+    font-size: 17px !important;
+  }
+}

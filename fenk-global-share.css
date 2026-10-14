@@ -1,0 +1,17 @@
+/* FENK — Global Share / Shop component */
+.fenk-global-actions{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:8px;direction:rtl}
+.fenk-global-share,.fenk-global-shop{border:1px solid #d6e8e1;background:#fff;color:#124b43;border-radius:10px;padding:7px 10px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;line-height:1.2;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.fenk-global-share:hover,.fenk-global-shop:hover{background:#effaf6}
+.fenk-global-shop{background:#08c985;border-color:#08c985;color:#fff}
+.fenk-global-share:active,.fenk-global-shop:active{transform:scale(.98)}
+.fenk-share-overlay{position:fixed;inset:0;background:rgba(7,34,29,.45);z-index:99999;display:grid;place-items:end center;padding:14px;box-sizing:border-box}
+.fenk-share-sheet{width:min(520px,100%);background:#fff;border-radius:22px 22px 14px 14px;padding:18px;box-sizing:border-box;box-shadow:0 15px 50px rgba(0,0,0,.2);direction:rtl}
+.fenk-share-head{display:flex;align-items:center;gap:10px;justify-content:space-between;margin-bottom:14px}
+.fenk-share-title{margin:0;color:#103e46;font-size:18px;line-height:1.4}
+.fenk-share-close{border:0;background:#f2f6f5;border-radius:10px;width:36px;height:36px;font-size:20px;cursor:pointer}
+.fenk-share-item{font-size:12px;color:#71817d;margin:0 0 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fenk-share-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.fenk-share-option{border:1px solid #dcebe6;background:#f8fcfa;color:#123f47;border-radius:12px;padding:12px 9px;font:inherit;font-weight:700;cursor:pointer}
+.fenk-share-option:hover{background:#edf9f4}
+.fenk-share-option.copy{grid-column:1/-1}
+@media(max-width:420px){.fenk-global-actions{gap:5px}.fenk-global-share,.fenk-global-shop{font-size:11px;padding:7px 8px}.fenk-share-sheet{padding:15px}.fenk-share-grid{gap:7px}}

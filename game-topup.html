@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="referrer" content="strict-origin-when-cross-origin"><title>شحن الألعاب | FENK</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0"></script>
+<style>
+:root{--p:#16a34a;--p2:#22c55e;--ink:#172b3b;--muted:#7b818a;--bg:#f7f7fb;--card:#fff;--line:#e8e8ee;--green:#16a34a;--soft:#ecfdf3;--shadow:0 8px 24px rgba(20,32,52,.12)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:Arial,"Noto Sans Arabic",sans-serif;overflow-x:hidden;padding-bottom:92px}button,input,select,textarea{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}
+.top{position:sticky;top:0;z-index:80;background:linear-gradient(135deg,#16a34a,#16a34a);border:0;height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 max(14px,calc((100% - 1120px)/2));gap:12px;color:#fff}.top .brand{order:2;color:#fff}.top-actions{display:flex;align-items:center;gap:18px;order:1}.login{font-weight:900;font-size:18px;color:#fff}.search-btn{border:0;background:transparent;color:#fff;font-size:38px;line-height:1}.subtop{height:58px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 max(14px,calc((100% - 1120px)/2));border-bottom:1px solid var(--line);position:sticky;top:70px;z-index:79}.lang{border:1px solid #4ade80;border-radius:999px;background:#fff;color:#15803d;padding:7px 14px;font-weight:900}.subtop .back{border:0;background:transparent;font-size:30px;padding:0;color:#5b5e66}.brand{display:flex;align-items:center;gap:8px;font-weight:900;font-size:21px}.brand img{width:54px;height:45px;object-fit:contain}.brand span{color:var(--ink)}.back{border:1px solid #dedee6;border-radius:13px;padding:9px 13px;font-weight:800;color:#4f5862;background:#fff}
+wrap{max-width:1120px;margin:auto;padding:12px 12px 26px}.promo{position:relative;overflow:hidden;border-radius:20px;background:linear-gradient(180deg,#dcfce7 0%,#343244 82%);min-height:390px;box-shadow:var(--shadow);color:#fff;margin-bottom:14px}.promo-track{display:flex;transition:transform .45s ease;direction:ltr}.slide{min-width:100%;display:grid;grid-template-columns:1fr;direction:rtl;align-items:end;padding:0 0 45px;gap:0;min-height:390px;position:relative}.slide .copy{padding:16px 28px;position:relative;z-index:2;text-align:right;background:linear-gradient(transparent,rgba(25,25,45,.92) 35%);margin-top:-90px}.eyebrow{display:inline-block;background:#ffffff20;border:1px solid #ffffff35;border-radius:999px;padding:7px 12px;font-weight:800;font-size:13px}.slide h1{font-size:34px;color:#fff;margin:12px 0 8px;line-height:1.25}.slide p{font-size:18px;line-height:1.8;margin:0 0 16px;color:#eee}.cta{display:inline-flex;border:0;border-radius:999px;background:var(--p);color:#fff;padding:12px 23px;font-weight:900}.slide img,.slide video{width:100%;height:300px;object-fit:cover;object-position:center center;border-radius:0;background:#fff2;position:relative}.dots{position:absolute;bottom:12px;left:0;right:0;display:flex;justify-content:center;gap:8px}.dot{width:54px;height:6px;border:0;border-radius:999px;background:#ffffff55}.dot.active{background:#fff}
+.topup-tools{display:grid;grid-template-columns:1.5fr .75fr .75fr auto;gap:10px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:12px;margin:0 0 14px;box-shadow:0 5px 18px rgba(20,32,52,.06)}.topup-tools input,.topup-tools select{width:100%;border:1px solid #dddfe7;border-radius:12px;background:#fff;padding:12px;outline:none;color:var(--ink)}.topup-tools button{border:0;border-radius:12px;background:var(--p);color:#fff;padding:12px 18px;font-weight:900}.topup-tools button:active{transform:translateY(1px)}
+.heading{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:20px 3px 12px}.heading h2{margin:0;font-size:27px}.heading p{margin:5px 0 0;color:var(--muted)}.see{color:var(--p);font-weight:900;white-space:nowrap}
+.game-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.game-card{background:#fff;border:1px solid var(--line);border-radius:22px;overflow:hidden;box-shadow:var(--shadow);text-align:right;transition:.18s}.game-card:hover{transform:translateY(-2px)}.game-image-wrap{position:relative}.game-card img{width:100%;height:150px;image-rendering:auto;display:block;object-fit:cover;object-position:center center;background:#eee}.game-image-wrap .live{position:absolute;top:10px;right:10px;float:none;margin:0}.live i{width:8px;height:8px;border-radius:50%;background:#caffdf;display:inline-block}.game-card .body{padding:10px 11px 11px}.live{display:inline-flex;align-items:center;gap:5px;background:var(--p);color:#fff;border-radius:999px;padding:6px 10px;font-size:11px;font-weight:900;position:relative;margin-top:-42px;float:right}.live:before{content:"";width:8px;height:8px;border-radius:50%;background:#caffdf}.game-card h3{clear:both;margin:6px 0 4px;font-size:16px;line-height:1.35;min-height:2.7em;display:flex;align-items:center;justify-content:center;text-align:center}.game-card .from{color:var(--p);font-weight:900;font-size:14px}.game-card .sub{color:#8a9098;font-size:12px;margin-top:4px}.game-card .open{display:flex;width:100%;margin-top:8px;border:0;background:var(--p);color:#fff!important;padding:9px;border-radius:12px;text-align:center;font-weight:900;align-items:center;justify-content:center;min-height:44px;line-height:1.2}
+.game-grid[data-cols="3"]{grid-template-columns:repeat(3,minmax(0,1fr))}.game-grid[data-cols="4"]{grid-template-columns:repeat(4,minmax(0,1fr))}.game-grid[data-mobile-cols="1"]{grid-template-columns:1fr}.game-grid[data-mobile-cols="2"]{grid-template-columns:repeat(2,minmax(0,1fr))}.game-card[data-image-size="small"] .game-image-wrap img{height:120px!important}.game-card[data-image-size="medium"] .game-image-wrap img{height:170px!important}.game-card[data-image-size="large"] .game-image-wrap img{height:220px!important}.game-card[data-image-fit="cover"] .game-image-wrap img{object-fit:cover!important}.game-card[data-image-fit="contain"] .game-image-wrap img{object-fit:contain!important}.game-card[data-image-padding="0"] .game-image-wrap img{padding:0!important}.game-card[data-image-padding="8"] .game-image-wrap img{padding:8px!important}.game-card[data-image-padding="16"] .game-image-wrap img{padding:16px!important}.game-card[data-image-padding="24"] .game-image-wrap img{padding:24px!important}.detail{margin-top:16px;background:#fff;border-radius:24px;box-shadow:var(--shadow);overflow:hidden}.detail-top{padding:12px}.detail-top img{width:100%;height:270px;image-rendering:auto;object-fit:cover;border-radius:18px;background:#eee}.back-to-games{border:1px solid #bbf7d0;background:#f0fdf4;color:#15803d;border-radius:999px;padding:8px 14px;font-weight:900;margin-bottom:10px}.info{text-align:center;padding:12px 16px}.info h2{margin:0;font-size:28px}.info p{margin:7px 0;color:var(--muted)}.chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}.chip{background:#ecfdf3;color:#15803d;border-radius:999px;padding:9px 13px;font-weight:900;font-size:13px}.benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;padding:10px 12px 16px}.benefit{border:1px solid #dcfce7;background:#f7fff9;border-radius:16px;padding:13px 8px;text-align:center}.benefit b{display:block}.benefit small{display:block;color:var(--muted);margin-top:4px}.packages-wrap{border-top:1px solid var(--line)}.packages-title{padding:18px 16px 10px}.packages-title h3{margin:0;font-size:24px}.packages-title p{margin:6px 0 0;color:var(--muted)}.packages{display:grid;gap:10px;padding:8px 12px 14px}.package{width:100%;border:2px solid #ececf1;border-radius:17px;background:#fff;padding:9px 10px;display:grid;grid-template-columns:100px minmax(0,1fr) 108px;align-items:center;gap:12px;text-align:right;min-height:78px;direction:rtl;overflow:hidden}.package.active{border-color:var(--p);box-shadow:0 0 0 5px #16a34a18;background:#f7fff9}.package .price{font-size:19px;font-weight:900;direction:ltr;unicode-bidi:isolate;text-align:left;white-space:nowrap;min-width:0}.package .name{font-size:16px;font-weight:900;line-height:1.45;unicode-bidi:plaintext;overflow-wrap:anywhere;min-width:0}.package .amount{display:block;color:#858b94;font-size:12px;unicode-bidi:isolate;direction:auto;overflow-wrap:anywhere}.package-desc{display:block;color:#73817f;font-size:11px;font-weight:600;margin-top:3px;white-space:normal}.package img{width:96px;height:52px;object-fit:contain;object-position:center;border-radius:8px;justify-self:start;background:#fff;display:block}.offer-old{display:block;color:#e85a5a;text-decoration:line-through;font-size:12px;margin-top:3px}.offer-badge{display:inline-block;background:var(--p);color:#fff;border-radius:999px;padding:3px 7px;font-size:10px;margin-right:5px}.empty{padding:25px;text-align:center;color:var(--muted)}
+.checkout{margin-top:14px;background:#fff;border-radius:24px;box-shadow:var(--shadow);padding:17px}.checkout h3{margin:0 0 5px;font-size:23px}.checkout .sub{margin:0 0 15px;color:var(--muted)}.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}.game-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.game-fields .field.full{grid-column:1/-1}.field input[type=password]{direction:ltr;text-align:left}.field select{border:1px solid #dddfe7;border-radius:13px;padding:12px;outline:none;background:#fff}.field{display:flex;flex-direction:column;gap:6px;font-weight:800}.field.full{grid-column:1/-1}.field input,.field textarea{border:1px solid #dddfe7;border-radius:13px;padding:12px;outline:none}.phone{display:flex;direction:ltr;border:1px solid #dddfe7;border-radius:13px;overflow:hidden}.phone span{padding:12px;background:#f4f4f7;font-weight:900}.phone input{border:0;border-radius:0;width:100%}.paybox{margin-top:13px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:14px;padding:13px;line-height:1.7}.total{display:flex;justify-content:space-between;margin-top:13px;border-top:1px solid var(--line);padding-top:13px;font-size:20px;font-weight:900}.total span:last-child{color:var(--p);direction:ltr}.submit{width:100%;border:0;background:var(--p);color:#fff;border-radius:15px;padding:14px;margin-top:14px;font-size:18px;font-weight:900}.submit:disabled{opacity:.5}.status{text-align:center;margin-top:10px;font-weight:800;line-height:1.7}.note{text-align:center;color:var(--muted);font-size:12px;margin-top:8px}
+.search-panel{display:none;position:fixed;inset:0;z-index:200;background:rgba(12,15,25,.55);padding:80px 12px}.search-panel.open{display:block}.search-box{background:#fff;border-radius:20px;padding:16px;max-width:620px;margin:auto;box-shadow:0 15px 40px rgba(0,0,0,.2)}.search-box input{width:100%;border:1px solid #dddfe7;border-radius:14px;padding:14px;outline:none}.search-results{display:grid;gap:8px;margin-top:10px;max-height:60vh;overflow:auto}.search-results button{border:1px solid #eee;background:#fff;border-radius:12px;padding:12px;text-align:right;font-weight:800}.description-card{margin-top:14px;background:#fff;border-radius:24px;box-shadow:var(--shadow);overflow:hidden}.description-head{padding:20px 18px;border-bottom:1px solid var(--line)}.description-head h3{margin:0;font-size:25px}.description-body{padding:18px 18px 22px;font-size:17px;line-height:2;color:#3d4148}.description-body p{margin:0 0 16px}.guide{border-top:1px solid #eee;padding-top:15px}.guide h4{margin:0 0 8px;font-size:20px}.guide ol{margin:0;padding-inline-start:24px}.safe-note{margin-top:18px;background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;border-radius:14px;padding:12px;font-weight:800;font-size:14px;line-height:1.7} .search-btn{font-family:Arial,sans-serif}
+.bottom{position:fixed;z-index:60;bottom:0;left:0;right:0;height:76px;background:#fff;border-top:1px solid #e7e7ed;box-shadow:0 -5px 18px #00000010;display:flex;justify-content:center;padding:7px}.bottom-inner{width:min(560px,100%);display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.bottom a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:14px;color:#626a74;font-weight:900;font-size:12px}.bottom a.active{background:#ecfdf3;color:var(--p)}.bi{font-size:21px}
+@media(min-width:701px){.game-grid{grid-template-columns:repeat(var(--desktop-cols,2),minmax(0,1fr))}}@media(max-width:700px){.top{height:64px;padding:0 10px}.brand{font-size:17px}.login{font-size:15px}.search-btn{font-size:32px}.subtop{top:64px;height:52px}.promo{min-height:430px}.slide{min-height:430px;padding-bottom:35px}.slide img,.slide video{height:300px}.slide .copy{margin-top:-110px;padding:14px 18px}.slide h1{font-size:27px}.slide p{font-size:15px}.brand img{width:46px;height:39px}.back{font-size:12px;padding:8px 9px}.wrap{padding:8px}.promo{min-height:300px;border-radius:20px}.slide{grid-template-columns:1fr;min-height:300px;padding:12px}.slide img,.slide video{height:145px;order:-1}.slide h1{font-size:25px;margin:8px 0 5px}.slide p{font-size:13px;margin-bottom:10px}.game-grid{gap:10px}.topup-tools{grid-template-columns:1fr 1fr}.topup-tools input{grid-column:1/-1}.topup-tools #catalogCategory{display:none}.topup-tools button{grid-column:1/-1}.game-card{border-radius:18px}.game-card img{height:150px}.game-card h3{font-size:15px}.heading h2{font-size:23px}.see{font-size:13px}.benefits{grid-template-columns:1fr 1fr}.detail-top img{height:210px}.info h2{font-size:24px}.grid{grid-template-columns:1fr}.field.full{grid-column:auto}.package{grid-template-columns:96px minmax(0,1fr) 100px;min-height:74px;padding:8px 9px;gap:10px}.package img{width:92px;height:50px}.package .name{font-size:15px;line-height:1.35;min-width:0}.package .amount{font-size:12px;margin-top:2px}.package .price{font-size:17px;line-height:1.15;text-align:left}.offer-old{font-size:11px}.offer-badge{font-size:9px;padding:2px 6px}.bottom{height:80px}}
+ .payment-ok{color:#15803d;font-weight:900}.payment-loading{color:#6b7280}.payment-error{color:#b42318}.payment-retry{border:0;background:#fff;border:1px solid #fecaca;color:#b42318;border-radius:10px;padding:7px 10px;font-weight:800;margin-top:6px}</style>
+<style>
+/* FENK mobile fixes: compact game cards, cleaner banners, reachable account close/logout */
+@media(min-width:701px){.game-grid{grid-template-columns:repeat(var(--desktop-cols,2),minmax(0,1fr))}}@media(max-width:700px){
+  .game-card img{height:132px!important;object-position:center center!important}.game-card.efootball-card img{object-fit:cover!important;object-position:center center!important;background:#eee}
+  .game-card .body{padding:9px!important}
+  .game-card h3{font-size:14px!important;min-height:2.6em!important}
+  .game-card .from{font-size:13px!important}
+  .game-card .sub{font-size:11px!important}
+  .game-card .open{font-size:13px!important;padding:9px 6px!important}
+  .game-image-wrap .live{top:8px!important;right:8px!important;font-size:10px!important;padding:6px 9px!important}
+  .promo{min-height:0!important}
+  .slide{min-height:0!important;padding:0 0 42px!important}
+  .slide img{height:205px!important;object-position:center center!important}
+  .slide .copy{margin-top:-72px!important;padding:12px 15px!important}
+  .slide h1{font-size:23px!important}
+  .slide p{font-size:13px!important;line-height:1.6!important}
+}
+#accountModal .close{position:sticky!important;top:0!important;z-index:20!important;float:left!important;margin:-4px 0 4px 0!important;width:42px!important;height:42px!important;background:#fff!important;border:1px solid #e5e8ef!important;box-shadow:0 3px 12px rgba(0,0,0,.10)!important}
+#accountModal .account-box{scroll-padding-top:8px!important}
+
+.direct-game .promo,.direct-game .catalog-section{display:none!important}
+.direct-game .wrap{padding-top:12px}
+.direct-game .detail{margin-top:0}
+
+/* FENK Games V4 mobile polish */
+.catalog-section{scroll-margin-top:82px}.game-card{position:relative}.game-card .favorite{position:absolute;top:10px;left:10px;z-index:3;width:38px;height:38px;border:0;border-radius:50%;background:rgba(255,255,255,.94);color:#16a34a;display:grid;place-items:center;box-shadow:0 4px 12px rgba(0,0,0,.14);font-size:20px}.game-card .favorite.active{background:#16a34a;color:#fff}.game-card .body{min-height:160px}.game-card .open{min-height:44px}.category-sections{display:grid;gap:14px;margin-top:18px}.service-section{background:#fff;border:1px solid var(--line);border-radius:22px;padding:15px;box-shadow:var(--shadow)}.service-section h3{margin:0 0 5px;font-size:22px}.service-section p{margin:0;color:var(--muted)}.service-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}.service-empty{padding:22px;text-align:center;color:var(--muted);background:#f0fdf4;border-radius:14px}.proof-box{margin-top:14px;border:1px solid #bbf7d0;background:#f0fdf4;border-radius:16px;padding:13px}.proof-box label{display:flex;flex-direction:column;gap:7px;font-weight:900}.proof-box input[type=file]{width:100%;padding:10px;border:1px dashed #86efac;border-radius:12px;background:#fff}.proof-help{font-size:12px;color:var(--muted);margin-top:6px}.status-badge{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;background:#ecfdf3;color:#15803d;font-size:11px;font-weight:900}.discount-percent{display:inline-block;background:#ffe8e8;color:#c33d3d;border-radius:999px;padding:3px 6px;font-size:10px;margin-top:3px}.service-section.hidden{display:none}@media(max-width:720px){.top{height:64px}.subtop{display:none}.wrap{padding:10px 10px 30px}.promo{min-height:330px;border-radius:18px}.slide{min-height:330px}.slide img,.slide video{height:230px}.slide .copy{padding:12px 16px;margin-top:-72px}.slide h1{font-size:25px}.slide p{font-size:14px}.topup-tools{grid-template-columns:1fr 1fr;gap:8px;padding:10px}.topup-tools input{grid-column:1/-1}.topup-tools #catalogCategory{display:none}.topup-tools button{grid-column:1/-1}.game-grid{gap:9px}.game-card{border-radius:18px}.game-card img{height:132px}.game-card .body{padding:9px 9px 10px;min-height:150px}.game-card h3{font-size:15px;min-height:2.5em}.game-card .from{font-size:13px}.game-card .sub{font-size:11px}.game-card .open{font-size:13px;padding:9px 6px}.game-card .favorite{width:34px;height:34px;font-size:18px;top:8px;left:8px}.service-grid{grid-template-columns:1fr 1fr}.detail-top img{height:220px}.game-fields{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.game-fields .field.full{grid-column:auto}.checkout{padding:13px;border-radius:19px}.benefits{grid-template-columns:1fr 1fr}.package{grid-template-columns:96px minmax(0,1fr) 100px;min-height:74px;padding:8px 9px;gap:10px}.package img{width:92px;height:50px}.package .price{font-size:17px}.bottom{z-index:100}.bottom-inner{padding-bottom:max(6px,env(safe-area-inset-bottom))}}
+</style>
+<style>.recent-topups{margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:22px;padding:15px;box-shadow:var(--shadow)}.recent-topups-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.recent-topup{border:1px solid #dcfce7;background:#f7fff9;border-radius:15px;padding:11px;text-align:right}.recent-topup b{display:block}.recent-topup small{display:block;color:var(--muted);margin:4px 0}.recent-topup button{width:100%;border:0;background:var(--p);color:#fff;border-radius:10px;padding:9px;font-weight:900}@media(min-width:701px){.game-grid{grid-template-columns:repeat(var(--desktop-cols,2),minmax(0,1fr))}}@media(max-width:700px){.recent-topups-list{grid-template-columns:1fr 1fr}}@media(max-width:430px){.recent-topups-list{grid-template-columns:1fr}}</style>
+<style>
+/* FENK V135 — Mobile games UI compact polish (mobile only) */
+@media (max-width:700px){
+  .top{height:60px!important;padding:0 10px!important;gap:8px!important}
+  .top .brand{gap:6px!important;font-size:16px!important}
+  .top .brand img{width:42px!important;height:35px!important}
+  .top-actions{gap:10px!important}
+  .login{font-size:14px!important;white-space:nowrap}
+  .search-btn{font-size:29px!important;width:36px!important;height:36px!important;padding:0!important;display:grid!important;place-items:center!important}
+
+  .game-grid{gap:8px!important}
+  .game-card{border-radius:17px!important;box-shadow:0 5px 16px rgba(20,32,52,.10)!important}
+  .game-card img{height:124px!important}
+  .game-card .body{padding:8px 8px 9px!important;min-height:142px!important}
+  .game-card h3{font-size:14px!important;line-height:1.28!important;min-height:2.56em!important;margin:5px 0 3px!important}
+  .game-card .from{font-size:12.5px!important;line-height:1.25!important}
+  .game-card .sub{font-size:10.5px!important;margin-top:3px!important}
+  .game-card .open{min-height:42px!important;height:42px!important;margin-top:7px!important;padding:7px 5px!important;border-radius:11px!important;font-size:12.5px!important}
+
+  /* Favorite: compact but still touchable */
+  .game-card .favorite{width:42px!important;height:42px!important;top:8px!important;left:8px!important;font-size:19px!important;box-shadow:0 3px 10px rgba(0,0,0,.12)!important}
+
+  /* Direct-shipping badge: smaller and less intrusive */
+  .game-image-wrap .live{top:8px!important;right:8px!important;height:40px!important;min-height:40px!important;padding:0 10px!important;font-size:10px!important;gap:4px!important;border-radius:999px!important;line-height:1!important}
+  .game-image-wrap .live:before,.game-image-wrap .live i{width:6px!important;height:6px!important;min-width:6px!important}
+
+  /* Search / filters */
+  .heading{margin:16px 2px 9px!important}
+  .heading h2{font-size:21px!important}
+  .heading p{font-size:12px!important}
+  .topup-tools{gap:7px!important;padding:8px!important;border-radius:15px!important}
+  .topup-tools input,.topup-tools select{padding:10px!important;border-radius:11px!important;font-size:13px!important}
+  .topup-tools button{padding:10px 14px!important;border-radius:11px!important;font-size:13px!important}
+
+  /* Bottom navigation: compact, without shrinking the touch target too far */
+  body{padding-bottom:78px!important}
+  .bottom{height:70px!important;padding:5px 7px!important}
+  .bottom-inner{gap:4px!important}
+  .bottom a{gap:1px!important;border-radius:12px!important;font-size:11px!important;min-height:60px!important}
+  .bottom a.active{padding:3px 10px!important}
+  .bi{font-size:23px!important;line-height:1!important}
+}
+@media (max-width:390px){
+  .top{padding-inline:8px!important}
+  .top .brand img{width:40px!important;height:34px!important}
+  .top .brand{font-size:15px!important}
+  .search-btn{font-size:27px!important;width:34px!important;height:34px!important}
+  .login{font-size:13px!important}
+  .game-grid{gap:7px!important}
+  .game-card img{height:116px!important}
+  .game-card .body{min-height:138px!important;padding:7px!important}
+  .game-card .favorite{width:40px!important;height:40px!important;top:7px!important;left:7px!important;font-size:18px!important}
+  .game-image-wrap .live{top:7px!important;right:7px!important;height:38px!important;min-height:38px!important;padding-inline:8px!important;font-size:9.5px!important}
+  .game-card h3{font-size:13.5px!important}
+  .game-card .from{font-size:12px!important}
+  .game-card .open{height:40px!important;min-height:40px!important;font-size:12px!important}
+  .bottom{height:68px!important}
+  .bottom a{min-height:58px!important;font-size:10.5px!important}
+  .bi{font-size:22px!important}
+}
+</style>
+<style id="fenk-checkout-mobile-fix-v1">
+@media (max-width:700px){
+  .checkout{margin-bottom:18px!important;padding-bottom:18px!important;scroll-margin-bottom:90px!important}
+  .checkout .paybox,.checkout .proof-box,.checkout .total{margin-top:12px!important}
+  .checkout .total{position:static!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;padding:13px 14px!important;border-radius:14px!important;background:#f7fffb!important;border:1px solid #cce7dc!important;font-size:16px!important}
+  .checkout .total span:last-child{font-size:19px!important;font-weight:950!important;white-space:nowrap!important}
+  .checkout .proof-box{padding:11px!important}
+  .checkout .proof-box input[type=file]{font-size:13px!important;max-width:100%!important;box-sizing:border-box!important}
+  .checkout .paybox{line-height:1.8!important;font-size:13px!important}
+  .checkout .submit{min-height:48px!important;margin-top:12px!important}
+}
+@media (max-width:390px){
+  .checkout{padding:11px!important}
+  .checkout h3{font-size:18px!important}
+  .checkout .total span:last-child{font-size:17px!important}
+}
+body{overflow-x:hidden!important}
+</style>
+  <link rel="stylesheet" href="fenk-global-share.css?v=1">
+<style id="fenk-game-page-control-css">:root{--page-max-width:1120px;--game-gap:12px;--game-image-height:150px;--game-card-radius:22px;--game-page-padding:12px;--game-promo-height:390px;--game-promo-image-height:300px;--game-section-gap:20px;--game-font-family:system-ui;--game-font-size:16px;--game-heading-size:28px;--game-card-title-size:16px;--game-body-size:16px;--game-button-size:17px;--game-line-height:1.7;--game-icon-color:#15803d;--game-icon-size:18px}body{background:var(--bg)!important;color:var(--text)!important}.top{background:var(--header)!important}.wrap{max-width:var(--page-max-width)!important;gap:var(--game-section-gap)!important;padding-left:var(--game-page-padding)!important;padding-right:var(--game-page-padding)!important}.game-grid{gap:var(--game-gap)!important}.catalog-section,.detail,.checkout,.recent-topups{margin-top:var(--game-section-gap)!important}.promo{min-height:var(--game-promo-height)!important}.slide{min-height:var(--game-promo-height)!important}.slide img,.slide video{height:var(--game-promo-image-height)!important}.game-card{background:var(--card)!important;border-color:var(--line)!important;border-radius:var(--game-card-radius)!important}.game-card .game-image-wrap img,.game-card .game-image-wrap video,.game-card img,.game-card video{height:var(--card-image-height,var(--game-image-height))!important;width:100%!important;object-fit:cover!important}.game-card .body{color:var(--text)!important}.game-card .sub,.heading p{color:var(--muted)!important}.game-card .open,.cta,.topup-tools button{background:var(--primary)!important}.game-card .from,.see{color:var(--primary)!important}.topup-tools,.detail,.description-card{background:var(--card)!important;border-color:var(--line)!important}@media(min-width:701px){.game-grid{grid-template-columns:repeat(var(--desktop-cols,2),minmax(0,1fr))!important}}@media(max-width:700px){.game-grid{grid-template-columns:repeat(var(--mobile-cols,2),minmax(0,1fr))!important}}body{font-family:var(--game-font-family)!important;font-size:var(--game-font-size);line-height:var(--game-line-height)}.info h2{font-size:var(--game-heading-size)!important}.game-card h3{font-size:var(--game-card-title-size)!important}.detail,.checkout,.description-card,.paybox,.package,.package-method-choice{font-size:var(--game-body-size)}.submit,.game-card .open,.payment-method,.package-method-btn{font-size:var(--game-button-size)!important}.benefit span,.back-to-games span,#gameSearchIcon{color:var(--game-icon-color)!important;font-size:var(--game-icon-size)!important}</style>  <script src="fenk-game-music.js?v=183" defer></script>
+<style id="fenk-package-method-css">
+.package-method-choice{padding:14px 14px 6px;background:#fff;border-bottom:1px solid #eef2f0}
+.package-method-title{font-weight:900;font-size:17px;margin-bottom:8px;color:#173b4d}
+.package-methods-top{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.package-method-btn{border:2px solid #d8e6e1;background:#fff;border-radius:14px;padding:11px 9px;font-weight:900;color:#145c48;min-height:48px;cursor:pointer}
+.package-method-btn.active{background:#16a34a;color:#fff;border-color:#16a34a;box-shadow:0 3px 10px rgba(22,163,74,.15)}
+.package-method-hint{margin-top:8px;color:#6b7280;font-size:12px;line-height:1.7}
+.package-method-hint.flexy{color:#9a3412;font-weight:800}
+@media(max-width:600px){.package-method-choice{padding:12px 12px 5px}.package-method-btn{font-size:14px;padding:10px 7px}.package-method-title{font-size:16px}}
+</style><style id="fenk-flexy-css">.payment-methods{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:13px}.payment-method{border:1px solid #cfe3dc;background:#fff;border-radius:14px;padding:12px;font-weight:900;color:#145c48}.payment-method.active{background:#16a34a;color:#fff;border-color:#16a34a}.flexy-box{background:#fffdf0;border-color:#fde68a}.operator-title{font-weight:900;margin:12px 0 8px}.flexy-operators{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.flexy-operator{border:2px solid #e5e7eb;background:#fff;border-radius:14px;padding:9px 6px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:7px;min-height:62px}.flexy-operator.active{border-color:#16a34a;background:#ecfdf5;color:#15803d}.operator-logo{width:34px;height:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;flex:0 0 34px;overflow:hidden;background:#fff}.operator-logo.mobilis{color:#3aaa35;border:2px solid #3aaa35}.operator-logo.djezzy{color:#e30613;border:2px solid #e30613}.operator-logo.ooredoo{color:#e30613;border:2px solid #e30613;font-size:8px}.flexy-number{margin-top:10px;background:#fff;border:1px solid #dbe5e1;border-radius:13px;padding:12px;font-weight:900;direction:ltr;text-align:center}.flexy-payment-note{font-size:12px;color:#6b7280;margin-top:8px}.flexy-limit-note{margin-top:10px;padding:9px 11px;border-radius:12px;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;font-size:12px;font-weight:800}.flexy-unavailable{opacity:.62!important;border-color:#f3d1d1!important;background:#fff7f7!important;color:#9f1239!important}.payment-method[disabled]{opacity:.5 }@media(max-width:600px){.flexy-operators{grid-template-columns:1fr 1fr}.payment-methods{gap:8px}.operator-logo{width:30px;height:30px;flex-basis:30px}}</style>
+<style>.package-unavailable{opacity:.62!important;cursor:not-allowed!important;border-color:#f1caca!important}.flexy-limit-inline{color:#9f1239!important;font-weight:800}</style><style id="fenk-v184-payment-selector-fix">#paymentMethods{display:none!important}</style>
+<style id="fenk-v180-topup-fixes">
+html{overflow-x:hidden}
+body{padding-bottom:84px!important}
+.package .name{direction:auto;unicode-bidi:plaintext;text-align:right;min-width:0;overflow:hidden}
+.package .amount,.package .package-desc{direction:auto;unicode-bidi:plaintext}
+.package .price{direction:ltr;unicode-bidi:isolate;text-align:left}
+.package img{background:#f8fafc}
+.flexy-number[hidden]{display:none!important}
+.operator-logo{font-family:Arial,sans-serif;letter-spacing:-.4px}
+.operator-logo.mobilis{background:#fff;border:2px solid #35a936;color:#35a936}
+.operator-logo.djezzy{background:#e30613;border:2px solid #e30613;color:#fff}
+.operator-logo.ooredoo{background:#e30613;border:2px solid #e30613;color:#fff}
+.operator-logo.mobilis span{font-size:7px}.operator-logo.djezzy span{font-size:8px}.operator-logo.ooredoo span{font-size:7px}
+.flexy-operator:not(.active){opacity:1}.operator-state{display:block;font-size:10px;font-weight:700;margin-top:3px;color:#6b7280}.flexy-operator.flexy-unavailable{opacity:.58;cursor:not-allowed}.flexy-operator.flexy-unavailable .operator-state{color:#9f1239}
+.package-unavailable{display:none!important}
+.empty{line-height:1.7}
+@media(max-width:700px){
+ .game-card .open{min-height:38px!important;font-size:13px!important;display:flex!important;align-items:center!important;justify-content:center!important}
+ .game-card .body{padding:10px!important}
+ .game-card .sub{font-size:11px!important}
+ .packages{padding-bottom:18px!important}
+}
+</style>
+<style id="fenk-v180-improved-final">
+/* FENK V180 improved: RTL + mobile polish */
+html,body{max-width:100%;overflow-x:hidden}
+[dir="rtl"] .package-name,[dir="rtl"] .game-name,.package-name,.game-name{
+  direction:auto; unicode-bidi:plaintext; text-align:right; overflow-wrap:anywhere;
+}
+.package-card img,.game-card img{display:block;max-width:100%;height:auto}
+.payment-operator-card img{object-fit:contain}
+.payment-proof-help{line-height:1.7}
+@media (max-width:600px){
+  .game-card{min-width:0}
+  .game-card .action-btn,.game-card button{min-height:40px;white-space:nowrap}
+  .package-card{min-width:0}
+  .package-card .package-name{font-size:.95rem;line-height:1.35}
+  .package-card .price{font-size:1rem}
+  main,.page-content,.container{padding-bottom:calc(90px + env(safe-area-inset-bottom)) !important}
+}
+</style>
+
+</head>
+<body>
+<header class="top"><div class="top-actions"><a class="login" href="index.html">دخول ↪</a><button class="search-btn" type="button" aria-label="بحث" id="searchBtn"><span id="gameSearchIcon">⌕</span></button></div><a class="brand" href="index.html"><img src="assets/logo-clean.webp" alt="FENK"><span>FENK</span></a></header>
+<div class="search-panel" id="searchPanel"><div class="search-box"><input id="gameSearch" placeholder="ابحث عن لعبة..."><div class="search-results" id="searchResults"></div></div></div>
+<main class="wrap">
+<section class="promo"><div class="promo-track" id="promoTrack"></div><div class="dots" id="promoDots"></div></section>
+<section class="catalog-section"><div class="heading"><div><h2>شحن الألعاب</h2><p>اختر لعبتك وابدأ الشحن مباشرة</p></div><span class="see" id="resultsCount">0 لعبة</span></div><div class="topup-tools"><input id="catalogSearch" type="search" placeholder="ابحث عن لعبة..." aria-label="بحث في الألعاب"><select id="catalogSort" aria-label="الفرز"><option value="default">الفرز حسب</option><option value="price-asc">السعر: الأقل أولاً</option><option value="price-desc">السعر: الأعلى أولاً</option><option value="name">الاسم</option></select><button id="catalogApply" type="button">بحث</button></div><div class="game-grid" id="catalog"></div></section><section class="detail" id="detail" hidden><div class="detail-top" id="gameBannerWrap"><img id="gameBanner" alt=""></div><div class="info"><button type="button" class="back-to-games" id="backToGames"><span id="gameBackIcon">←</span> العودة إلى الألعاب</button><h2 id="gameTitle"></h2><p id="gameDesc"></p><div class="chips" id="detailChips"><span class="chip" id="detailTime">مدة الاستلام: —</span><span class="chip" id="detailServer">السيرفر: —</span><span class="chip">💳 بريد موب أو فلكسي</span></div></div><div class="benefits" id="benefitsSection"><div class="benefit"><b><span id="benefitSecureIcon">🛡</span> دفع آمن</b><small>دفع محلي عبر بريد موب</small></div><div class="benefit"><b><span id="benefitSupportIcon">💬</span> دعم FENK</b><small>مساعدة أثناء الطلب</small></div><div class="benefit"><b><span id="benefitTrackIcon">↔</span> متابعة الطلب</b><small>رقم طلب وحالة واضحة</small></div><div class="benefit"><b><span id="benefitFastIcon">⚡</span> خدمة سريعة</b><small>بعد تأكيد الدفع</small></div></div><div class="packages-wrap">
+  <div class="package-method-choice" id="packageMethodChoice">
+    <div class="package-method-title">طريقة الشحن</div>
+    <div class="package-methods-top" role="group" aria-label="طريقة الشحن">
+      <button type="button" class="package-method-btn active" data-payment-method="barid_mob">💳 بريد موب</button>
+      <button type="button" class="package-method-btn" data-payment-method="flexy">📱 فلكسي</button>
+    </div>
+    <div class="package-method-hint" id="packageMethodHint">اختر الباقة ثم ستظهر لك بيانات الشحن عبر بريد موب.</div>
+  </div>
+  <div class="packages-title" id="packagesTitle"><h3 id="packageTitle">اختر ما يناسبك</h3><p id="packageHint">الباقات والأسعار محددة من Admin.</p></div>
+  <div class="packages" id="packages"></div>
+</div></section>
+<section class="description-card" id="descriptionCard" hidden>
+  <div class="description-head"><h3 id="descriptionTitleText">الوصف</h3></div>
+  <div class="description-body">
+    <p id="gameLongDescription"></p>
+    <div class="guide" id="guideSection"><h4 id="guideTitleText">طريقة الشحن</h4><ol id="gameGuide"></ol></div>
+    <div class="safe-note" id="securityNote">أدخل فقط البيانات المطلوبة لهذه اللعبة. لا تشارك بيانات لا تطلبها FENK.</div>
+  </div>
+</section>
+
+<section class="checkout" id="checkout" hidden><h3 id="checkoutTitleText">بيانات الشحن</h3><p class="sub" id="checkoutSubtitleText">هذه الصفحة تتغير حسب اللعبة. الحقول والأسعار النشطة مرتبطة بقاعدة بيانات FENK ويديرها حساب Admin.</p><div class="grid"><div id="gameFields" class="game-fields full-field"></div><label class="field" id="phoneField"><span id="phoneLabelText">رقم الهاتف</span><div class="phone"><span>+213</span><input id="phone" inputmode="tel" maxlength="9" placeholder="5xxxxxxxx"></div></label><label class="field" id="nameField"><span id="nameLabelText">الاسم الكامل</span><input id="name" placeholder="الاسم واللقب"></label><label class="field full" id="notesField"><span id="notesLabelText">ملاحظات</span><textarea id="notes" rows="3" placeholder="أي معلومات مهمة للشحن..."></textarea></label></div><div class="payment-methods" id="paymentMethods"><button type="button" class="payment-method active" data-payment-method="barid_mob">💳 بريد موب</button><button type="button" class="payment-method" data-payment-method="flexy">📱 فلكسي</button></div><div class="paybox" id="baridPayBox"><b id="baridTitleText">طريقة الدفع: بريد موب</b><br><span id="paymentInstructions">تعليمات الدفع الخاصة بـFENK ستظهر هنا.</span></div><div class="paybox flexy-box" id="flexyPayBox" hidden><b id="flexyTitleText">طريقة الدفع: فلكسي</b><div class="operator-title">اختر المتعامل</div><div class="flexy-operators" id="flexyOperators"></div><div class="flexy-number" id="flexyNumber" hidden>اختر المتعامل ليظهر الرقم.</div><div class="flexy-payment-note">حوّل المبلغ عبر فلكسي إلى الرقم الظاهر أعلاه. لا يُطلب إثبات دفع أو صورة تحويل عند استخدام فلكسي.</div><div class="flexy-limit-note">الحد الأقصى للدفع عبر فلكسي هو <strong>600 دج</strong>. الباقات الأعلى من ذلك لا تتوفر عبر فلكسي.</div></div><div class="proof-box" id="proofBox"><label for="paymentProof"><span id="proofLabelText">ارفع إثبات الدفع</span> <span class="status-badge">مطلوب</span><input id="paymentProof" type="file" accept="image/jpeg,image/png,image/webp" required></label><div class="proof-help">صورة إثبات التحويل فقط — الحد الأقصى 5 ميغابايت.</div></div><div class="total" id="totalBox"><span id="totalLabelText">المجموع</span><span id="total">— دج</span></div><button class="submit" id="send" disabled>اختر باقة أولاً</button><div class="status" id="status"></div><div class="note" id="footerNote">الأسعار المعروضة من باقات FENK النشطة ويمكن تعديلها من Admin.</div></section>
+</main>
+<footer class="bottom"><div class="bottom-inner"><a href="index.html"><span class="bi">⌂</span><span>الرئيسية</span></a><a href="#catalog" class="active"><span class="bi">🎮</span><span>الألعاب</span></a><a href="#checkout"><span class="bi">🛍</span><span>طلب الشحن</span></a></div></footer>
+<script src="game-topup-control.js?v=20260923-v185"></script>
+<script>
+const SUPABASE_URL='https://wqfnzahjwlukncxlxdkp.supabase.co';const SUPABASE_KEY='sb_publishable__QR4tJ9p5RYOQkIuHkoYKQ_mbDa9tuA';const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{flowType:'pkce',persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const DEFAULT_FIELDS={
+ 'PUBG Mobile':[{key:'player_id',label:'Player ID',type:'text',placeholder:'أدخل Player ID الخاص بك',required:true}],
+ 'PUBG Mobile Packs and Passes':[{key:'player_id',label:'Player ID',type:'text',placeholder:'أدخل Player ID الخاص بك',required:true}],
+ 'PUBG Mobile Korea':[{key:'player_id',label:'Player ID',type:'text',placeholder:'أدخل Player ID الخاص بك',required:true}],
+ 'Free Fire':[{key:'player_id',label:'Player ID',type:'text',placeholder:'أدخل Player ID الخاص بك',required:true}],
+ 'Free Fire Brazil':[{key:'player_id',label:'Player ID',type:'text',placeholder:'أدخل Player ID الخاص بك',required:true}],
+ 'Free Fire Taiwan':[{key:'player_id',label:'Player ID',type:'text',placeholder:'أدخل Player ID الخاص بك',required:true}],
+ 'Blood Strike MENA':[{key:'player_id',label:'Player ID',type:'text',placeholder:'أدخل Player ID الخاص بك',required:true}],
+ 'Blood Strike Global':[{key:'player_id',label:'Player ID',type:'text',placeholder:'أدخل Player ID الخاص بك',required:true}],
+ 'eFootball':[
+   {key:'konami_email',label:'البريد الإلكتروني (Email)',type:'email',placeholder:'البريد الإلكتروني لحساب KONAMI',required:true},
+   {key:'konami_password',label:'كلمة السر (Password)',type:'password',placeholder:'كلمة السر حساب KONAMI',required:true},
+   {key:'phone_type',label:'نوع هاتفك',type:'select',placeholder:'اختر نوع الهاتف',required:true,options:[{label:'Android',value:'Android'},{label:'iPhone',value:'iPhone'}]}
+ ],
+ 'Mobile Legends':[{key:'user_id',label:'User ID',type:'text',placeholder:'أدخل User ID',required:true},{key:'server',label:'Server ID',type:'text',placeholder:'أدخل Server ID',required:true}],
+ 'Mobile Legends Global':[{key:'user_id',label:'User ID',type:'text',placeholder:'أدخل User ID',required:true}],
+ 'Mobile Legends Regional':[{key:'user_id',label:'User ID',type:'text',placeholder:'أدخل User ID',required:true}],
+ 'Call of Duty Mobile':[{key:'player_id',label:'Player ID',type:'text',placeholder:'أدخل Player ID الخاص بك',required:true}],
+ 'Solo Leveling: ARISE':[{key:'email',label:'البريد الإلكتروني',type:'email',placeholder:'إيميل حساب Netmarble',required:true},{key:'password',label:'كلمة السر',type:'password',placeholder:'كلمة سر حساب Netmarble',required:true}],
+ 'Roblox':[{key:'username',label:'Username',type:'text',placeholder:'أدخل اسم المستخدم في Roblox',required:true}],
+};
+let checkoutFields=[];
+async function loadGameCheckoutFields(gameId){
+  if(!gameId)return;
+  try{
+    const r=await db.from('game_checkout_fields').select('id,game_id,field_key,field_label,field_type,placeholder,is_required,options,sort_order,is_active').eq('game_id',gameId).eq('is_active',true).order('sort_order',{ascending:true});
+    if(!r.error) checkoutFields=r.data||[];
+  }catch(e){console.warn('checkout fields load',e)}
+}
+function fieldSpec(gname){return checkoutFields.length?checkoutFields.map(f=>({...f,required:Boolean(f.is_required)})):[]}
+function renderGameFields(){
+  const box=qs('#gameFields'); if(!box||!selectedGame)return;
+  const dbFields=checkoutFields.filter(f=>f.game_id===selectedGame.id&&f.is_active).sort((a,b)=>(a.sort_order||0)-(b.sort_order||0));
+  const list=dbFields.length?dbFields:((DEFAULT_FIELDS[selectedGame.name]||[{key:'player_id',label:'Player ID',type:'text',placeholder:'أدخل Player ID الخاص بك',required:true}]));
+  box.innerHTML=list.map(f=>{const type=f.field_type||f.type||'text'; const rawKey=String(f.field_key||f.key||''); const key=escapeHtml(rawKey); const label=escapeHtml(f.field_label||f.label); const ph=escapeHtml(f.placeholder||f.ph||''); const req=(f.is_required??f.required)!==false; const inputType=/password|pass/i.test(rawKey)?'password':(type==='number'?'number':type==='email'?'email':'text'); if(type==='select'){const opts=Array.isArray(f.options)?f.options:[]; return `<label class="field"><span>${label}${req?' *':''}</span><select data-game-field="${key}" ${req?'required':''}><option value="">${ph||'اختر'}</option>${opts.map(o=>`<option value="${escapeHtml(o.value)}">${escapeHtml(o.label)}</option>`).join('')}</select></label>`} return `<label class="field"><span>${label}${req?' *':''}</span><input data-game-field="${key}" type="${inputType}" placeholder="${ph}" ${req?'required':''} autocomplete="${type==='password'?'off':'on'}"></label>`}).join('');
+  box.querySelectorAll('[data-game-field]').forEach(el=>el.addEventListener('input',validate));
+  box.querySelectorAll('select[data-game-field]').forEach(el=>el.addEventListener('change',validate));
+}
+function collectGameFields(){const out={};qs('#gameFields')?.querySelectorAll('[data-game-field]').forEach(el=>out[el.dataset.gameField]=el.value.trim());return out}
+function requiredGameFieldsValid(){const fields=qs('#gameFields')?.querySelectorAll('[data-game-field][required]')||[];return [...fields].every(el=>String(el.value||'').trim());}
+function primaryPlayerId(fields){return fields.player_id||fields.user_id||fields.uid||fields.username||Object.values(fields).find(v=>String(v||'').trim())||''}
+function normalizeSearch(v){return String(v||'').toLowerCase().normalize('NFKD').replace(/[\u064B-\u065F\u0670]/g,'').replace(/[إأآا]/g,'ا').replace(/ة/g,'ه').replace(/ى/g,'ي').replace(/ؤ/g,'و').replace(/ئ/g,'ي').replace(/[^\p{L}\p{N}]+/gu,' ').trim()}
+let favoriteIds=new Set();
+async function loadFavorites(){const user=await getUser();if(!user){favoriteIds=new Set();return}const {data}=await db.from('game_favorites').select('game_id').eq('user_id',user.id);favoriteIds=new Set((data||[]).map(x=>String(x.game_id)))}
+async function toggleFavorite(gameId){const user=await getUser();if(!user){statusBox.textContent='سجّل الدخول لإضافة الألعاب إلى المفضلة.';return}const id=String(gameId);if(favoriteIds.has(id)){const {error}=await db.from('game_favorites').delete().eq('user_id',user.id).eq('game_id',gameId);if(!error)favoriteIds.delete(id)}else{const {error}=await db.from('game_favorites').insert({user_id:user.id,game_id:gameId});if(!error)favoriteIds.add(id)}renderCatalog()}
+function goToGame(ref){const g=games.find(x=>String(x.id)===String(ref)||x.name===ref);if(!g)return;location.href='game-topup.html?v=177&game='+encodeURIComponent(g.slug||slugForGame(g.name));}
+const GAME_INFO={
+ 'PUBG Mobile':{server:'عالمي',time:'ثوانٍ',desc:'اشحن شدات PUBG Mobile بسرعة، اختر باقة UC المناسبة وأدخل Player ID فقط لإرسال طلبك إلى FENK.',guide:['افتح PUBG Mobile وانسخ Player ID.','اختر باقة UC المناسبة.','أدخل Player ID ورقم الهاتف ثم أرسل الطلب.','أكمل الدفع عبر بريد موب وانتظر تأكيد الطلب.']},
+ 'Free Fire':{server:'MENA',time:'ثوانٍ',desc:'شحن جواهر Free Fire مباشرة. اختر الباقة، أدخل Player ID وتابع الطلب عبر FENK.',guide:['افتح Free Fire واضغط صورة الملف الشخصي.','انسخ Player ID الظاهر في الحساب.','اختر باقة الجواهر وأدخل البيانات المطلوبة.','أكمل الدفع عبر بريد موب ثم تابع حالة الطلب.']},
+ 'Mobile Legends':{server:'عالمي',time:'5-30 دقيقة',desc:'شحن Diamonds لموبايل ليجند عبر FENK مع اختيار الباقة المناسبة لحسابك.',guide:['افتح اللعبة وانسخ User ID وZone ID إذا طلبا.','اختر الباقة.','أدخل البيانات المطلوبة بدقة.','أرسل الطلب وأكمل الدفع عبر بريد موب.']},
+ 'eFootball':{server:'عالمي',time:'5-30 دقيقة',desc:'شحن كوينز eFootball والباقات المتاحة. تظهر كل الباقات والأسعار من قاعدة بيانات FENK.',guide:['اختر الباقة المناسبة.','أدخل البيانات التي تظهر لك في نموذج الشحن.','راجع السعر قبل المتابعة.','أكمل الدفع عبر بريد موب وانتظر تأكيد FENK.']},
+ 'Genshin Impact':{server:'حسب الحساب',time:'5-30 دقيقة',desc:'شحن Genesis Crystals لحساب Genshin Impact وفق الباقات المتاحة في FENK.',guide:['اختر الباقة.','أدخل البيانات المطلوبة للحساب.','راجع السيرفر والبيانات قبل الإرسال.','أكمل الدفع عبر بريد موب.']},
+ 'Call of Duty Mobile':{server:'حسب السيرفر',time:'5-30 دقيقة',desc:'شحن CP للعبة Call of Duty Mobile مع باقات مختلفة حسب البيانات المتاحة.',guide:['اختر الباقة.','أدخل Player ID أو بيانات الحساب المطلوبة.','تأكد من السيرفر.','أكمل الدفع عبر بريد موب.']},
+ 'EA Sports FC':{server:'عالمي',time:'5-30 دقيقة',desc:'شحن نقاط EA Sports FC والباقات المتاحة من خلال FENK.',guide:['اختر الباقة المناسبة.','أدخل بيانات الحساب المطلوبة.','راجع السعر والبيانات.','أكمل الدفع عبر بريد موب.']},
+ 'Roblox':{server:'عالمي',time:'5-30 دقيقة',desc:'شحن Robux والباقات المتاحة من خلال FENK.',guide:['اختر الباقة.','أدخل اسم المستخدم أو البيانات المطلوبة.','راجع البيانات.','أكمل الدفع عبر بريد موب.']}
+};
+const ASSETS={'PUBG Mobile':{banner:'assets/game-card-pubg-mobile.webp',logo:'assets/pubg-mobile-logo.svg',title:'شحن لعبة ببجي موبايل – PUBG Mobile UC Top Up',sub:'UC'},'Free Fire':{banner:'assets/free-fire-user.webp',logo:'assets/free-fire-logo.svg',title:'شحن لعبة فري فاير – Free Fire Top Up',sub:'Diamonds'},'Mobile Legends':{banner:'assets/game-card-free-fire.webp',logo:'assets/logo-clean.webp',title:'شحن موبايل ليجند – Mobile Legends Diamonds',sub:'Diamonds'},'eFootball':{banner:'assets/efootball-user.png',logo:'assets/efootball-logo.svg',title:'شحن كوينز بيس - eFootball Mobile Coins (PES) Top-Up',sub:'Coins'},'Call of Duty Mobile':{banner:'assets/game-card-efootball.webp',logo:'assets/logo-clean.webp',title:'شحن نقاط Call of Duty Mobile – CP Top Up',sub:'CP'},'Roblox':{banner:'assets/game-card-roblox.webp',logo:'assets/roblox-logo.svg',title:'شحن Roblox - Robux',sub:'Robux'},'Genshin Impact':{banner:'assets/game-card-efootball.webp',logo:'assets/logo-clean.webp',title:'شحن Genshin Impact',sub:'Genesis Crystals'},'EA Sports FC':{banner:'assets/game-card-efootball-new.jpg',logo:'assets/efootball-logo.svg',title:'شحن EA Sports FC',sub:'Points'},'Xbox':{banner:'assets/game-card-xbox-new.jpg',title:'شحن بطاقات Xbox',sub:'Gift Cards'},'PlayStation':{banner:'assets/game-card-playstation-new.jpg',title:'شحن بطاقات PlayStation',sub:'بطاقات وشحن'},'Steam':{banner:'assets/game-card-steam-new.webp',title:'شحن Steam Wallet',sub:'Wallet'},'Roblox':{banner:'assets/game-card-roblox-new.jpg',logo:'assets/roblox-logo.svg',title:'شحن Roblox - Robux',sub:'Robux'}};
+const promos=[{game:'eFootball',ey:'هذا الأسبوع',title:'عودة شحن العروض ⚽️🔥',text:'عروض Luis Suarez و Iker Casillas والباقات الخاصة بـ eFootball.',btn:'تحقق'},{game:'Free Fire',ey:'شحن مباشر ⚡',title:'فري فاير MENA',text:'شحن مباشر سريع وباقات الجواهر المتاحة في FENK.',btn:'متابعة'},{game:'PUBG Mobile',ey:'حصرياً ✨',title:'PUBG Mobile',text:'اشحن UC واختر الباقة التي تناسبك بالسعر الظاهر في FENK.',btn:'متابعة'}];
+let games=[],packages=[],gameDisplaySettings=[],selectedGame=null,selectedPackage=null,promoIndex=0;
+const qs=s=>document.querySelector(s),catalog=qs('#catalog'),packageBox=qs('#packages'),sendBtn=qs('#send'),statusBox=qs('#status');const requested=new URLSearchParams(location.search).get('game');
+const GAME_IMAGE_MAP={
+ 'pubg-mobile':'pubg-mobile.webp','pubg-mobile-packs-and-passes':'pubg-mobile-packs-and-passes.webp','pubg-mobile-korea':'pubg-mobile-korea.webp',
+ 'free-fire':'free-fire.webp','free-fire-brazil':'free-fire-brazil.webp','free-fire-taiwan':'free-fire-taiwan.webp',
+ 'blood-strike-mena':'blood-strike-mena.webp','blood-strike-global':'blood-strike-global.webp',
+ 'efootball':'efootball-fenk.jpg','mobile-legends':'mobile-legends.webp','mobile-legends-global':'mobile-legends-global.webp','mobile-legends-regional':'mobile-legends-regional.webp',
+ 'honor-of-kings':'honor-of-kings.webp','delta-force':'delta-force-fenk.jpg','delta-force-garena':'delta-force-garena.webp','call-of-duty-mobile':'call-of-duty-mobile-fenk.jpg',
+ 'arena-breakout':'arena-breakout.webp','arena-breakout-infinite':'arena-breakout-infinite-fenk.jpg','solo-leveling-arise':'solo-leveling-arise.webp',
+ 'whiteout-survival':'whiteout-survival.webp','onestate-rp':'onestate-rp.webp','flex-city-rp':'flex-city-rp.webp','brawl-stars':'brawl-stars.webp',
+ 'clash-of-clans':'clash-of-clans.webp','clash-royale':'clash-royale.webp','8-ball-pool':'8-ball-pool.webp','tiktok-coins':'tiktok-coins.webp'
+};
+function hdSlug(n){return String(n||'').toLowerCase().replace(/[:]/g,'').replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'').replace(/-+/g,'-')}
+function assetFor(n,g=null){
+  const base=ASSETS[n]||{};
+  const key=hdSlug(g?.slug||n);
+  const hd=GAME_IMAGE_MAP[key]?`assets/game-hd/${GAME_IMAGE_MAP[key]}`:'';
+  const dbBanner=String(g?.banner_url||'').trim();
+  const dbLogo=String(g?.logo_url||'').trim();
+
+  // FENK: images edited from the Admin/Supabase database must ALWAYS
+  // override the bundled/static game artwork. Previously `hd` was first,
+  // so changing a game's image in Admin appeared to save successfully but
+  // the public Games page continued showing the old bundled image.
+  const banner=dbBanner||dbLogo||hd||base.banner;
+  const logo=dbLogo||dbBanner||hd||base.logo||banner;
+  const safeFallback=base.banner||hd||'assets/logo-clean.webp';
+
+  return {
+    banner,
+    fallback:safeFallback,
+    logo,
+    title:g?.name||base.title||'شحن '+n+' - Top Up',
+    sub:base.sub||'Top Up'
+  };
+}
+function infoFor(n,g=null){const base=GAME_INFO[n]||{server:'عالمي',time:'5-30 دقيقة',desc:'اختر الباقة المناسبة لهذه اللعبة وأرسل طلبك إلى FENK.',guide:['اختر الباقة المناسبة.','أدخل بيانات الشحن المطلوبة.','راجع البيانات قبل الإرسال.','أكمل الدفع عبر بريد موب.']};return {...base,desc:String(g?.description||'').trim()||base.desc}}function escapeHtml(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}function parseDzd(v){
+  if(v===null||v===undefined)return 0;
+  const raw=String(v).trim();
+  if(!raw)return 0;
+  const normalized=raw
+    .replace(/[٠-٩]/g,d=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(d)))
+    .replace(/[٬,\s]/g,'')
+    .replace(/[٫]/g,'.')
+    .replace(/[^0-9.\-]/g,'');
+  const n=Number(normalized);
+  return Number.isFinite(n)?n:0;
+}
+function price(p){
+  if(!p)return 0;
+  const normal=parseDzd(p.payment_price_dzd??p.price_dzd);
+  if(currentPaymentMethod==='flexy'){
+    // Explicit Flexy price wins; null/empty/zero falls back to normal price.
+    // An explicit Flexy price above 600 DZD is blocked.
+    const flexy=parseDzd(p.flexy_price_dzd);
+    if(flexy>0)return flexy<=600?flexy:0;
+    return normal>0&&normal<=600?normal:0;
+  }
+  return normal;
+}
+function originalPrice(p){return Number(p.original_price_dzd??0)}
+function slugForGame(g){return String(g?.slug||g?.name||'').trim().toLowerCase().replace(/[\s_]+/g,'-').replace(/[^a-z0-9-]/g,'').replace(/-+/g,'-')}
+function gameControl(){return window.FENK_GAME_PAGE_CONTROL||{}}function controlVisibility(key){return gameControl().visibility?.[key]!==false}function controlGame(g){const m=gameControl().games||{},k=String(g?.id||g?.slug||'');return m[k]||m[String(g?.slug||'')]||{}}function mediaHtml(t,u,a){if(t==='video'&&u)return `<video src="${escapeHtml(u)}" muted loop autoplay playsinline preload="metadata" aria-label="${escapeHtml(a||'')}"></video>`;if(t==='none')return '';return `<img src="${escapeHtml(u||'assets/logo-clean.webp')}" alt="${escapeHtml(a||'')}" loading="lazy">`}function mediaForGame(g){const c=controlGame(g),a=assetFor(g.name,g),ic=c.icon||{};return {cardType:c.mediaType||'image',cardUrl:c.mediaUrl||a.banner,iconType:ic.mediaType||c.mediaType||'image',iconUrl:ic.mediaUrl||c.mediaUrl||a.logo||a.banner,fallback:a.fallback||a.banner}}function renderPromos(){const c=gameControl(),items=Array.isArray(c.promos)&&c.promos.length?c.promos.filter(x=>x.active!==false):promos;const src=items.length?items:promos;qs('#promoTrack').innerHTML=src.map((x,i)=>{const pg=games.find(g=>g.name===x.game||g.slug===slugForGame(x.game)),a=assetFor(x.game,pg),u=x.mediaUrl||'',m=x.mediaType==='none'?'':(x.mediaType==='video'&&u?`<video src="${escapeHtml(u)}" autoplay muted loop playsinline preload="metadata"></video>`:`<img src="${escapeHtml(u||a.banner)}" alt="${escapeHtml(x.game||'FENK')}" loading="lazy">`);return `<article class="slide"><div class="copy"><span class="eyebrow">${escapeHtml(x.ey||'')}</span><h1>${escapeHtml(x.title||'')}</h1><p>${escapeHtml(x.text||'')}</p><button class="cta" data-promo="${i}">${escapeHtml(x.btn||'متابعة')} ←</button></div>${m}</article>`}).join('');qs('#promoDots').innerHTML=src.map((_,i)=>`<button class="dot ${i===0?'active':''}" data-dot="${i}"></button>`).join('');document.querySelectorAll('[data-promo]').forEach(b=>b.onclick=()=>goToGame(src[+b.dataset.promo]?.game));document.querySelectorAll('[data-dot]').forEach(b=>b.onclick=()=>{promoIndex=+b.dataset.dot;movePromo()});promoIndex=Math.min(promoIndex,Math.max(0,src.length-1));movePromo();schedulePromo()}function movePromo(){qs('#promoTrack').style.transform=`translateX(-${promoIndex*100}%)`;document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===promoIndex))}let promoTimer=null;function schedulePromo(){if(promoTimer)clearTimeout(promoTimer);const c=gameControl(),items=Array.isArray(c.promos)&&c.promos.length?c.promos.filter(x=>x.active!==false):promos;if(items.length<2)return;const sec=Math.max(2,Number(items[promoIndex]?.intervalSec)||5);promoTimer=setTimeout(()=>{promoIndex=(promoIndex+1)%items.length;movePromo();schedulePromo()},sec*1000)}
+function renderCatalog(){const raw=(qs('#catalogSearch')?.value||'').trim();const q=normalizeSearch(raw);const sort=qs('#catalogSort')?.value||'default';let list=games.filter(g=>{const name=normalizeSearch(g.name);const slug=normalizeSearch(g.slug);const hay=name+' '+slug;return !q||hay.includes(q)});list=list.map(g=>{const ps=packages.filter(p=>p.game_id===g.id&&p.is_active).map(price).filter(x=>x>0),min=ps.length?Math.min(...ps):0;return {...g,_min:min,_display:gameDisplaySettings.find(x=>String(x.game_id)===String(g.id))||{}}});if(sort==='price-asc')list.sort((a,b)=>(a._min||Infinity)-(b._min||Infinity));if(sort==='price-desc')list.sort((a,b)=>(b._min||0)-(a._min||0));if(sort==='name')list.sort((a,b)=>a.name.localeCompare(b.name,'ar'));qs('#resultsCount').textContent=`${list.length} لعبة`;const colSource=list[0]?._display||{};const lc=gameControl().layout||{};catalog.dataset.cols=String(lc.desktopColumns||colSource.desktop_columns||2);catalog.dataset.mobileCols=String(lc.mobileColumns||colSource.mobile_columns||2);catalog.style.setProperty('--desktop-cols',String(lc.desktopColumns||colSource.desktop_columns||2));catalog.style.setProperty('--mobile-cols',String(lc.mobileColumns||colSource.mobile_columns||2));catalog.innerHTML=list.map(g=>{const a=assetFor(g.name,g);const fav=favoriteIds.has(String(g.id));const op=packages.filter(p=>p.game_id===g.id&&p.is_active).map(originalPrice).find(x=>x>0);const pct=g._min&&op&&op>g._min?Math.round((1-g._min/op)*100):0;const a2=mediaForGame(g),ds=g._display||{},ov=controlGame(g),imageSize=ov.imageSize||ds.image_size||'medium',imageFit=ov.imageFit||ds.image_fit||'contain',imagePadding=Number(ds.image_padding??8),iconFallback=a2.fallback||a.banner,iconMedia=mediaHtml(a2.iconType,a2.iconUrl,g.name);const cardHeight=imageSize==='small'?120:imageSize==='large'?220:170;return `<article class="game-card ${g.slug==='efootball'?'efootball-card':''}" data-image-size="${imageSize}" data-image-fit="${imageFit}" data-image-padding="${imagePadding}" style="--card-image-height:${cardHeight}px"><button class="favorite ${fav?'active':''}" type="button" aria-label="${fav?'إزالة من المفضلة':'إضافة للمفضلة'}" data-fav="${g.id}">${fav?'♥':'♡'}</button><div class="game-image-wrap">${iconMedia||`<img src="${escapeHtml(iconFallback)}" alt="${escapeHtml(g.name)}" loading="lazy" decoding="async">`}<span class="live">${escapeHtml(gameControl().icons?.live||'●')} شحن مباشر <i></i></span></div><div class="body"><h3>${escapeHtml(g.name)}</h3><div class="from">${g._min?`ابتداءً من ${g._min.toLocaleString('fr-FR')} دج`:'لا توجد باقات متاحة حاليًا'}</div>${pct?`<span class="discount-percent">خصم ${pct}%</span>`:''}<div class="sub">${escapeHtml(a.sub)} • ${escapeHtml(infoFor(g.name,g).server)}</div><button class="open" data-game="${g.id}" type="button">${escapeHtml(String(gameControl().gameButtonText||'شحن الآن').trim()||'شحن الآن')} ←</button></div></article>`}).join('')||'<div class="empty">لا توجد منتجات متاحة حاليًا.</div>';catalog.querySelectorAll('[data-game]').forEach(b=>b.onclick=()=>goToGame(b.dataset.game));catalog.querySelectorAll('[data-fav]').forEach(b=>b.onclick=()=>toggleFavorite(b.dataset.fav));}let paymentReady=false,paymentLoading=false,currentPaymentMethod='barid_mob',selectedFlexyOperator=null,flexyOperators=[];
+function setPaymentMethod(method){currentPaymentMethod=method==='flexy'?'flexy':'barid_mob';document.querySelectorAll('[data-payment-method]').forEach(b=>b.classList.toggle('active',b.dataset.paymentMethod===currentPaymentMethod));const bar=qs('#baridPayBox'),fx=qs('#flexyPayBox'),proofBox=qs('#proofBox'),proof=qs('#paymentProof');if(bar)bar.hidden=currentPaymentMethod!=='barid_mob';if(fx)fx.hidden=currentPaymentMethod!=='flexy';if(proofBox)proofBox.hidden=currentPaymentMethod!=='barid_mob';if(proof){proof.required=currentPaymentMethod==='barid_mob';proof.disabled=currentPaymentMethod!=='barid_mob';if(currentPaymentMethod==='flexy')proof.value='';}if(currentPaymentMethod==='flexy'){paymentReady=!!selectedFlexyOperator;renderFlexyOperators()}else{paymentReady=!!qs('#paymentInstructions')?.dataset.ready}if(selectedGame){
+  if(currentPaymentMethod==='flexy' && selectedPackage && price(selectedPackage)<=0){
+    selectedPackage=null;
+    qs('#total').textContent='— دج';
+  }
+  renderPackages();
+  renderCatalog();
+}
+validate()}
+function operatorLogo(op){
+  const map={
+    mobilis:{cls:'mobilis',text:'mobilis',label:'موبيليس'},
+    djezzy:{cls:'djezzy',text:'Djezzy',label:'جازي'},
+    ooredoo:{cls:'ooredoo',text:'ooredoo',label:'أوريدو'}
+  };
+  const x=map[String(op||'').toLowerCase()];
+  return x?`<span class="operator-logo ${x.cls}" aria-hidden="true"><span>${escapeHtml(x.text)}</span></span>`:'';
+}
+function renderFlexyOperators(){
+  const box=qs('#flexyOperators'),num=qs('#flexyNumber');
+  if(!box)return;
+  const all=flexyOperators.slice().sort((a,b)=>(Number(a.sort_order)||0)-(Number(b.sort_order)||0));
+  box.innerHTML=all.length
+    ? all.map(x=>{
+        const enabled=x.is_active===true && String(x.phone_number||'').trim();
+        const active=selectedFlexyOperator?.operator===x.operator;
+        return `<button type="button" class="flexy-operator ${active?'active':''} ${enabled?'':'flexy-unavailable'}" data-flexy-op="${escapeHtml(x.operator)}" ${enabled?'':'disabled aria-disabled="true"'}>${operatorLogo(x.operator)}<span>${escapeHtml(x.display_name)}<small class="operator-state">${enabled?'متاح':'الخدمة غير متوفرة حاليًا'}</small></span></button>`;
+      }).join('')
+    : '<div class="empty">لا توجد متعاملات فلكسي مضافة حاليًا.</div>';
+  box.querySelectorAll('[data-flexy-op]:not([disabled])').forEach(b=>b.onclick=()=>{
+    selectedFlexyOperator=all.find(x=>x.operator===b.dataset.flexyOp)||null;
+    if(num){
+      num.hidden=!selectedFlexyOperator;
+      num.innerHTML=selectedFlexyOperator
+        ? `رقم ${escapeHtml(selectedFlexyOperator.display_name)}: <strong>${escapeHtml(selectedFlexyOperator.phone_number)}</strong>`
+        : '';
+    }
+    renderFlexyOperators();
+    if(selectedGame)renderPackages();
+    validate();
+  });
+  if(num){
+    num.hidden=!selectedFlexyOperator;
+    num.innerHTML=selectedFlexyOperator
+      ? `رقم ${escapeHtml(selectedFlexyOperator.display_name)}: <strong>${escapeHtml(selectedFlexyOperator.phone_number)}</strong>`
+      : '';
+  }
+}
+async function loadFlexyOperators(){try{const r=await db.from('game_flexy_operators').select('operator,display_name,phone_number,is_active,sort_order').order('sort_order',{ascending:true});if(r.error)throw r.error;flexyOperators=r.data||[];renderFlexyOperators();}catch(e){console.warn('flexy operators load',e);flexyOperators=[];renderFlexyOperators()}}
+async function loadPaymentInstructions(){const el=qs('#paymentInstructions');const proof=qs('#paymentProof');if(!el)return;paymentLoading=true;paymentReady=false;sendBtn.disabled=true;el.dataset.ready='';el.innerHTML='<span class="payment-loading">جارٍ تحميل معلومات الدفع…</span>';try{const rpc=await db.rpc('get_public_barid_mob_payment_settings');let data=(!rpc.error&&Array.isArray(rpc.data)&&rpc.data.length)?rpc.data[0]:(!rpc.error&&rpc.data&&!Array.isArray(rpc.data)?rpc.data:null);if(!data){const direct=await db.from('payment_settings').select('display_name,account_number,phone_number,instructions,is_active').eq('method','barid_mob').eq('is_active',true).order('updated_at',{ascending:false}).limit(1);if(!direct.error&&direct.data?.length)data=direct.data[0];}if(data?.account_number){el.innerHTML=`<b>${escapeHtml(data.display_name||'بريد موب')}</b><br>RIP: ${escapeHtml(data.account_number)}${data.phone_number?`<br>الهاتف: ${escapeHtml(data.phone_number)}`:''}${data.instructions?`<br>${escapeHtml(data.instructions)}`:'<br>حوّل المبلغ ثم ارفع صورة إثبات الدفع.'}<br><span class="payment-ok">✓ معلومات بريد موب جاهزة</span>`;el.dataset.ready='1';}else{el.innerHTML='<span class="payment-error">بيانات بريد موب غير مكتملة. يمكنك استخدام فلكسي إذا كان متاحًا.</span>'}await loadFlexyOperators();setPaymentMethod(currentPaymentMethod);}catch(err){console.warn('payment settings load',err);el.innerHTML='<span class="payment-error">تعذر تحميل معلومات الدفع.</span>';await loadFlexyOperators();setPaymentMethod(currentPaymentMethod);}finally{paymentLoading=false;validate()}}
+
+async function getUser(){const {data:{session}}=await db.auth.getSession();return session?.user||null}
+function saveRecentTopup(){if(!selectedGame||!selectedPackage)return;const fields=collectGameFields();const key='fenk_recent_topups_v1';let rows=[];try{rows=JSON.parse(localStorage.getItem(key)||'[]')}catch{};rows=rows.filter(x=>x.gameId!==selectedGame.id||x.packageId!==selectedPackage.id);rows.unshift({gameId:selectedGame.id,packageId:selectedPackage.id,gameName:selectedGame.name,packageName:selectedPackage.name||selectedPackage.amount,fields});localStorage.setItem(key,JSON.stringify(rows.slice(0,6)));renderRecentTopups()}
+function renderRecentTopups(){const wrap=qs('#recentTopups'),list=qs('#recentTopupsList');if(!wrap||!list)return;let rows=[];try{rows=JSON.parse(localStorage.getItem('fenk_recent_topups_v1')||'[]')}catch{};if(!rows.length){wrap.hidden=true;return}wrap.hidden=false;list.innerHTML=rows.map((x,i)=>`<article class="recent-topup"><b>${escapeHtml(x.gameName)}</b><small>${escapeHtml(x.packageName||'آخر باقة')}</small><button type="button" data-recent="${i}">إعادة الشحن ←</button></article>`).join('');list.querySelectorAll('[data-recent]').forEach(b=>b.onclick=()=>{const x=rows[Number(b.dataset.recent)];if(!x)return;openGame(x.gameId,true);setTimeout(()=>{if(x.packageId){selectedPackage=packages.find(p=>String(p.id)===String(x.packageId))||null;renderPackages();const pr=price(selectedPackage);qs('#total').textContent=pr?pr.toLocaleString('fr-FR')+' دج':'— دج';}if(x.fields){Object.entries(x.fields).forEach(([k,v])=>{const el=document.querySelector(`[data-game-field="${CSS.escape(k)}"]`);if(el)el.value=v??''});}validate();},80)});}
+async function load(){
+  if(window.loadGamePageControl) await window.loadGamePageControl();
+  statusBox.textContent='جارٍ تحميل الألعاب…';
+  games=[];packages=[];checkoutFields=[];
+  try{
+    let rpc=await db.rpc('get_public_game_catalog_fast');
+    if(rpc.error){
+      const v2=await db.rpc('get_public_game_catalog_v2');
+      if(!v2.error) rpc=v2;
+      else {
+        const legacy=await db.rpc('get_public_game_catalog');
+        if(!legacy.error) rpc=legacy;
+      }
+    }
+    if(rpc.error) throw rpc.error;
+    let raw=rpc.data;
+    if(typeof raw==='string'){try{raw=JSON.parse(raw)}catch(_){} }
+    const payload=Array.isArray(raw)?{games:raw,packages:[],checkout_fields:[]}:(raw||{});
+    games=Array.isArray(payload.games)?payload.games.filter(x=>x?.is_active===true):[];
+    packages=Array.isArray(payload.packages)?payload.packages.filter(x=>x?.is_active===true):[];
+    checkoutFields=Array.isArray(payload.checkout_fields)?payload.checkout_fields.filter(x=>x?.is_active===true):[];
+    if(!games.length&&payload.data&&typeof payload.data==='object'){
+      const n=payload.data;
+      games=Array.isArray(n.games)?n.games.filter(x=>x?.is_active===true):games;
+      packages=Array.isArray(n.packages)?n.packages.filter(x=>x?.is_active===true):packages;
+      checkoutFields=Array.isArray(n.checkout_fields)?n.checkout_fields.filter(x=>x?.is_active===true):checkoutFields;
+    }
+    // Some cached/older RPC responses may return an empty object without an error.
+    // Always recover from the public tables before showing "0 لعبة".
+    if(!games.length){
+      const gr=await db.from('games').select('id,name,slug,logo_url,banner_url,description,category,is_active,sort_order').eq('is_active',true).order('sort_order',{ascending:true});
+      if(!gr.error){
+        games=gr.data||[];
+        const ids=games.map(x=>x.id).filter(Boolean);
+        if(ids.length){
+          const pr=await db.from('game_packages').select('id,game_id,name,description,amount,image_url,price_dzd,payment_price_dzd,flexy_price_dzd,original_price_dzd,is_active,sort_order').in('game_id',ids).eq('is_active',true).order('sort_order',{ascending:true});
+          if(!pr.error) packages=pr.data||[];
+          const fr=await db.from('game_checkout_fields').select('id,game_id,field_key,field_label,field_type,placeholder,is_required,options,sort_order,is_active').in('game_id',ids).eq('is_active',true).order('sort_order',{ascending:true});
+          if(!fr.error) checkoutFields=fr.data||[];
+        }
+      }
+    }
+  }catch(rpcError){
+    console.warn('Public game catalog RPC failed; trying direct public queries:',rpcError);
+    try{
+      const gr=await db.from('games').select('id,name,slug,logo_url,banner_url,description,category,is_active,sort_order').eq('is_active',true).order('sort_order',{ascending:true});
+      if(gr.error) throw gr.error;
+      games=gr.data||[]; const ids=games.map(x=>x.id).filter(Boolean);
+      if(ids.length){
+        const pr=await db.from('game_packages').select('id,game_id,name,description,amount,image_url,price_dzd,payment_price_dzd,flexy_price_dzd,original_price_dzd,is_active,sort_order').in('game_id',ids).eq('is_active',true).order('sort_order');
+        if(pr.error) throw pr.error; packages=pr.data||[];
+        const fr=await db.from('game_checkout_fields').select('id,game_id,field_key,field_label,field_type,placeholder,is_required,options,sort_order,is_active').in('game_id',ids).eq('is_active',true).order('sort_order');
+        if(fr.error) throw fr.error; checkoutFields=fr.data||[];
+      }
+    }catch(directError){
+      console.error('game catalog load',directError);
+      statusBox.textContent='تعذر تحميل قائمة الألعاب الآن. اضغط إعادة المحاولة.';
+      games=[];packages=[];checkoutFields=[];
+    }
+  }
+  try{const ids=games.map(x=>x.id).filter(Boolean);if(ids.length){const ds=await db.from('game_display_settings').select('game_id,image_size,image_fit,desktop_columns,mobile_columns,image_padding').in('game_id',ids);if(!ds.error)gameDisplaySettings=ds.data||[];}}catch(e){console.warn('display settings load skipped',e);gameDisplaySettings=[]}
+  await loadFavorites();renderPromos();renderCatalog();
+  if(!games.length){statusBox.textContent='لم يتم العثور على ألعاب مفعلة. اضغط إعادة تحميل الألعاب.';const retryBtn=document.createElement('button');retryBtn.type='button';retryBtn.textContent='إعادة تحميل الألعاب';retryBtn.className='open';retryBtn.style.margin='12px auto';retryBtn.onclick=load;catalog.appendChild(retryBtn);}else{statusBox.textContent=`تم تحميل ${games.length} لعبة و ${packages.length} باقة.`;}
+  const first=requested?games.find(x=>x.name===requested||x.slug===requested):null;if(first){openGame(first.id,false);document.body.classList.add('direct-game')}
+}
+document.querySelectorAll('[data-payment-method]').forEach(b=>b.addEventListener('click',()=>setPaymentMethod(b.dataset.paymentMethod)));
+let activeGameMusicId='';
+let gameMusicAudio=null;
+let musicAutoplayBlocked=false;
+
+function ensureGameMusicAudio(){
+  if(gameMusicAudio) return gameMusicAudio;
+  const a=document.createElement('audio');
+  a.preload='auto';
+  a.loop=true;
+  a.playsInline=true;
+  a.setAttribute('playsinline','');
+  a.setAttribute('aria-hidden','true');
+  a.style.display='none';
+  document.body.appendChild(a);
+  gameMusicAudio=a;
+  return a;
+}
+
+function stopGameMusic(){
+  const a=gameMusicAudio;
+  if(a){
+    try{
+      a.pause();
+      a.currentTime=0;
+      a.removeAttribute('src');
+      a.load();
+    }catch(_){}
+  }
+  activeGameMusicId='';
+  musicAutoplayBlocked=false;
+}
+
+function tryStartGameMusic(){
+  const a=gameMusicAudio;
+  if(!a || !a.src) return;
+  a.play().then(()=>{
+    musicAutoplayBlocked=false;
+    removeMusicGestureFallback();
+  }).catch(()=>{
+    // Mobile browsers can block audible autoplay. Start automatically
+    // on the first user interaction without showing a music control.
+    musicAutoplayBlocked=true;
+    addMusicGestureFallback();
+  });
+}
+
+function addMusicGestureFallback(){
+  if(!musicAutoplayBlocked) return;
+  const resume=()=>{
+    if(!gameMusicAudio || !gameMusicAudio.src) return;
+    gameMusicAudio.play().then(()=>{
+      musicAutoplayBlocked=false;
+      removeMusicGestureFallback();
+    }).catch(()=>{});
+  };
+  window.__fenkMusicResume=resume;
+  ['pointerdown','touchstart','keydown','click'].forEach(ev=>{
+    document.addEventListener(ev,resume,{capture:true,once:false,passive:true});
+  });
+}
+
+function removeMusicGestureFallback(){
+  const resume=window.__fenkMusicResume;
+  if(!resume) return;
+  ['pointerdown','touchstart','keydown','click'].forEach(ev=>{
+    document.removeEventListener(ev,resume,{capture:true});
+  });
+  window.__fenkMusicResume=null;
+}
+
+function setupGameMusic(g){
+  stopGameMusic();
+  if(!g) return;
+  const m=controlGame(g).music||{};
+  const enabled=m.enabled!==false && !!String(m.url||'').trim();
+  if(!enabled) return;
+
+  const a=ensureGameMusicAudio();
+  const url=String(m.url).trim();
+  a.src=url;
+  a.loop=true;
+  a.volume=Math.max(0,Math.min(1,Number(m.volume??0.35)));
+  activeGameMusicId=String(g.id);
+
+  // Music starts whenever a game is opened. The browser may require
+  // a user gesture; in that case the invisible fallback resumes it.
+  tryStartGameMusic();
+}
+
+async function openGame(ref,fromUser=true){const g=games.find(x=>String(x.id)===String(ref)||x.name===ref)||games[0];if(!g)return;selectedGame=g;selectedPackage=null;stopGameMusic();selectedFlexyOperator=null;setPaymentMethod('barid_mob');const a=assetFor(g.name,g),i=infoFor(g.name,g);setupGameMusic(g,fromUser);qs('#detail').hidden=false;qs('#checkout').hidden=false;loadPaymentInstructions();qs('#gameBanner').src=a.banner;qs('#gameBanner').onerror=()=>{if(a.fallback&&qs('#gameBanner').src.indexOf(a.fallback)===-1)qs('#gameBanner').src=a.fallback};qs('#gameTitle').textContent=a.title||g.name;qs('#gameDesc').textContent=i.desc;qs('#detailTime').textContent='مدة الاستلام: '+i.time;qs('#detailServer').textContent='السيرفر: '+i.server;qs('#gameLongDescription').textContent=i.desc;qs('#gameGuide').innerHTML=i.guide.map(x=>'<li>'+escapeHtml(x)+'</li>').join('');qs('#securityNote').textContent=g.name==='eFootball'?'هذه الخدمة تتطلب بريد KONAMI وكلمة السر ونوع الهاتف Android لإتمام الشحن. تُرسل البيانات مع الطلب إلى حساب Admin لتنفيذ الخدمة.':'أدخل فقط البيانات المطلوبة لهذه اللعبة. لا تشارك بيانات لا تطلبها FENK.';qs('#descriptionCard').hidden=false;await loadGameCheckoutFields(g.id);renderGameFields();renderPackages();validate();if(fromUser)setTimeout(()=>qs('#detail').scrollIntoView({behavior:'smooth',block:'start'}),40)}
+function renderPackages(){
+  const title=qs('#packageTitle'),hint=qs('#packageHint'),methodHint=qs('#packageMethodHint');
+  document.querySelectorAll('#packageMethodChoice [data-payment-method]').forEach(b=>{
+    b.classList.toggle('active',b.dataset.paymentMethod===currentPaymentMethod);
+  });
+  if(title){
+    title.textContent=currentPaymentMethod==='flexy'?'باقات فلكسي':'اختر ما يناسبك';
+  }
+  if(hint){
+    hint.textContent=currentPaymentMethod==='flexy'
+      ?'الباقات المتاحة للدفع عبر فلكسي فقط — الحد الأقصى 600 دج.'
+      :'الباقات والأسعار محددة من Admin.';
+  }
+  if(methodHint){
+    methodHint.classList.toggle('flexy',currentPaymentMethod==='flexy');
+    methodHint.textContent=currentPaymentMethod==='flexy'
+      ?'ابحث هنا عن باقة مناسبة لفلكسي. ستظهر فقط الباقات التي لا تتجاوز 600 دج.'
+      :'اختر الباقة ثم ستظهر لك بيانات الشحن عبر بريد موب.';
+  }
+
+  if(!selectedGame){
+    packageBox.innerHTML='<div class="empty">اختر لعبة من القائمة.</div>';
+    return;
+  }
+
+  const all=packages.filter(p=>p.game_id===selectedGame.id&&p.is_active);
+  const FLEX_CAP=600;
+  const list=currentPaymentMethod==='flexy'
+    ? all.filter(p=>{const pr=price(p);return pr>0&&pr<=FLEX_CAP;})
+    : all;
+
+  if(selectedPackage && !list.some(p=>String(p.id)===String(selectedPackage.id))){
+    selectedPackage=null;
+    if(qs('#total'))qs('#total').textContent='— دج';
+  }
+
+  if(!list.length){
+    packageBox.innerHTML=currentPaymentMethod==='flexy'
+      ? '<div class="empty">لا توجد باقات متاحة عبر فلكسي لهذه اللعبة حتى 600 دج. اختر بريد موب لرؤية جميع الباقات.</div>'
+      : '<div class="empty">لا توجد باقات مفعلة لهذه اللعبة حاليًا. أضفها من لوحة Admin.</div>';
+    return;
+  }
+
+  const a=assetFor(selectedGame.name);
+  packageBox.innerHTML=list.map(p=>{
+    const pr=price(p),op=originalPrice(p),img=p.image_url||a.banner;
+    return `<button class="package ${selectedPackage?.id===p.id?'active':''}" data-id="${p.id}">
+      <span class="price" dir="ltr">${pr?pr.toLocaleString('fr-FR')+' دج':'قيد التحديد'}${op&&op>pr&&pr?`<span class="offer-old" dir="ltr">${op.toLocaleString('fr-FR')} دج</span>`:''}</span>
+      <span class="name" dir="auto">${escapeHtml(p.name||p.amount)}${op&&op>pr&&pr?'<span class="offer-badge">عرض</span>':''}<span class="amount" dir="auto">${escapeHtml(p.amount||'')}</span>${p.description?`<small class="package-desc" dir="auto">${escapeHtml(p.description)}</small>`:''}</span>
+      <img loading="lazy" decoding="async" src="${escapeHtml(img)}" alt="${escapeHtml(p.name||p.amount||'')}" onerror="this.src='${escapeHtml(a.banner)}'">
+    </button>`;
+  }).join('');
+
+  packageBox.querySelectorAll('.package').forEach(b=>b.onclick=()=>{
+    selectedPackage=list.find(p=>String(p.id)===String(b.dataset.id))||null;
+    const pr=price(selectedPackage);
+    renderPackages();
+    qs('#total').textContent=pr>0?pr.toLocaleString('fr-FR')+' دج':'— دج';
+    validate();
+    setTimeout(()=>{
+      const checkout=qs('#checkout');
+      if(checkout)checkout.scrollIntoView({behavior:'smooth',block:'start'});
+    },30);
+  });
+}
+function normalizePhone(v){const d=String(v||'').replace(/\D/g,'');if(/^0[567]\d{8}$/.test(d))return '+213'+d.slice(1);if(/^[567]\d{8}$/.test(d))return '+213'+d;if(/^213[567]\d{8}$/.test(d))return '+'+d;return ''}function validate(){if(paymentLoading){sendBtn.disabled=true;sendBtn.textContent='جارٍ تحميل الدفع…';return}if(!selectedGame){sendBtn.disabled=true;sendBtn.textContent='اختر لعبة';return}if(!selectedPackage){sendBtn.disabled=true;sendBtn.textContent='اختر باقة أولاً';return}const packagePrice=price(selectedPackage);if(!(packagePrice>0)){sendBtn.disabled=true;sendBtn.textContent='سعر الباقة غير متاح';return}if(currentPaymentMethod==='flexy'&&packagePrice>600){selectedPackage=null;if(qs('#total'))qs('#total').textContent='— دج';renderPackages();sendBtn.disabled=true;sendBtn.textContent='هذه الباقة تتجاوز حد فلكسي 600 دج';return}if(!requiredGameFieldsValid()||(controlVisibility('phone')&&!normalizePhone(qs('#phone').value))||(controlVisibility('name')&&!qs('#name').value.trim())){sendBtn.disabled=true;sendBtn.textContent='أكمل بيانات الشحن';return}if(currentPaymentMethod==='barid_mob'){if(!paymentReady){sendBtn.disabled=true;sendBtn.textContent='تعذر تحميل بريد موب';return}const proof=qs('#paymentProof')?.files?.[0];if(controlVisibility('proofBox')&&(!proof)){sendBtn.disabled=true;sendBtn.textContent='ارفع إثبات الدفع';return}if(proof&&proof.size>5*1024*1024){sendBtn.disabled=true;sendBtn.textContent='حجم الإثبات أكبر من 5MB';return}}else{if(!selectedFlexyOperator){sendBtn.disabled=true;sendBtn.textContent='اختر متعامل فلكسي';return}}sendBtn.disabled=false;sendBtn.textContent='تأكيد الطلب'}
+qs('#send').addEventListener('click',async()=>{if(!selectedGame||!selectedPackage)return;const user=await getUser();if(!user){try{sessionStorage.setItem('fenk_login_return_url',location.href)}catch{};statusBox.textContent='جارٍ تحويلك إلى صفحة تسجيل الدخول…';sendBtn.disabled=true;setTimeout(()=>{location.href='index.html?login=1'},120);return}const phone=normalizePhone(qs('#phone').value),fields=collectGameFields(),player=primaryPlayerId(fields),name=qs('#name').value.trim(),notes=qs('#notes').value.trim(),proof=qs('#paymentProof')?.files?.[0];if(controlVisibility('phone')&&!phone){statusBox.textContent='رقم الهاتف غير صحيح. استخدم 05 أو 06 أو 07.';return}if(controlVisibility('name')&&!name){statusBox.textContent='أدخل الاسم الكامل.';return}if(!requiredGameFieldsValid()){statusBox.textContent='أكمل بيانات اللعبة المطلوبة.';return}if(currentPaymentMethod==='barid_mob'&&controlVisibility('proofBox')&&(!proof||proof.size>5*1024*1024)){statusBox.textContent='ارفع صورة إثبات الدفع بحد أقصى 5MB.';return}if(currentPaymentMethod==='flexy'){if(!selectedFlexyOperator){statusBox.textContent='اختر متعامل فلكسي.';return}const flexyPrice=price(selectedPackage);if(!(flexyPrice>0)||flexyPrice>600){statusBox.textContent='هذه الباقة غير متاحة للدفع عبر فلكسي (الحد الأقصى 600 دج).';return}}sendBtn.disabled=true;statusBox.textContent=currentPaymentMethod==='barid_mob'?'جارٍ رفع إثبات الدفع وإنشاء الطلب…':'جارٍ إنشاء طلب فلكسي…';try{let path=null;if(currentPaymentMethod==='barid_mob'&&proof){const ext=(proof.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';path=`${user.id}/${crypto.randomUUID()}.${ext}`;const up=await db.storage.from('fenk-game-payment-proofs').upload(path,proof,{contentType:proof.type||'image/jpeg',upsert:false});if(up.error)throw up.error}const pr=price(selectedPackage),op=originalPrice(selectedPackage),payload={user_id:user.id,game_id:selectedGame.id,package_id:selectedPackage.id,player_id:player||'game-user',customer_name:name,customer_phone:phone,payment_method:currentPaymentMethod,status:currentPaymentMethod==='flexy'?'processing':'payment_submitted',notes,payment_proof_path:path,amount_dzd:pr,product_price:pr,total_price:pr,product_name:selectedPackage.name||selectedPackage.amount,product_info:`${selectedGame.name} — ${selectedPackage.name||selectedPackage.amount}${op&&op>pr?` — السعر القديم ${op} دج`:''}`,flexy_operator:currentPaymentMethod==='flexy'?selectedFlexyOperator.operator:null,flexy_phone_snapshot:currentPaymentMethod==='flexy'?selectedFlexyOperator.phone_number:null,player_data:{fields,game:selectedGame.name,package:selectedPackage.name||selectedPackage.amount,amount_dzd:pr,payment_method:currentPaymentMethod,flexy_operator:currentPaymentMethod==='flexy'?selectedFlexyOperator.display_name:null,flexy_phone:currentPaymentMethod==='flexy'?selectedFlexyOperator.phone_number:null,payment_proof_path:path}};const {data,error}=await db.from('orders').insert(payload).select('id,order_code,amount_dzd,status,confirmation_message,payment_info,flexy_phone_snapshot').single();if(error)throw error;statusBox.textContent=currentPaymentMethod==='flexy'?`تم إرسال طلب فلكسي ✓ رقم الطلب #${data?.order_code||'—'}. الحالة: 🟡 قيد المعالجة.`:`تم إرسال الطلب وإثبات الدفع ✓ رقم الطلب #${data?.order_code||'—'}. الحالة: في انتظار التحقق.`;saveRecentTopup();qs('#notes').value='';if(qs('#paymentProof'))qs('#paymentProof').value=''}catch(e){console.error(e);statusBox.textContent=e?.message||'تعذر إرسال الطلب. حاول مرة أخرى.'}finally{validate()}});
+function renderSearch(q=''){const box=qs('#searchResults');const term=normalizeSearch(q);const list=games.filter(g=>!term||normalizeSearch(g.name+' '+g.slug).includes(term));box.innerHTML=list.map(g=>`<button data-search-game="${g.id}">${escapeHtml(g.name)}</button>`).join('')||'<div class="empty">لا توجد نتائج.</div>';box.querySelectorAll('[data-search-game]').forEach(b=>b.onclick=()=>{qs('#searchPanel').classList.remove('open');openGame(b.dataset.searchGame,true)});}
+qs('#backToGames').onclick=()=>{stopGameMusic();history.replaceState({},'',location.pathname);document.body.classList.remove('direct-game');qs('#detail').hidden=true;qs('#descriptionCard').hidden=true;qs('#checkout').hidden=true;window.scrollTo({top:0,behavior:'smooth'});};
+qs('#catalogApply').onclick=()=>renderCatalog();qs('#catalogSearch').addEventListener('keydown',e=>{if(e.key==='Enter')renderCatalog()});qs('#catalogSort').addEventListener('change',renderCatalog);
+qs('#searchBtn').onclick=()=>{qs('#searchPanel').classList.add('open');qs('#gameSearch').focus();renderSearch()};qs('#searchPanel').onclick=e=>{if(e.target.id==='searchPanel')e.currentTarget.classList.remove('open')};qs('#gameSearch').addEventListener('input',e=>renderSearch(e.target.value));
+renderRecentTopups();
+load();
+
+// Stop game music whenever the user actually leaves the game page.
+window.addEventListener('pagehide', stopGameMusic, {capture:true});
+window.addEventListener('beforeunload', stopGameMusic, {capture:true});
+window.addEventListener('popstate', ()=>{
+  if(!qs('#detail')?.hidden) stopGameMusic();
+});
+
+</script>
+<script src="fenk-global-share.js?v=1"></script>
+  <div data-fenk-game-music data-game-id="" aria-hidden="true"></div>
+
+<script id="fenk-v180-improved-guards">
+document.addEventListener('DOMContentLoaded',()=>{
+  // Prevent selecting/submitting a Flexy package above the configured 600 DZD cap.
+  const FLEX_CAP=600;
+  const methodNodes=[...document.querySelectorAll('input[name*="payment" i],input[name*="method" i],select[name*="payment" i]')];
+  const packageNodes=[...document.querySelectorAll('select[name*="package" i],input[name*="package" i]')];
+  function currentMethod(){
+    const checked=document.querySelector('input[name="payment_method"]:checked,input[name="paymentMethod"]:checked,input[name="payment"]:checked');
+    return checked?.value?.toLowerCase()||'';
+  }
+  function selectedPrice(){
+    const el=document.querySelector('[data-selected-package-price],[data-package-price]');
+    if(el) return Number(el.dataset.selectedPackagePrice||el.dataset.packagePrice||el.textContent.replace(/[^\d.]/g,''))||0;
+    const opt=document.querySelector('select option:checked[data-price],select option:checked');
+    return Number(opt?.dataset.price||opt?.value?.match(/\d+(?:\.\d+)?/)?.[0]||0)||0;
+  }
+  function enforce(){
+    const flex=/flexy|فلكسي/i.test(currentMethod());
+    const price=selectedPrice();
+    if(!flex) return;
+    document.querySelectorAll('[data-price],[data-package-price]').forEach(el=>{
+      const p=Number(el.dataset.price||el.dataset.packagePrice||0);
+      if(p>FLEX_CAP && (el.tagName==='OPTION')) el.disabled=true;
+    });
+  }
+  methodNodes.forEach(n=>n.addEventListener('change',enforce));
+  packageNodes.forEach(n=>n.addEventListener('change',enforce));
+  enforce();
+});
+</script>
+
+<script src="fenk-site-config.js?v=20260924-v195-global-logo"></script>
+</body></html>
+
+<style>
+/* FENK V159 — Game package cards match the mobile reference */
+@media (max-width:700px){
+  .packages{gap:10px!important;padding:8px 12px 14px!important}
+  .package{
+    grid-template-columns:96px minmax(0,1fr) 100px!important;
+    min-height:74px!important;
+    padding:8px 9px!important;
+    gap:10px!important;
+    border-radius:17px!important;
+    overflow:hidden!important;
+  }
+  .package img{
+    width:92px!important;
+    height:50px!important;
+    object-fit:contain!important;
+    object-position:center!important;
+    justify-self:start!important;
+    border-radius:8px!important;
+  }
+  .package .name{
+    min-width:0!important;
+    font-size:15px!important;
+    line-height:1.35!important;
+    overflow-wrap:anywhere!important;
+  }
+  .package .amount{
+    font-size:12px!important;
+    margin-top:2px!important;
+  }
+  .package .price{
+    font-size:17px!important;
+    line-height:1.15!important;
+    text-align:left!important;
+    white-space:nowrap!important;
+  }
+}
+@media (max-width:430px){
+  .package{
+    grid-template-columns:86px minmax(0,1fr) 92px!important;
+    padding:8px!important;
+    gap:8px!important;
+  }
+  .package img{width:82px!important;height:48px!important}
+  .package .name{font-size:14px!important}
+  .package .price{font-size:16px!important}
+}
+</style>

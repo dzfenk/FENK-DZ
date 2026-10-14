@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>FENK — السلة</title>
+<link rel="icon" href="assets/logo-clean.webp">
+<style>
+:root{--fenk:#08c879;--fenk-dark:#003d32;--bg:#f5faf8;--text:#123a3d;--muted:#71817c;--line:#dfeae6}
+*{box-sizing:border-box}
+html,body{margin:0;max-width:100%;overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.top{position:sticky;top:0;z-index:20;background:var(--fenk-dark);color:#fff;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;box-shadow:0 2px 12px #003d3220}
+.top a{color:#fff;text-decoration:none;white-space:nowrap}
+.top b{font-size:18px}
+.wrap{width:min(900px,100%);margin:auto;padding:18px 14px 150px}
+.page-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.page-head h1{font-size:28px;margin:0}
+.count{font-size:13px;color:var(--muted);font-weight:800}
+.toolbar{background:#fff;border:1px solid var(--line);border-radius:15px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+.check-wrap{display:flex;align-items:center;gap:9px;font-weight:900;cursor:pointer;min-height:42px}
+.check-wrap input,.select-box{width:22px;height:22px;accent-color:var(--fenk);cursor:pointer;flex:0 0 auto}
+.delete-selected{border:1px solid #f0caca;background:#fff5f5;color:#b42318;border-radius:10px;padding:9px 12px;font:inherit;font-weight:900;cursor:pointer}
+.delete-selected:disabled{opacity:.45;cursor:not-allowed}
+.item{background:#fff;border:1px solid var(--line);border-radius:16px;padding:11px;margin-bottom:10px;display:grid;grid-template-columns:auto 92px minmax(0,1fr) auto;gap:11px;align-items:center;box-shadow:0 2px 8px #123a3d08}
+.item.selected{border-color:#9bdcc5;box-shadow:0 0 0 2px #08c87912}
+.item-check{display:grid;place-items:center}
+.item img{width:92px;height:92px;object-fit:contain;background:#f7faf9;border-radius:12px;border:1px solid #edf2f0;padding:4px}
+.info{min-width:0}
+.title{font-weight:900;font-size:16px;line-height:1.45;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.options{color:var(--muted);font-size:12px;line-height:1.5;margin:4px 0 6px;white-space:normal}
+.price-row{display:flex;flex-wrap:wrap;align-items:center;gap:7px;line-height:1.5}
+.price{font-weight:950;font-size:17px;color:#123a3d;white-space:nowrap}
+.old{color:#8a9692;text-decoration:line-through;font-size:12px;white-space:nowrap}
+.discount{display:inline-flex;align-items:center;background:#fff0f2;color:#c51f45;border-radius:7px;padding:2px 6px;font-size:11px;font-weight:900;white-space:nowrap}
+.subtotal{font-weight:950;font-size:14px;margin-top:5px;color:#087b56;white-space:nowrap}
+.actions{display:flex;flex-direction:column;align-items:flex-end;gap:9px}
+.qty{display:flex;align-items:center;gap:7px}
+.qty button{width:36px;height:36px;border:1px solid #c8d8d3;background:#fff;border-radius:9px;font-size:20px;line-height:1;font-weight:900;color:#123a3d;cursor:pointer;touch-action:manipulation}
+.qty span{min-width:24px;text-align:center;font-weight:950}
+.remove{border:0;background:transparent;color:#b42318;font:inherit;font-size:13px;font-weight:900;padding:5px 4px;cursor:pointer;touch-action:manipulation}
+.total-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px;margin-top:12px}
+.total-line{display:flex;justify-content:space-between;gap:10px;align-items:center;font-weight:950;font-size:20px}
+.total-note{display:block;font-size:12px;color:var(--muted);margin-top:5px}
+.btn{display:block;width:100%;border:0;background:var(--fenk);color:#fff;border-radius:13px;padding:14px;font-weight:950;font-size:17px;margin-top:12px;cursor:pointer;touch-action:manipulation}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.empty{text-align:center;padding:70px 20px;background:#fff;border:1px solid var(--line);border-radius:18px}
+.empty h2{margin:0 0 8px}
+.empty a{display:inline-block;margin-top:15px;background:var(--fenk);color:#fff;text-decoration:none;border-radius:12px;padding:12px 18px;font-weight:900}
+.bottom-bar{position:fixed;z-index:30;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);box-shadow:0 -5px 18px #123a3d16;padding:10px max(12px,env(safe-area-inset-left)) calc(10px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-right));}
+.bottom-inner{width:min(900px,100%);margin:auto;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center}
+.bottom-select{display:flex;align-items:center;gap:7px;font-weight:900;white-space:nowrap}
+.bottom-total{font-weight:950;font-size:17px;text-align:center;white-space:nowrap}
+.bottom-actions{display:flex;gap:8px}
+.bottom-actions button{min-height:44px;border-radius:11px;padding:9px 13px;font:inherit;font-weight:950;cursor:pointer;touch-action:manipulation}
+.bottom-delete{border:1px solid #f0caca;background:#fff5f5;color:#b42318}
+.bottom-checkout{border:0;background:var(--fenk);color:#fff;min-width:150px}
+.bottom-checkout:disabled{opacity:.45;cursor:not-allowed}
+@media(max-width:650px){
+ .top{padding:12px 13px}.top b{font-size:16px}
+ .wrap{padding:14px 9px 175px}.page-head h1{font-size:24px}
+ .toolbar{padding:7px 9px}
+ .item{grid-template-columns:auto 72px minmax(0,1fr);gap:9px;padding:9px;border-radius:14px}
+ .item img{width:72px;height:72px;border-radius:10px}
+ .actions{grid-column:2/-1;grid-row:2;flex-direction:row;align-items:center;justify-content:space-between;width:100%;padding-top:1px;border-top:1px solid #edf2f0}
+ .title{font-size:14px}.price{font-size:16px}.subtotal{font-size:13px}
+ .qty button{width:38px;height:38px}.remove{min-height:38px;padding:8px}
+ .bottom-inner{grid-template-columns:1fr auto;gap:7px}
+ .bottom-select{grid-column:1}.bottom-total{grid-column:2;grid-row:1;font-size:15px}
+ .bottom-actions{grid-column:1/-1;width:100%;display:grid;grid-template-columns:1fr 1.5fr}
+ .bottom-actions button{width:100%;min-height:46px}
+ .bottom-checkout{min-width:0}
+}
+@media(max-width:360px){.item{grid-template-columns:auto 62px minmax(0,1fr);gap:7px}.item img{width:62px;height:62px}.bottom-total{font-size:14px}.bottom-actions button{font-size:14px}}
+</style>
+<link rel="stylesheet" href="marketplace-mobile-unified.css">
+  <link rel="stylesheet" href="fenk-global-share.css?v=1">
+</head>
+<body>
+<header class="mp-header"><a class="mp-back" href="marketplace.html">← رجوع</a><a class="mp-brand" href="marketplace.html"><span>FENK</span> السلة</a><a class="mp-cart" href="product-cart.html" aria-label="السلة">🛒 <span class="mp-cart-count" id="headerCount"></span></a></header>
+<main class="wrap">
+ <div class="page-head"><h1>سلة FENK</h1><span id="count" class="count"></span></div>
+ <div id="list"></div>
+</main>
+<div id="bottomBar" class="bottom-bar" hidden>
+ <div class="bottom-inner">
+  <label class="bottom-select"><input id="selectAllBottom" class="select-box" type="checkbox"> تحديد الكل</label>
+  <div class="bottom-total">الإجمالي: <span id="bottomTotal">0 دج</span></div>
+  <div class="bottom-actions">
+   <button id="deleteSelectedBottom" class="bottom-delete" type="button">حذف المحدد</button>
+   <button id="checkoutBottom" class="bottom-checkout" type="button">إكمال الطلب →</button>
+  </div>
+ </div>
+</div>
+<script>
+const CART_KEY='fenk_product_cart',SELECTED_KEY='fenk_cart_selected';
+const cart=()=>JSON.parse(localStorage.getItem(CART_KEY)||'[]');
+const save=a=>{localStorage.setItem(CART_KEY,JSON.stringify(a));window.dispatchEvent(new Event('fenk-cart-updated'));};
+const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+const keyOf=x=>x.key||((x.product_id||x.id||x.title||'item')+'::'+JSON.stringify(x.options||{}));
+const money=v=>Number(v||0).toLocaleString('ar-DZ')+' دج';
+let selected=new Set();
+function loadSelection(items){
+ const stored=JSON.parse(sessionStorage.getItem(SELECTED_KEY)||'null');
+ const keys=items.map(keyOf);
+ selected=stored?new Set(stored.filter(k=>keys.includes(k))):new Set(keys);
+ persistSelection();
+}
+function persistSelection(){sessionStorage.setItem(SELECTED_KEY,JSON.stringify([...selected]));}
+function selectedItems(items){return items.filter(x=>selected.has(keyOf(x)));}
+function updateHeader(items){const qty=items.reduce((s,x)=>s+Number(x.quantity||1),0);const n=items.length;document.getElementById('headerCount').textContent=n?`(${qty})`:'';document.getElementById('count').textContent=n?`${n} منتج`:'';}
+function notifyCart(){window.dispatchEvent(new Event('fenk-cart-updated'));}
+function render(){
+ const items=cart();
+ loadSelection(items);
+ updateHeader(items);
+ const list=document.getElementById('list');
+ const bar=document.getElementById('bottomBar');
+ if(!items.length){
+  list.innerHTML='<div class="empty"><h2>السلة فارغة</h2><div>أضف منتجات من متجر FENK ثم عد إلى السلة.</div><a href="products.html">تصفح المنتجات</a></div>';
+  bar.hidden=true; return;
+ }
+ bar.hidden=false;
+ let selectedTotal=0;
+ const selectedCount=selectedItems(items).length;
+ selectedItems(items).forEach(x=>selectedTotal+=Number(x.price||0)*Number(x.quantity||1));
+ list.innerHTML='<div class="toolbar"><label class="check-wrap"><input id="selectAllTop" class="select-box" type="checkbox"> تحديد الكل</label><button id="deleteSelectedTop" class="delete-selected" type="button">حذف المحدد</button></div>'+
+ items.map((x,i)=>{
+   const k=keyOf(x),isSelected=selected.has(k),q=Math.max(1,Number(x.quantity||1)),price=Number(x.price||0),old=Number(x.original_price||0),discount=Number(x.discount_pct||0),sub=price*q;
+   const opts=Object.entries(x.options||{}).map(([a,b])=>esc(a)+': '+esc(b)).join(' • ');
+   return `<article class="item ${isSelected?'selected':''}" data-key="${esc(k)}">
+    <label class="item-check" aria-label="تحديد ${esc(x.title)}"><input class="select-box item-select" type="checkbox" data-index="${i}" ${isSelected?'checked':''}></label>
+    <img src="${esc(x.image_url||'assets/marketplace/marketplace-products.png')}" alt="${esc(x.title)}" loading="lazy">
+    <div class="info"><div class="title">${esc(x.title)}</div>${opts?`<div class="options">${opts}</div>`:''}<div class="price-row"><strong class="price">${money(price)}</strong>${old>price?`<span class="old">${money(old)}</span>`:''}${discount>0?`<span class="discount">خصم ${discount}%</span>`:''}</div><div class="subtotal">الإجمالي: ${money(sub)}</div></div>
+    <div class="actions"><div class="qty"><button type="button" data-action="minus" data-index="${i}" aria-label="إنقاص الكمية">−</button><span>${q}</span><button type="button" data-action="plus" data-index="${i}" aria-label="زيادة الكمية">+</button></div><button type="button" class="remove" data-action="remove" data-index="${i}">حذف 🗑</button></div>
+   </article>`;
+ }).join('');
+ document.getElementById('bottomTotal').textContent=money(selectedTotal);
+ const allSelected=items.length>0&&items.every(x=>selected.has(keyOf(x)));
+ document.getElementById('selectAllTop').checked=allSelected;
+ document.getElementById('selectAllBottom').checked=allSelected;
+ document.getElementById('deleteSelectedTop').disabled=selectedCount===0;
+ document.getElementById('deleteSelectedBottom').disabled=selectedCount===0;
+ document.getElementById('checkoutBottom').disabled=selectedCount===0;
+}
+function toggleIndex(i,checked){const items=cart(),k=keyOf(items[i]);if(checked)selected.add(k);else selected.delete(k);persistSelection();render();}
+function toggleAll(checked){const items=cart();selected=checked?new Set(items.map(keyOf)):new Set();persistSelection();render();}
+function removeIndex(i){const items=cart(),k=keyOf(items[i]);items.splice(i,1);selected.delete(k);persistSelection();save(items);render();}
+function removeSelected(){const items=cart();if(!selected.size){alert('حدد منتجاً واحداً على الأقل لحذفه.');return}const kept=items.filter(x=>!selected.has(keyOf(x)));selected=new Set();persistSelection();save(kept);render();}
+function change(i,d){const items=cart(),x=items[i];if(!x)return;const max=Number(x.stock_quantity||999999);x.quantity=Math.max(1,Math.min(max,Number(x.quantity||1)+d));save(items);render();}
+function checkout(){const items=cart(),chosen=selectedItems(items);if(!chosen.length){alert('حدد منتجاً واحداً على الأقل لإكمال الطلب');return}sessionStorage.setItem('fenk_buy_now',JSON.stringify(chosen));sessionStorage.setItem('fenk_checkout_from_cart','1');location.href='product-checkout.html';}
+document.addEventListener('click',e=>{const el=e.target.closest('[data-action]');if(!el)return;const i=Number(el.dataset.index);if(el.dataset.action==='minus')change(i,-1);if(el.dataset.action==='plus')change(i,1);if(el.dataset.action==='remove')removeIndex(i);});
+document.addEventListener('change',e=>{if(e.target.matches('.item-select'))toggleIndex(Number(e.target.dataset.index),e.target.checked);if(e.target.id==='selectAllTop'||e.target.id==='selectAllBottom')toggleAll(e.target.checked);});
+document.addEventListener('click',e=>{if(e.target.id==='deleteSelectedTop'||e.target.id==='deleteSelectedBottom')removeSelected();if(e.target.id==='checkoutBottom')checkout();});
+window.addEventListener('storage',render);window.addEventListener('fenk-cart-updated',()=>{render();notifyCart()});render();
+</script>
+<script src="marketplace-cart-header.js"></script>
+  <script src="fenk-global-share.js?v=1"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0"></script>
+<script src="fenk-site-config.js?v=20260924-v195-global-logo"></script>
+</body></html>

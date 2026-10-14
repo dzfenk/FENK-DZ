@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>FENK — قطع غيار السيارات</title>
+<link rel="icon" href="assets/logo-clean.webp"><link rel="stylesheet" href="style.css">
+<style>
+:root{--g:#08c879;--dark:#003d32;--bg:#f5faf8}
+body{margin:0;background:var(--bg);color:#123a3d;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.p-top{background:#003d32;color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:20}
+.brand{font-size:22px;font-weight:900}.brand span{color:#16cf8b}
+.p-top a,.cart-btn{border:1px solid #4e8d80;color:#fff;background:transparent;border-radius:12px;padding:10px 13px;text-decoration:none;font-weight:800}
+.wrap{max-width:1100px;margin:auto;padding:18px}.hero{background:linear-gradient(135deg,#005344,#0a8c69);color:#fff;border-radius:24px;padding:24px 20px;margin-bottom:18px}
+.hero h1{margin:0 0 8px;font-size:30px}.hero p{margin:0;line-height:1.8;color:#d9f6ee}
+.parts-nav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 18px}.parts-nav a{background:#fff;border:1px solid #d7e6e1;color:#123a3d;border-radius:999px;padding:9px 12px;text-decoration:none;font-weight:800;font-size:13px}.parts-nav a.active{background:#003d32;color:#fff;border-color:#003d32}
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin:16px 0}.toolbar h2{margin:0}
+.products-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.pcard{background:#fff;border-radius:18px;overflow:hidden;border:1px solid #e1ebe8;box-shadow:0 8px 25px #0a5b4810;cursor:pointer;transition:.2s}.pcard:hover{transform:translateY(-2px)}
+.pcard img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}.pcard-body{padding:12px}.pcard-title{font-weight:850;font-size:16px;line-height:1.45;min-height:46px}.price{font-size:19px;font-weight:950;margin-top:6px}.old{text-decoration:line-through;color:#8b9693;font-size:12px;margin-inline-start:6px}.discount{display:inline-block;background:#e7fff3;color:#078a59;border-radius:999px;padding:4px 7px;font-size:11px;font-weight:900;margin-top:7px}.rating{font-size:12px;color:#5e6f6b;margin-top:5px}.choose{width:100%;border:0;background:var(--g);color:#fff;border-radius:11px;padding:11px;margin-top:10px;font-weight:900;cursor:pointer}
+.empty{background:#fff;border:1px dashed #cddbd6;border-radius:18px;padding:50px 20px;text-align:center;color:#75837f}.loading{padding:60px;text-align:center;color:#75837f}
+@media(max-width:800px){.wrap{padding:12px}.hero{padding:20px;border-radius:18px}.hero h1{font-size:25px}.parts-nav{gap:6px}.parts-nav a{font-size:12px;padding:8px 10px}.products-grid{grid-template-columns:1fr;gap:14px}.pcard{border-radius:14px}.pcard-body{padding:10px}}
+</style><link rel="stylesheet" href="mobile-fix.css">
+<link rel="stylesheet" href="marketplace-mobile-unified.css">
+  <link rel="stylesheet" href="fenk-global-share.css?v=1">
+</head>
+<body>
+<header class="mp-header"><a class="mp-back" href="marketplace.html">← رجوع</a><a class="mp-brand" href="marketplace.html"><span>FENK</span> قطع الغيار</a><a class="mp-cart" href="product-cart.html" aria-label="السلة">🛒 <span class="mp-cart-count" id="cartCount"></span></a></header>
+<main class="wrap">
+<section class="hero"><small>FENK Marketplace</small><h1>قطع غيار السيارات 🚗</h1><p>اختر قطعة الغيار، حدّد الخيارات المناسبة لسيارتك مثل المقاس أو الأمبير، ثم اضغط «اختيار المنتج» وأكمل الطلب بنفس طريقة قسم المنتجات.</p></section>
+<nav class="parts-nav" aria-label="أنواع قطع الغيار">
+<a href="spare-parts.html" data-part="">الكل</a>
+<a href="spare-parts.html?part=engines">🔧 محركات</a><a href="spare-parts.html?part=gearbox">⚙️ ناقل الحركة</a><a href="spare-parts.html?part=tires_rims">🛞 إطارات وجنوط</a><a href="spare-parts.html?part=brakes">🛑 فرامل</a><a href="spare-parts.html?part=electrical">🔌 كهرباء</a><a href="spare-parts.html?part=lighting">💡 إضاءة</a><a href="spare-parts.html?part=cooling">❄️ تبريد</a><a href="spare-parts.html?part=oils_filters">🛢️ زيوت وفلاتر</a><a href="spare-parts.html?part=batteries">🔋 بطاريات</a><a href="spare-parts.html?part=body">🚘 هيكل</a><a href="spare-parts.html?part=interior">🪑 داخلية</a><a href="spare-parts.html?part=exhaust">💨 عادم</a><a href="spare-parts.html?part=other">➕ أخرى</a>
+</nav><button type="button" class="spare-more" id="spareMoreBtn" aria-expanded="false">عرض المزيد</button>
+<div class="toolbar"><h2 id="heading">قطع غيار السيارات</h2><span id="count"></span></div>
+<div id="grid" class="products-grid"><div class="loading">جارٍ تحميل قطع الغيار…</div></div>
+<section style="margin-top:20px;text-align:center"><a href="marketplace-category.html?category=spare_parts" style="color:#087b56;font-weight:900">تصفح أيضًا إعلانات قطع الغيار من المستخدمين ←</a></section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0"></script>
+<script>
+const U='https://wqfnzahjwlukncxlxdkp.supabase.co',K='sb_publishable__QR4tJ9p5RYOQkIuHkoYKQ_mbDa9tuA',db=window.supabase.createClient(U,K);
+const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+const money=v=>Number(v||0).toLocaleString('ar-DZ')+' دج';
+const names={engines:'محركات',gearbox:'ناقل الحركة',tires_rims:'إطارات وجنوط',brakes:'فرامل',electrical:'كهرباء',lighting:'إضاءة',cooling:'تبريد',oils_filters:'زيوت وفلاتر',batteries:'بطاريات',body:'هيكل',interior:'داخلية',exhaust:'عادم',other:'أخرى'};
+const part=new URLSearchParams(location.search).get('part')||'';
+document.querySelectorAll('.parts-nav a').forEach(a=>{const q=new URL(a.href,location.href).searchParams.get('part')||'';if(q===part)a.classList.add('active')});
+document.getElementById('heading').textContent=part?(names[part]||'قطع غيار السيارات'):'قطع غيار السيارات';
+function updateCart(){const a=JSON.parse(localStorage.getItem('fenk_product_cart')||'[]');document.getElementById('cartCount').textContent=a.reduce((s,x)=>s+Number(x.quantity||1),0)}
+async function load(){
+ let q=db.from('fenk_products').select('*').eq('is_active',true).eq('show_in_products',true).eq('catalog_section','spare_parts').gt('stock_quantity',0).order('created_at',{ascending:false});
+ if(part)q=q.eq('part_category',part);
+ const {data,error}=await q;
+ if(error){document.getElementById('grid').innerHTML='<div class="empty">تعذر تحميل قطع الغيار.</div>';return}
+ const rows=data||[];document.getElementById('count').textContent=rows.length+' قطعة';
+ if(!rows.length){document.getElementById('grid').innerHTML='<div class="empty">لا توجد قطع غيار مفعلة في هذا القسم حاليًا.<br><small>يمكن للأدمن إضافة البطاريات والإطارات والفرامل وغيرها من لوحة الإدارة.</small></div>';return}
+ document.getElementById('grid').innerHTML=rows.map(p=>{const img=Array.isArray(p.image_urls)&&p.image_urls[0]||'assets/marketplace/promos/auto-parts.jpg';return `<article class="pcard" onclick="location.href='product.html?id=${encodeURIComponent(p.id)}&section=spare_parts'"><img src="${esc(img)}" alt="${esc(p.title)}" loading="lazy"><div class="pcard-body"><div class="pcard-title">${esc(p.title)}</div><div class="price">${money(p.price_dzd)}${p.original_price?` <span class="old">${money(p.original_price)}</span>`:''}</div>${Number(p.discount_pct)>0?`<span class="discount">خصم ${Number(p.discount_pct)}%</span>`:''}<div class="rating">${Number(p.rating)>0?'⭐ '+Number(p.rating).toFixed(1):'قطعة أصلية عبر FENK'}</div><button class="choose" onclick="event.stopPropagation();location.href='product.html?id=${encodeURIComponent(p.id)}&section=spare_parts'">اختيار المنتج</button></div></article>`}).join('');
+ updateCart()
+}
+load();updateCart();
+</script>
+<script src="marketplace-cart-header.js"></script>
+  <script src="fenk-global-share.js?v=1"></script>
+<script src="fenk-site-config.js?v=20260924-v195-global-logo"></script>
+</body></html>

@@ -1,0 +1,162 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>سوق المنتجات | FENK</title><link rel="icon" href="assets/logo-clean.webp"><link rel="stylesheet" href="style.css"><style>
+:root{--g:#08c879;--dark:#003d32;--bg:#f5faf8;--line:#dfeae6}
+*{box-sizing:border-box}
+html,body{margin:0;max-width:100%;overflow-x:hidden}
+body{background:var(--bg);color:#123a3d;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.p-top{background:#003d32;color:#fff;height:58px;padding:7px 12px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;position:sticky;top:0;z-index:20}
+.brand{font-size:19px;font-weight:900;text-align:center;white-space:nowrap;line-height:1}
+.brand span{color:#16cf8b}
+.p-top a,.cart-btn{border:1px solid #4e8d80;color:#fff;background:transparent;border-radius:10px;padding:7px 10px;text-decoration:none;font-weight:800;font-size:13px;white-space:nowrap;min-height:38px;display:flex;align-items:center;justify-content:center}
+.wrap{max-width:1200px;margin:auto;padding:10px 14px 24px}
+.hero{background:linear-gradient(135deg,#003d32,#00664f);color:#fff;border-radius:15px;padding:10px 14px;margin-bottom:9px;min-height:54px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.hero small{font-size:12px;opacity:.82;white-space:nowrap}
+.hero h1{margin:0;font-size:20px;line-height:1.1;white-space:nowrap}
+.hero p{margin:0;line-height:1.4;color:#d9f6ee;font-size:12px;text-align:right;max-width:620px}
+.catalog-tools{margin:7px 0 10px}
+.search-box{position:relative}
+.search-box input{width:100%;height:42px;border:1px solid #cddbd6;border-radius:12px;background:#fff;padding:0 42px 0 12px;font-size:14px;color:#123a3d;outline:none;box-shadow:0 2px 10px #0a5b4809}
+.search-box input:focus{border-color:#08c879;box-shadow:0 0 0 3px #08c87918}
+.search-icon{position:absolute;right:11px;top:50%;transform:translateY(-50%);font-size:17px}
+.chips{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding:7px 1px 2px}
+.chips::-webkit-scrollbar{display:none}
+.chip{border:1px solid #d7e3df;background:#fff;color:#49615c;border-radius:999px;padding:6px 11px;font-size:11px;font-weight:800;white-space:nowrap;cursor:pointer}
+.chip.active{background:#e8fff5;border-color:#08c879;color:#078a59}
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin:5px 1px 8px}
+.toolbar h2{margin:0;font-size:20px}
+.toolbar span{font-size:12px;color:#75837f}
+.products-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.pcard{background:#fff;border-radius:14px;overflow:hidden;border:1px solid #e1ebe8;box-shadow:0 5px 16px #0a5b4810;cursor:pointer;transition:.2s;min-width:0}
+.pcard:hover{transform:translateY(-2px)}
+.pcard img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:#f7faf9}
+.pcard-body{padding:9px;min-width:0}
+.pcard-title{font-weight:850;font-size:14px;line-height:1.4;height:39px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.price{font-size:17px;font-weight:950;margin-top:5px;white-space:nowrap;direction:rtl;text-align:right}
+.old{text-decoration:line-through;color:#8b9693;font-size:10px;margin-inline-start:4px;font-weight:700}
+.discount{display:inline-block;background:#e7fff3;color:#078a59;border-radius:999px;padding:3px 6px;font-size:9px;font-weight:900;margin-top:5px;white-space:nowrap}
+.rating{font-size:10px;color:#5e6f6b;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.choose{width:100%;border:0;background:var(--g);color:#fff;border-radius:9px;padding:8px 4px;margin-top:8px;font-weight:900;cursor:pointer;font-size:11px;min-height:34px}
+.empty{grid-column:1/-1;background:#fff;border:1px dashed #cddbd6;border-radius:16px;padding:40px 20px;text-align:center;color:#75837f}
+.loading{grid-column:1/-1;padding:40px;text-align:center;color:#75837f}
+@media(min-width:801px){
+  .p-top{height:64px;padding:8px 18px}
+  .brand{font-size:22px}
+  .hero{min-height:70px;padding:12px 18px}
+  .hero h1{font-size:24px}
+}
+@media(max-width:800px){
+  .wrap{padding:7px 8px 18px}
+  .hero{padding:8px 10px;min-height:46px;border-radius:12px;margin-bottom:7px}
+  .hero p{display:none}
+  .hero h1{font-size:17px}
+  .hero small{font-size:10px}
+  .products-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+  .pcard{border-radius:9px}
+  .pcard-body{padding:5px}
+  .pcard-title{font-size:10px;line-height:1.35;height:28px}
+  .price{font-size:11px;margin-top:3px}
+  .old{font-size:7px}
+  .discount{font-size:7px;padding:2px 4px;margin-top:3px}
+  .rating{font-size:7px;margin-top:3px}
+  .choose{font-size:7px;min-height:27px;padding:5px 2px;margin-top:4px;border-radius:6px}
+  .toolbar{margin:3px 1px 5px}
+  .toolbar h2{font-size:17px}
+  .toolbar span{font-size:10px}
+  .search-box input{height:38px;font-size:12px;border-radius:10px}
+  .chips{gap:5px;padding-top:5px}
+  .chip{font-size:9px;padding:5px 8px}
+  .p-top{height:52px;padding:5px 7px;gap:5px}
+  .brand{font-size:16px}
+  .p-top a,.cart-btn{min-height:34px;padding:5px 7px;font-size:10px;border-radius:9px}
+}
+@media(max-width:360px){
+  .products-grid{gap:5px}
+  .pcard-body{padding:4px}
+  .pcard-title{font-size:9px}
+  .price{font-size:10px}
+  .choose{font-size:6.5px}
+}
+</style><link rel="stylesheet" href="marketplace-mobile-unified.css">
+  <link rel="stylesheet" href="fenk-global-share.css?v=1">
+</head><body><header class="mp-header"><a class="mp-back" href="marketplace.html">← رجوع</a><a class="mp-brand" href="marketplace.html">سوق المنتجات | FENK</a><a class="mp-cart" href="product-cart.html" aria-label="السلة">🛒 <span class="mp-cart-count" id="cartCount"></span></a></header><main class="wrap">
+  <section class="hero">
+    <div><small>FENK Marketplace</small><h1>منتجات 🛍️</h1></div>
+    <p>منتجات مختارة من Temu وAliExpress وAmazon وغيرها — اختر المنتج والمقاس أو اللون ثم اطلبه من FENK.</p>
+  </section>
+  <section class="catalog-tools" aria-label="البحث والتصنيفات">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input id="productSearch" type="search" inputmode="search" placeholder="ابحث عن منتج..." aria-label="ابحث عن منتج">
+    </div>
+    <div id="chips" class="chips" aria-label="تصنيفات المنتجات"></div>
+  </section>
+  <div class="toolbar"><h2>المنتجات</h2><span id="count"></span></div>
+  <div id="grid" class="products-grid"><div class="loading">جارٍ تحميل المنتجات…</div></div>
+</main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0"></script><script>
+const SUPABASE_URL='https://wqfnzahjwlukncxlxdkp.supabase.co';
+const SUPABASE_KEY='sb_publishable__QR4tJ9p5RYOQkIuHkoYKQ_mbDa9tuA';
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const $=id=>document.getElementById(id);
+const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+function money(v){return Number(v||0).toLocaleString('ar-DZ')+' دج'}
+function updateCart(){const a=JSON.parse(localStorage.getItem('fenk_product_cart')||'[]');$('cartCount').textContent=a.reduce((s,x)=>s+Number(x.quantity||1),0)}
+let allRows=[];
+let activeChip='الكل';
+const categoryMap=[
+  ['الكل',''],
+  ['إلكترونيات','إلكترون|هاتف|سماعة|شاحن|ساعة|كاميرا|كمبيوتر|تابلت|usb|bluetooth'],
+  ['المنزل','منزل|مطبخ|قهوة|تنظيف|ديكور|إضاءة|كرسي|طاولة'],
+  ['أزياء','ملابس|حذاء|حقيبة|أزياء|قميص|بنطال'],
+  ['أدوات','أداة|أدوات|مفك|عدة|tool|drill|screw'],
+  ['إكسسوارات','إكسسوار|غطاء|حافظة|حامل|سوار|accessor']
+];
+function matchesChip(p,label){
+  if(label==='الكل') return true;
+  const entry=categoryMap.find(x=>x[0]===label);
+  if(!entry) return true;
+  const text=String(p.title||'').toLowerCase();
+  return entry[1].split('|').some(k=>text.includes(k.toLowerCase()));
+}
+function renderChips(){
+  $('chips').innerHTML=categoryMap.map(([label])=>
+    `<button type="button" class="chip ${activeChip===label?'active':''}" onclick="setChip('${esc(label)}')">${label}</button>`
+  ).join('');
+}
+function setChip(label){activeChip=label;renderChips();render();}
+function render(){
+  const q=String($('productSearch').value||'').trim().toLowerCase();
+  const rows=allRows.filter(p=>{
+    const title=String(p.title||'').toLowerCase();
+    return (!q||title.includes(q))&&matchesChip(p,activeChip);
+  });
+  $('count').textContent=rows.length+' منتج';
+  if(!rows.length){$('grid').innerHTML='<div class="empty">لا توجد منتجات مطابقة للبحث.</div>';return}
+  $('grid').innerHTML=rows.map(p=>{
+    const img=Array.isArray(p.image_urls)&&p.image_urls[0]||'assets/marketplace/marketplace-products.png';
+    const sold=p.sold_count ?? p.sales_count ?? p.sold ?? null;
+    const rating=Number(p.rating||0);
+    return `<article class="pcard" onclick="location.href='product.html?id=${encodeURIComponent(p.id)}&section=products'">
+      <img src="${esc(img)}" alt="${esc(p.title)}" loading="lazy">
+      <div class="pcard-body">
+        <div class="pcard-title">${esc(p.title)}</div>
+        <div class="price">${money(p.price_dzd)}${p.original_price?` <span class="old">${money(p.original_price)}</span>`:''}</div>
+        ${Number(p.discount_pct)>0?`<span class="discount">خصم ${Number(p.discount_pct)}%</span>`:''}
+        <div class="rating">${rating>0?'⭐ '+rating.toFixed(1):'منتج FENK'}${sold!=null&&sold!==''?' · تم بيع '+Number(sold).toLocaleString('ar-DZ'):''}</div>
+        <button class="choose" onclick="event.stopPropagation();location.href='product.html?id=${encodeURIComponent(p.id)}&section=products'">اختيار المنتج</button>
+      </div>
+    </article>`;
+  }).join('');
+}
+async function load(){
+  const {data,error}=await db.from('fenk_products').select('*').eq('is_active',true).eq('show_in_products',true).eq('catalog_section','products').gt('stock_quantity',0).order('created_at',{ascending:false});
+  if(error){$('grid').innerHTML='<div class="empty">تعذر تحميل المنتجات.</div>';return}
+  allRows=data||[];
+  renderChips();
+  render();
+}
+$('productSearch').addEventListener('input',render);
+load();
+updateCart();
+</script><script src="marketplace-cart-header.js"></script>
+  <script src="fenk-global-share.js?v=1"></script>
+<script src="fenk-site-config.js?v=20260924-v195-global-logo"></script>
+</body></html>

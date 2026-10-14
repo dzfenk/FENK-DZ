@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+<meta content="#031915" name="theme-color"/>
+<title>FENK — يجيبلك</title>
+<link href="https://cdn.jsdelivr.net" rel="preconnect"/>
+<link href="style.css?v=20260926-notification-routing-v1" rel="stylesheet"/>
+<script src="https://unpkg.com/lucide@1.46.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0"></script>
+<style id="fenk-mobile-error-fix">
+@media(max-width:800px){
+  #order{scroll-margin-top:58px!important;}
+  #game-topup{scroll-margin-top:58px!important;}
+}
+
+/* Real game artwork in the main FENK gaming grid */
+.game-icon.game-real-image img[src*="free-fire-user"],
+.game-icon.game-real-image img[src*="steam-user"],
+.game-icon.game-real-image img[src*="roblox-user"],
+.game-icon.game-real-image img[src*="efootball-user"]{object-fit:cover!important;padding:0!important;border-radius:12px!important;}
+
+.language-switcher{display:flex;align-items:center;gap:5px;border:1px solid rgba(22,163,74,.35);background:#fff;border-radius:999px;padding:5px 9px;color:#166534;min-height:38px;flex:0 0 auto}.language-switcher i{width:17px;height:17px}.language-switcher select{border:0;background:transparent;color:#166534;font-weight:900;outline:0;cursor:pointer;font-size:13px}.mobile-head-tools{display:flex;align-items:center;gap:7px}.mobile-language{min-height:34px;padding:4px 7px}.mobile-language select{max-width:48px;font-size:12px}.language-settings-row select{border:1px solid #d9e3df;border-radius:12px;background:#fff;padding:9px 12px;font-weight:800;color:#123b35;min-width:120px;outline:none}.fenk-ltr{direction:ltr!important;text-align:left!important}
+@media(max-width:800px){.mobile-head-tools{display:flex}.mobile-head-top{gap:8px;justify-content:space-between}.mobile-location{flex:0 0 auto}.language-switcher{box-shadow:0 3px 10px rgba(0,0,0,.04)}}
+</style>
+
+  <link rel="stylesheet" href="fenk-global-share.css?v=1">
+<style>
+.fenk-login-promo{margin:0 0 14px;border-radius:16px;overflow:hidden;background:#f7faf8;border:1px solid #dce9e4;box-shadow:0 6px 18px rgba(0,0,0,.06)}
+.fenk-login-promo[hidden]{display:none!important}.flp-head{padding:10px 12px 7px;text-align:center}.flp-head b{display:block;color:#075c43;font-size:15px}.flp-head span{display:block;color:#6c7975;font-size:11px;margin-top:3px}.flp-track{position:relative;min-height:92px}.flp-slide{display:none;position:relative;width:100%;text-decoration:none;color:inherit}.flp-slide.active{display:block}.flp-slide img,.flp-slide video{display:block;width:100%;max-height:220px;min-height:110px;object-fit:contain;background:#061f18}.flp-text{display:block;padding:9px 11px;text-align:center;font-weight:800;color:#075c43;background:#fff;font-size:13px} .fenk-login-ticker{margin:0 0 12px;border:1px solid #bfe3d5;border-radius:12px;background:#effaf5;color:#075c43;overflow:hidden;white-space:nowrap;box-shadow:0 3px 10px rgba(0,0,0,.04)} .fenk-login-ticker[hidden]{display:none!important}.fenk-login-ticker-track{display:inline-flex;min-width:max-content;animation:fenkLoginTickerMove 22s linear infinite;padding:9px 0;font-size:13px;font-weight:800;direction:rtl}.fenk-login-ticker-item{display:inline-flex;align-items:center;padding:0 28px}.fenk-login-ticker-item:after{content:"•";margin-inline-start:28px;color:#2aa477}@keyframes fenkLoginTickerMove{from{transform:translateX(0)}to{transform:translateX(50%)}} @media (prefers-reduced-motion:reduce){.fenk-login-ticker-track{animation:none;display:flex;justify-content:center;white-space:normal;text-align:center;flex-wrap:wrap}}
+</style>
+<style id="fenk-neon-auth-style">
+.fenk-neon-auth{margin:12px 0;padding:14px;border:1px solid #d7e8e1;border-radius:14px;background:#f7fbf9;text-align:right}
+.fenk-neon-auth-title{text-align:center;color:#075c43;font-weight:900;margin-bottom:10px}
+.fenk-neon-auth form{display:grid;gap:7px}
+.fenk-neon-auth label{font-size:12px;font-weight:800;color:#214b40}
+.fenk-neon-auth input{width:100%;box-sizing:border-box;min-height:43px;padding:10px 12px;border:1px solid #cbdad4;border-radius:9px;background:#fff;color:#15352e;font:inherit;direction:ltr;text-align:left}
+.fenk-neon-auth #fenkNeonSubmit{width:100%;margin-top:5px;min-height:44px}
+.fenk-neon-auth #fenkNeonMode{display:block;margin:0 auto;background:transparent;border:0;color:#087f5b;font-weight:800;padding:8px}
+.fenk-neon-auth #fenkNeonMessage{margin:3px 0 0;text-align:center;font-size:12px;min-height:18px;color:#075c43;overflow-wrap:anywhere}
+.fenk-neon-auth #fenkNeonMessage.error{color:#b42318}
+.fenk-neon-auth #fenkNeonRegisterFields{display:grid;gap:7px}
+.fenk-neon-auth #fenkNeonRegisterFields[hidden]{display:none}
+</style>
+
+</head>
+<body>
+<div class="site">
+<header class="topbar" id="top">
+<div class="top-inner">
+<a class="brand" href="#home"><img alt="FENK" src="assets/logo-clean.webp"/></a>
+<div class="search-wrap"><input id="siteSearch" placeholder="ابحث عن منتج، رابط أو صورة ..." type="search"/><button aria-label="بحث" id="searchBtn" type="button"><i data-lucide="search"></i></button></div>
+<button class="country" id="countryBtn" type="button"><i data-lucide="map-pin"></i> الجزائر <span>●</span></button>
+<label class="language-switcher" aria-label="اللغة"><i data-lucide="languages"></i><select id="languageSelect" aria-label="اختيار اللغة" onchange="window.FENKSetLanguageV84(this.value)"><option value="ar">العربية</option><option value="dz">الدارجة الجزائرية</option><option value="kab">ⵜⴰⵇⴱⴰⵢⵍⵉⵜ · القبائلية</option><option value="fr">Français</option><option value="en">English</option></select></label>
+<nav class="actions">
+<button id="accountBtn"><i class="ico-icon" data-lucide="user-round"></i><small>حسابي</small></button>
+<button aria-label="رسائل" id="messagesBtn" type="button" class="messages-head-btn"><i class="ico-icon" data-lucide="messages-square"></i><small>رسائل</small><em id="messageBadge">0</em></button><button aria-label="الإشعارات" class="notification-head-btn" id="notificationsBtn" type="button"><i class="ico-icon" data-lucide="bell"></i><small>الإشعارات</small><em id="notificationBadge">0</em></button>
+<button id="ordersBtn" type="button"><i class="ico-icon" data-lucide="shopping-cart"></i><small>الطلبات</small><em>0</em></button>
+</nav>
+</div>
+<div class="categorybar">
+<button class="all-sections" type="button" onclick="location.href='marketplace.html'">🛍️ Marketplace <i data-lucide="store"></i></button>
+<a href="products.html"><i data-lucide="package"></i><span>سواق المنتجات</span></a><a href="products.html"><i data-lucide="store"></i><span>متاجر</span></a><a href="marketplace-category.html?category=cars"><i data-lucide="car-front"></i><span>سواق السيارات</span></a><a href="marketplace-category.html?category=realestate"><i data-lucide="building-2"></i><span>عقارات</span></a><a href="marketplace-category.html?category=realestate"><i data-lucide="trees"></i><span>أراضي</span></a><a href="marketplace-publish.html?v=199" aria-label="نشر إعلان"><i data-lucide="megaphone"></i><span>نشر إعلان</span></a><a class="game-topup-nav" href="game-topup.html?v=130"><i data-lucide="gamepad-2"></i><span>شحن ألعاب</span></a>
+</div>
+</header>
+<div aria-label="رأس الموقع للهاتف" class="mobile-head">
+<div class="mobile-head-top">
+<a aria-label="FENK" class="mobile-brand" href="#home"><img alt="FENK" height="39" src="assets/logo-clean.webp" width="94"/></a>
+<div class="mobile-head-tools"><label class="language-switcher mobile-language" aria-label="اللغة"><i data-lucide="languages"></i><select id="mobileLanguageSelect" aria-label="اختيار اللغة" onchange="window.FENKSetLanguageV84(this.value)"><option value="ar">العربية</option><option value="dz">دارجة</option><option value="kab">ⵜⵇ</option><option value="fr">FR</option><option value="en">EN</option></select></label><button aria-label="اختيار الولاية" class="mobile-location" id="mobileCountryBtn" type="button"><i data-lucide="map-pin"></i><span>الجزائر</span></button></div>
+</div>
+<div class="mobile-search search-wrap"><input autocomplete="off" id="mobileSiteSearch" placeholder="ابحث عن منتج أو الصق الرابط..." type="search"/><button aria-label="بحث" id="mobileSearchBtn" type="button"><i data-lucide="search"></i></button></div>
+<section aria-label="إعلان FENK" class="mobile-announcement"><div class="mobile-announcement-track"><span class="announcement-highlight">FENK يجيبلك</span><b>•</b><span>الدفع محليًا 🇩🇿 عبر بريد موب فقط</span><b>•</b><span>توصيل إلى الجزائر</span><b>•</b><span>تابع طلبك خطوة بخطوة</span><b>•</b><span>خدمة FENK للشراء والتوصيل</span><b>•</b></div></section>
+<div id="guestNotificationAlert" class="guest-notification-alert" hidden>
+  <button type="button" id="guestNotificationAlertBtn" aria-label="عرض الإشعارات">
+    <span class="guest-notification-dot">🔴</span>
+    <span><b>لديك إشعارات جديدة</b><small>سجّل الدخول لعرضها</small></span>
+    <i data-lucide="chevron-left" aria-hidden="true"></i>
+  </button>
+</div>
+</div>
+<main id="home">
+<section aria-label="FENK" class="fenk-static-hero" id="hero">
+  <img class="fenk-hero-media hero-image" src="assets/fenk-hero-fenkdz.webp" alt="FENK DZ - متجر الألعاب والخدمات الرقمية في الجزائر" decoding="async" fetchpriority="high">
+  <video class="fenk-hero-media hero-video" muted autoplay loop playsinline preload="metadata" hidden></video>
+</section>
+<!-- FENK Gaming — real game cover shortcuts -->
+<section aria-label="شحن الألعاب" class="game-glow-bar game-cover-bar" id="game-topup-shortcuts">
+<div class="game-glow-head">
+<div>
+<span class="game-glow-kicker">FENK GAMING</span>
+<h2>شحن ألعابك ⚡</h2>
+<p>اختر لعبتك للشحن</p>
+</div>
+<a class="game-glow-all" href="game-topup.html?v=130">كل الألعاب <span>←</span></a>
+</div>
+<div class="game-glow-track game-cover-track">
+<a class="game-glow-card game-cover-card" href="game-topup.html?v=130&game=Free%20Fire">
+<span class="game-cover-image"><img alt="Free Fire" loading="lazy" src="assets/free-fire-user.webp"/></span>
+<strong>Free Fire</strong><small>Diamonds</small>
+</a>
+<a class="game-glow-card game-cover-card" href="game-topup.html?v=130&game=Roblox">
+<span class="game-cover-image"><img alt="Roblox" loading="lazy" src="assets/roblox-user.jpg"/></span>
+<strong>Roblox</strong><small>Robux</small>
+</a>
+<a class="game-glow-card game-cover-card" href="game-topup.html?v=130&game=Steam">
+<span class="game-cover-image"><img alt="Steam" loading="lazy" src="assets/steam-user.png"/></span>
+<strong>Steam</strong><small>Wallet</small>
+</a>
+<a class="game-glow-card game-cover-card" href="game-topup.html?v=130&game=eFootball">
+<span class="game-cover-image"><img alt="eFootball" loading="lazy" src="assets/efootball-user.png"/></span>
+<strong>eFootball</strong><small>Coins</small>
+</a>
+</div>
+</section>
+<section class="fenk-marketplace-strip" aria-label="FENK Marketplace">
+  <a class="fenk-marketplace-strip-title" href="marketplace.html">
+    <span class="marketplace-mini-icon">🛍️</span>
+    <span><b>FENK Marketplace</b><small>منتجات • متاجر • سيارات • عقارات • أراضي</small></span>
+    <strong>فتح السوق ←</strong>
+  </a>
+</section>
+
+<a aria-label="الانتقال إلى طلب منتج" class="mobile-hero-cta" href="#order">اطلب منتجك <span aria-hidden="true">←</span></a>
+<section class="promo-strip"><div class="promo-track"><b><i data-lucide="sparkles"></i> عروض خاصة على طلباتك الأولى</b><span>لا تحتاج إلى Visa أو Mastercard</span><span>الدفع محليًا في الجزائر 🇩🇿 • بريد موب فقط</span><span>تابع طلبك خطوة بخطوة</span><span>من الرابط إلى باب منزلك</span><b><i data-lucide="flame"></i> FENK يجيبلك من المواقع العالمية</b></div></section>
+<section class="fenk-magic" id="fenk-magic" aria-label="FENK Magic">
+  <div class="fenk-magic-head">
+    <span class="magic-kicker">🦊 FENK MAGIC</span>
+    <h2>لقيت حاجة؟ خلّي FENK يتكفّل بالباقي.</h2>
+    <p>أرسل رابطًا أو صورة أو اكتب ما تبحث عنه. نرتّب لك المعلومات ونجهّز طلبك.</p>
+  </div>
+  <div class="fenk-magic-actions">
+    <button type="button" data-magic-action="link"><i data-lucide="link-2"></i><span><b>أرسل رابط</b><small>AliExpress · Amazon · eBay...</small></span></button>
+    <button type="button" data-magic-action="image"><i data-lucide="camera"></i><span><b>أرسل صورة</b><small>صورة المنتج تكفي</small></span></button>
+    <button type="button" data-magic-action="text"><i data-lucide="message-circle"></i><span><b>اكتب ما تريد</b><small>بالعربية أو الدارجة</small></span></button>
+  </div>
+  <div class="fenk-magic-result">
+    <div><i data-lucide="sparkles"></i><span><b>بعد الإرسال</b><small>FENK يجهّز لك معلومات المنتج والسعر والخطوة التالية.</small></span></div>
+    <strong>🟢 الدفع محليًا عبر بريد موب</strong>
+  </div>
+</section>
+
+<section class="fenk-intelligence" id="fenk-intelligence" aria-label="FENK Intelligence">
+  <div class="intel-head"><span>🦊 FENK INTELLIGENCE</span><h2>من رابط إلى قرار شراء</h2><p>حلّل المنتج، شاهد المعلومات التي أمكن استخراجها، ثم جهّز طلبك أو راقبه بالسعر الذي تريده.</p></div>
+  <form class="intel-form" id="intelForm">
+    <label>رابط المنتج <input id="intelUrl" type="url" inputmode="url" placeholder="https://..." autocomplete="off"></label>
+    <button class="send" type="submit" id="intelAnalyze">🔎 حلّل المنتج</button>
+  </form>
+  <div class="intel-drop" id="intelDrop">
+    <input id="intelImage" type="file" accept="image/*" hidden>
+    <button type="button" id="intelImageBtn">📷 أضف صورة المنتج</button>
+    <small id="intelImageName">الصورة تُستخدم كمرجع بصري ويمكن إرفاقها بالطلب.</small>
+  </div>
+  <div class="intel-status" id="intelStatus" aria-live="polite">جاهز — أرسل رابطًا للبدء.</div>
+  <div class="intel-result" id="intelResult" hidden></div>
+</section>
+
+<section class="order-section" id="order">
+<div class="section-title"><h2>اطلب منتجك</h2><p>4 خطوات قصيرة من المنتج إلى المراجعة</p></div>
+<div class="order-steps"><span class="done">1<strong>معلومات المنتج</strong></span><span>2<strong>اختيار الموقع</strong></span><span>3<strong>معلومات التوصيل</strong></span><span>4<strong>مراجعة الطلب</strong></span></div>
+<div class="form-grid">
+<div class="form-box">
+<label><i data-lucide="link-2"></i> رابط المنتج</label>
+<input id="productUrl" placeholder="https://www.aliexpress.com/item/..." type="url"/>
+<label>أو أرسل صورة المنتج</label>
+<label class="upload" for="productImage"><input accept="image/jpeg,image/png,image/webp" id="productImage" type="file"/><span class="upload-icon"><i data-lucide="image-plus"></i></span><b>اضغط هنا لاختيار صورة المنتج</b><small>JPG أو PNG أو WEBP • الحد الأقصى 5MB</small><strong class="upload-name" id="imageName"></strong><img alt="معاينة صورة المنتج" class="image-preview" decoding="async" height="360" id="imagePreview" loading="lazy" width="640"/></label>
+<label>اسم المنتج</label>
+<input id="productName" placeholder="مثال: ساعة ذكية" type="text"/>
+<label>معلومات المنتج المطلوبة</label>
+<textarea id="productInfo" placeholder="اللون، المقاس، الموديل أو أي تفاصيل مطلوبة..." rows="3"></textarea>
+</div>
+<div class="form-box">
+<label><i data-lucide="globe-2"></i> الموقع</label>
+<div aria-label="اختيار موقع المنتج" class="sites-select sites-icon-links" id="sites">
+<button class="active" data-site="AliExpress"><span class="site-icon">A</span><span>AliExpress</span></button>
+<button data-site="Amazon"><span class="site-icon">a</span><span>Amazon</span></button>
+<button data-site="eBay"><span class="site-icon">e</span><span>eBay</span></button>
+<button data-site="Temu"><span class="site-icon">T</span><span>Temu</span></button>
+<button data-site="SHEIN"><span class="site-icon">S</span><span>SHEIN</span></button>
+<button data-site="موقع آخر"><span class="site-icon">＋</span><span>موقع آخر</span></button>
+</div>
+<div class="customer-order-fields">
+<label>الاسم<input autocomplete="given-name" id="orderFirstName" placeholder="الاسم" type="text"/></label>
+<label>اللقب<input autocomplete="family-name" id="orderLastName" placeholder="اللقب" type="text"/></label>
+<label>رقم الهاتف<div class="phone-field"><span>+213</span><input autocomplete="tel" id="orderPhone" inputmode="tel" placeholder="5 XX XX XX XX" type="tel"/></div></label>
+<label>الولاية<select id="orderWilaya" required=""><option value="">اختر الولاية</option></select></label>
+<label>البلدية<input id="orderCommune" placeholder="البلدية" type="text"/></label>
+<label>الرمز البريدي<input autocomplete="postal-code" id="orderPostalCode" inputmode="numeric" maxlength="5" pattern="[0-9]{5}" placeholder="الرمز البريدي" type="text"/></label>
+<label class="full-field">العنوان بالتفصيل<textarea id="orderAddress" placeholder="الحي، رقم المنزل، الشارع..." rows="3"></textarea></label>
+</div>
+</div>
+<div class="form-box review-box"><label><i data-lucide="package"></i> مراجعة الطلب</label><div aria-label="ملخص الطلب" class="mobile-review-summary"></div><label class="desktop-qty-label"><i data-lucide="package"></i> الكمية المطلوبة</label><div class="counter"><button id="minus" type="button">−</button><b id="qty">1</b><button id="plus" type="button">+</button></div><button class="send" id="sendOrder" type="button">تأكيد الطلب <span>→</span></button><div id="orderMsg"></div></div>
+</div>
+</section>
+<section aria-label="مزايا FENK" class="mobile-trust"><span>✓ الدفع محليًا</span><span>✓ دعم WhatsApp</span><span>✓ تتبع الطلب</span><span>✓ توصيل إلى جميع الولايات</span></section>
+<section class="fenk-ai-ad fenk-ad-carousel" aria-label="إعلانات FENK">
+  <div class="fenk-ad-carousel-card" id="fenkAdCarousel">
+    <div class="fenk-ad-slides">
+      <a class="fenk-ad-slide active" href="#order" aria-label="إعلان FENK 1"><img src="assets/fenk-ad-01.jpg" alt="FENK يجيبلك من المواقع العالمية إلى الجزائر" loading="eager"></a>
+      <a class="fenk-ad-slide" href="#order" aria-label="إعلان FENK 2"><img src="assets/fenk-ad-02.jpg" alt="شحن الألعاب عبر بريد موب مع FENK" loading="lazy"></a>
+      <a class="fenk-ad-slide" href="#order" aria-label="إعلان FENK 3"><img src="assets/fenk-ad-03.jpg" alt="إعلانات FENK للتسوق والشحن في الجزائر" loading="lazy"></a>
+      <a class="fenk-ad-slide" href="#order" aria-label="إعلان FENK 4"><img src="assets/fenk-ad-04.jpg" alt="توصيل آمن إلى باب الدار مع FENK" loading="lazy"></a>
+      <a class="fenk-ad-slide" href="#order" aria-label="إعلان FENK 5"><img src="assets/fenk-ad-05.jpg" alt="خدمات FENK المتنوعة" loading="lazy"></a>
+      <a class="fenk-ad-slide" href="#order" aria-label="إعلان FENK 6"><img src="assets/fenk-ad-06.jpg" alt="FENK منصة جزائرية لتسهيل شراء المنتجات والخدمات" loading="lazy"></a>
+    </div>
+    <button class="fenk-ad-arrow prev" type="button" aria-label="الإعلان السابق">‹</button>
+    <button class="fenk-ad-arrow next" type="button" aria-label="الإعلان التالي">›</button>
+    <div class="fenk-ad-dots" role="tablist" aria-label="اختيار الإعلان">
+      <button class="active" type="button" data-ad="0" aria-label="الإعلان 1"></button><button type="button" data-ad="1" aria-label="الإعلان 2"></button><button type="button" data-ad="2" aria-label="الإعلان 3"></button><button type="button" data-ad="3" aria-label="الإعلان 4"></button><button type="button" data-ad="4" aria-label="الإعلان 5"></button><button type="button" data-ad="5" aria-label="الإعلان 6"></button>
+    </div>
+    <span class="fenk-ad-label">إعلانات FENK • تتغير تلقائيًا</span>
+  </div>
+</section>
+<section class="fenk-watch-card" id="price-watch" aria-label="مراقبة السعر">
+  <div class="section-title" style="padding-top:4px"><h2>🔔 راقب السعر</h2><p>حدد السعر الذي يناسبك، وسجّل المنتج لمراجعته عندما ينخفض السعر.</p></div>
+  <div class="fenk-watch-form">
+    <label>رابط المنتج<input id="watchUrl" type="url" placeholder="https://..." inputmode="url"></label>
+    <label>السعر المستهدف بالدج<input id="watchTarget" type="number" min="1" step="1" placeholder="20000" inputmode="numeric"></label>
+    <button id="addPriceWatch" type="button">🔔 أضف للمراقبة</button>
+  </div>
+  <div id="priceWatchMsg" class="fenk-watch-msg" role="status"></div>
+  <div id="priceWatchList" class="fenk-watch-list"></div>
+</section>
+<section class="fenk-price-calculator" aria-label="حاسبة السعر التقريبية">
+  <div class="fenk-price-card">
+    <div class="section-title" style="padding-top:4px"><h2>💰 احسب السعر التقريبي</h2><p>أدخل القيم المتوفرة لديك للحصول على تقدير سريع بالدينار الجزائري.</p></div>
+    <div class="fenk-price-grid">
+      <label>سعر المنتج بالدولار<input id="calcProductUsd" inputmode="decimal" type="number" min="0" step="0.01" placeholder="30"></label>
+      <label>سعر الصرف<input id="calcRate" inputmode="decimal" type="number" min="0" step="0.01" value="250"></label>
+      <label>الشحن بالدج<input id="calcShipping" inputmode="decimal" type="number" min="0" step="1" placeholder="800"></label>
+      <label>خدمة FENK بالدج<input id="calcService" inputmode="decimal" type="number" min="0" step="1" placeholder="300"></label>
+    </div>
+    <div class="fenk-price-total"><span>التقدير التقريبي</span><strong id="calcTotal">0 دج</strong></div>
+    <p class="fenk-price-note">⚠️ هذا تقدير فقط؛ السعر النهائي يؤكده فريق FENK بعد مراجعة المنتج والشحن.</p>
+  </div>
+</section>
+<section class="video-zone" id="videos"><div class="section-title"><h2>شاهد كيف FENK يجيبلك <i data-lucide="flame"></i></h2><p>مقاطع قصيرة توضّح التجربة من أول رابط حتى التوصيل</p></div><div class="video-grid"><article class="video-card"><video autoplay="" loop="" muted="" playsinline="" poster="assets/hero-ref.webp" preload="none" src="assets/promo1.mp4"></video><div><b>من أي موقع عالمي إلى الجزائر</b><span>شاهد رحلة طلبك</span></div></article><article class="video-card"><video autoplay="" loop="" muted="" playsinline="" poster="assets/tutorial-ref.webp" preload="none" src="assets/promo2.mp4"></video><div><b>كيف ترسل رابط المنتج؟</b><span>خطوات بسيطة وسريعة</span></div></article><article class="video-card"><video autoplay="" loop="" muted="" playsinline="" poster="assets/payment-ref.webp" preload="none" src="assets/promo3.mp4"></video><div><b>الدفع عبر بريد موب</b><span>محلي، واضح وآمن</span></div></article></div></section>
+<section class="tutorial"><div class="tutorial-title">كيف تنسخ رابط المنتج من <b>AliExpress</b>؟ <small>(مثال بالصور)</small></div><img alt="شرح نسخ رابط المنتج من AliExpress إلى FENK" loading="lazy" src="assets/tutorial-ref.webp"/></section>
+<section aria-label="خدمات FENK" class="fenk-services" id="fenk-services">
+<div class="section-title"><h2>خدمات FENK ✨</h2><p>أقسام إضافية مستوحاة من تجربة منصات الخدمات الرقمية، لكن بهوية FENK.</p></div>
+<div class="fenk-service-grid">
+<a class="fenk-service-card" href="#order"><span class="service-icon">🎁</span><div><b>بطاقات وهدايا</b><small>بطاقات ألعاب ومنصات حسب الطلب</small></div><i>←</i></a>
+<a class="fenk-service-card" href="#order"><span class="service-icon">🔥</span><div><b>الخدمات الأكثر طلبًا</b><small>اختر الخدمة وأرسل الرابط إلى FENK</small></div><i>←</i></a>
+<a class="fenk-service-card" href="#order"><span class="service-icon">🛒</span><div><b>شراء من المواقع العالمية</b><small>AliExpress، Amazon، eBay، Temu والمزيد</small></div><i>←</i></a>
+<a class="fenk-service-card" href="game-topup.html?v=130"><span class="service-icon">🎮</span><div><b>شحن الألعاب</b><small>شحن مباشر وبطاقات رقمية</small></div><i>←</i></a>
+</div>
+</section>
+<section aria-label="الأكثر طلبًا" class="fenk-popular">
+<div class="section-title"><h2>الأكثر طلبًا 🔥</h2><p>اختصارات سريعة للخدمات التي يمكن طلبها من FENK.</p></div>
+<div class="fenk-popular-row"><a href="#order">📱 هواتف وإكسسوارات</a><a href="#order">💻 إلكترونيات</a><a href="#order">👟 أزياء وأحذية</a><a href="#order">🏠 منتجات منزلية</a><a href="#order">🎁 بطاقات رقمية</a><a href="game-topup.html?v=130">🎮 ألعاب وشحن</a><a href="#price-watch">🔔 راقب السعر</a></div>
+</section>
+<section aria-label="شحن الألعاب" class="game-topup" id="game-topup">
+<div class="section-title"><h2><i data-lucide="gamepad-2"></i> شحن الألعاب</h2><p>اختر اللعبة أو المنصة لفتح صفحة شحن مخصصة</p></div>
+<div class="game-grid">
+<a class="game-card" data-game="Free Fire" href="game-topup.html?v=130&game=Free%20Fire"><span class="game-icon game-real-image"><img alt="Free Fire" decoding="async" loading="lazy" src="assets/game-card-free-fire.webp"/></span><b>Free Fire</b><small>Diamonds</small></a>
+<a class="game-card" data-game="PUBG Mobile" href="game-topup.html?v=130&game=PUBG%20Mobile"><span class="game-icon game-real-image"><img alt="PUBG Mobile" decoding="async" loading="lazy" src="assets/game-card-pubg-mobile.webp"/></span><b>PUBG Mobile</b><small>UC</small></a>
+<a class="game-card" data-game="Roblox" href="game-topup.html?v=130&game=Roblox"><span class="game-icon game-real-image"><img alt="Roblox" decoding="async" loading="lazy" src="assets/game-card-roblox-new.jpg"/></span><b>Roblox</b><small>Robux</small></a>
+<a class="game-card" data-game="eFootball" href="game-topup.html?v=130&game=eFootball"><span class="game-icon game-real-image"><img alt="eFootball" decoding="async" loading="lazy" src="assets/game-card-efootball-new.jpg"/></span><b>eFootball</b><small>Coins</small></a>
+<a class="game-card" data-game="PlayStation" href="game-topup.html?v=130&game=PlayStation"><span class="game-icon game-real-image"><img alt="PlayStation" decoding="async" loading="lazy" src="assets/game-card-playstation-new.jpg"/></span><b>PlayStation</b><small>بطاقات وشحن</small></a>
+<a class="game-card" data-game="Xbox" href="game-topup.html?v=130&game=Xbox"><span class="game-icon game-real-image"><img alt="Xbox" decoding="async" loading="lazy" src="assets/game-card-xbox-new.jpg"/></span><b>Xbox</b><small>Gift Cards</small></a>
+<a class="game-card" data-game="Steam" href="game-topup.html?v=130&game=Steam"><span class="game-icon game-real-image"><img alt="Steam" decoding="async" loading="lazy" src="assets/game-card-steam-new.webp"/></span><b>Steam</b><small>Wallet</small></a>
+<a class="game-card" data-game="شحن لعبة أخرى" href="game-topup.html?v=130&game=%D8%B4%D8%AD%D9%86%20%D9%84%D8%B9%D8%A8%D8%A9%20%D8%A3%D8%AE%D8%B1%D9%89"><span class="game-icon game-real-image"><img alt="ألعاب أخرى" decoding="async" loading="lazy" src="assets/game-card-other-games.png"/></span><b>لعبة أخرى</b><small>اطلبها من FENK</small></a>
+</div>
+<p class="game-note"><i data-lucide="info"></i> الدفع محليًا في الجزائر 🇩🇿 عبر <b>بريد موب فقط</b>. السعر النهائي يظهر بعد مراجعة طلب الشحن.</p>
+</section>
+
+<section class="sites-band" id="marketplaces"><h2>أهم المواقع المدعومة</h2><p class="sites-subtitle">اختر أي متجر عالمي، ثم أرسل رابط المنتج إلى FENK</p><div class="site-logo-grid"><a aria-label="Alibaba" href="https://www.alibaba.com" rel="noopener noreferrer" target="_blank"><img alt="Alibaba" loading="lazy" src="assets/alibaba.svg"/></a><a aria-label="AliExpress" href="https://www.aliexpress.com" rel="noopener noreferrer" target="_blank"><img alt="AliExpress" loading="lazy" src="assets/aliexpress.svg"/></a><a aria-label="Amazon" href="https://www.amazon.com" rel="noopener noreferrer" target="_blank"><img alt="Amazon" loading="lazy" src="assets/amazon.svg"/></a><a aria-label="eBay" href="https://www.ebay.com" rel="noopener noreferrer" target="_blank"><img alt="eBay" loading="lazy" src="assets/ebay.svg"/></a><a aria-label="Temu" href="https://www.temu.com" rel="noopener noreferrer" target="_blank"><img alt="Temu" loading="lazy" src="assets/temu.svg"/></a><a aria-label="SHEIN" href="https://www.shein.com" rel="noopener noreferrer" target="_blank"><img alt="SHEIN" loading="lazy" src="assets/shein.svg"/></a><span class="sites-more">وغيرها الكثير ...</span></div></section>
+
+
+<section class="share-fenk" id="share-fenk"><div><span class="share-kicker">🎁 شارك FENK</span><h2>شارك رابط FENK مع أصدقائك</h2><p>أرسل الرابط مباشرة أو انسخه بضغطة واحدة.</p></div><div class="share-actions"><button id="shareFenkBtn" type="button"><i data-lucide="share-2"></i> مشاركة الرابط</button><button class="share-copy" id="copyFenkBtn" type="button"><i data-lucide="copy"></i> نسخ الرابط</button></div><small id="shareFenkMsg" role="status"></small></section>
+<section class="why" id="why"><h2>لماذا FENK يجيبلك؟</h2><div class="why-grid"><article><b><i data-lucide="headphones"></i></b><h3>دعم دائم</h3><p>نحن معك في كل خطوة</p></article><article><b><i data-lucide="shield-check"></i></b><h3>أسعار شفافة</h3><p>بدون رسوم خفية</p></article><article><b><i data-lucide="zap"></i></b><h3>سرعة في المعالجة</h3><p>وتحديث مستمر لطلبك</p></article><article><b><i data-lucide="package"></i></b><h3>توصيل إلى كل الولايات</h3><p>بأمان وموثوقية</p></article></div></section>
+<section class="stages"><h2>مراحل الطلب</h2><p>من الرابط إلى باب منزلك</p><div class="stage-row"><div><b><i data-lucide="link-2"></i></b><span>إرسال الرابط<br/>أو الصورة</span></div><i>→</i><div><b><i data-lucide="search"></i></b><span>التحقق من المنتج<br/>وحساب السعر</span></div><i>→</i><div><b><i data-lucide="circle-dollar-sign"></i></b><span>تأكيد السعر<br/>من طرف الإدارة</span></div><i>→</i><div><b><i data-lucide="credit-card"></i></b><span>دفع عبر بريد موب<br/>ورفع إثبات الدفع</span></div><i>→</i><div><b><i data-lucide="shopping-cart"></i></b><span>شراء المنتج<br/>بواسطة FENK</span></div><i>→</i><div><b><i data-lucide="package"></i></b><span>الشحن<br/>ومتابعة التتبع</span></div><i>→</i><div><b><i data-lucide="truck"></i></b><span>وصول إلى الجزائر<br/>وتسليمه لك</span></div></div></section>
+<section class="fenk-ai-home" id="fenk-ai-home"><div><span class="ai-kicker">FENK AI</span><h2>محتار ماذا تشتري؟</h2><p>أرسل صورة المنتج أو اكتب ما تبحث عنه، وFENK AI يساعدك في البحث والمقارنة والمواصفات والطلب والدفع والمتابعة.</p></div><button class="send" data-open-ai="" type="button"><i data-lucide="bot"></i> اسأل FENK AI</button></section>
+<section class="payment" id="payment"><div class="payment-main"><div class="mobi"><img alt="شعار بريد موب" height="55" loading="lazy" src="assets/baridimob-new.jpg" width="76"/></div><div><h2>الدفع محليًا في الجزائر 🇩🇿 • بريد موب فقط</h2><p>محلي، واضح، وسريع</p></div></div><details class="payment-details" open=""><summary><i data-lucide="help-circle"></i> كيف أدفع؟</summary><div class="checks"><span><i data-lucide="check"></i> لا تحتاج إلى Visa أو Mastercard</span><span><i data-lucide="check"></i> ادفع عبر بريد موب فقط</span><span><i data-lucide="check"></i> شراء المنتج يتم بواسطة FENK</span><span><i data-lucide="check"></i> تأكيد الدفع من فريق FENK</span></div></details></section>
+</main>
+<section class="telegram-contact" id="telegram-contact"><div class="telegram-contact-inner"><div class="telegram-contact-icon whatsapp-icon"><i data-lucide="message-circle"></i></div><div><h2>تواصل معنا عبر WhatsApp</h2><p>بعد إرسال طلبك، سنتواصل معك عبر WhatsApp لتأكيد السعر والدفع.</p><button class="send" data-fenk-whatsapp="" type="button"><i data-lucide="message-circle"></i> فتح WhatsApp</button><small class="contact-phone" dir="ltr">+213 778 939 292</small></div></div></section>
+<footer class="footer" id="siteFooter"><div class="footer-brand"><img alt="FENK" src="assets/logo-clean.webp"/><p>كل ما تحتاجه .. في مكان واحد</p><div class="social"><button class="social-telegram" data-fenk-whatsapp="" type="button"><i data-lucide="message-circle"></i><span dir="ltr">WhatsApp: +213 778 939 292</span></button></div></div><div><h3>روابط سريعة</h3><a href="#home">الصفحة الرئيسية</a><a href="#order">طلب منتج</a><a href="#videos">الفيديوهات</a><a href="#why">لماذا فنك؟</a></div><div><h3>معلومات</h3><a data-fenk-info="about" href="#">من نحن</a><a href="privacy-policy.html">سياسة الخصوصية</a><a href="terms.html">شروط الاستخدام</a><a data-fenk-info="tips" href="#">نصائح البيع والشراء</a><a data-fenk-info="blog" href="#">مدونة فنك</a></div><div><h3>خدمة العملاء</h3><a data-fenk-info="help" href="#">مركز المساعدة</a><a data-fenk-info="report" href="#">الإبلاغ عن مخالفة</a><a data-fenk-info="suggest" href="#">اقتراحاتكم</a><a data-fenk-info="orders" href="#">متابعة الطلبات</a></div><div class="newsletter footer-contact"><h3>تواصل معنا</h3><a data-fenk-whatsapp="" href="#telegram-contact">تواصل معنا عبر WhatsApp</a><p>تواصل معنا عبر WhatsApp لأي استفسار أو متابعة.</p></div><div class="copyright">© 2026 FENK · جميع الحقوق محفوظة. <span>من الجزائر إلى العالم</span></div></footer>
+<button aria-expanded="false" aria-label="فتح مساعد FENK AI" title="اسأل FENK AI" class="mobile-fab" id="mobileFab" type="button"><span class="mobile-fab-glow" aria-hidden="true"></span><i data-lucide="bot"></i><span>FENK AI</span><small>اسألني</small></button><div class="mobile-fab-menu" hidden="" id="mobileFabMenu"><button data-fab-action="order"><i data-lucide="link-2"></i>طلب منتج</button><button data-fab-action="game"><i data-lucide="gamepad-2"></i>شحن لعبة</button><a class="fab-ad-link" href="marketplace-publish.html?v=199"><i data-lucide="megaphone"></i>نشر إعلان</a><button data-fab-action="ai"><i data-lucide="bot"></i>اسأل FENK AI</button></div><div class="mobile-nav"><button aria-label="الرئيسية" data-scroll="#top"><i data-lucide="house"></i><small>الرئيسية</small></button><button aria-label="الطلبات" id="mobileOrders" type="button"><i data-lucide="package"></i><small>الطلبات</small></button><button aria-label="رسائل" id="mobileMessages" type="button"><i data-lucide="messages-square"></i><small>الرسائل</small><em id="mobileMessageBadge"></em></button><button aria-label="الإشعارات" id="mobileNotification" type="button"><i data-lucide="bell"></i><small>الإشعارات</small><em id="mobileNotificationBadge"></em></button><button aria-label="الحساب" id="mobileAccount"><i data-lucide="user-round"></i><small>حسابي</small></button></div>
+<div class="modal" id="authModal"><div class="modal-box auth-box google-only"><button aria-label="إغلاق" class="close" id="closeAuth">×</button><div class="login-brand"><img src="assets/logo-clean.webp" alt="FENK"></div><div id="fenkLoginPromo" class="fenk-login-promo" hidden></div><div id="fenkLoginTicker" class="fenk-login-ticker" hidden></div><div class="login-head"><h2 id="authTitle">تسجيل الدخول إلى FENK</h2><p id="authSubtitle">اختر طريقة تسجيل الدخول</p></div><button class="google-btn" id="googleLogin" type="button"><span class="google-g">G</span><b>تسجيل الدخول باستخدام Google</b></button><div class="auth-or"><span>أو</span></div>
+<div class="fenk-neon-auth" id="fenkNeonAuth">
+  <div class="fenk-neon-auth-title">الدخول بالبريد الإلكتروني</div>
+  <form id="fenkNeonAuthForm" autocomplete="on">
+    <label for="fenkNeonEmail">البريد الإلكتروني</label>
+    <input id="fenkNeonEmail" name="email" type="email" autocomplete="email" required placeholder="name@example.com" />
+    <label for="fenkNeonPassword">كلمة المرور</label>
+    <input id="fenkNeonPassword" name="password" type="password" autocomplete="current-password" required minlength="8" placeholder="8 أحرف على الأقل" />
+    <div id="fenkNeonRegisterFields" hidden>
+      <label for="fenkNeonFirstName">الاسم</label><input id="fenkNeonFirstName" name="first_name" autocomplete="given-name" />
+      <label for="fenkNeonLastName">اللقب</label><input id="fenkNeonLastName" name="last_name" autocomplete="family-name" />
+      <label for="fenkNeonPhone">رقم الهاتف</label><input id="fenkNeonPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="05xxxxxxxx" />
+    </div>
+    <button class="send" id="fenkNeonSubmit" type="submit">تسجيل الدخول بالبريد</button>
+    <button class="link" id="fenkNeonMode" type="button">إنشاء حساب جديد</button>
+    <p id="fenkNeonMessage" role="status" aria-live="polite"></p>
+  </form>
+</div>
+<div class="auth-or"><span>أو عبر Telegram</span></div><div class="telegram-login-wrap"><div class="telegram-login-icon">✈️</div><div class="telegram-login-copy"><b>تسجيل الدخول باستخدام Telegram</b><small>دخول سريع وآمن بدون كلمة مرور</small><div id="telegramWidgetHost" class="telegram-widget-host" aria-hidden="true"></div></div></div><p class="login-note">باستمرارك، أنت توافق على سياسة الخصوصية وشروط استخدام FENK.</p><p id="authMsg" role="status"></p><button class="link" id="adminBtn" style="display:none" type="button">لوحة الإدارة</button></div></div><div class="modal" id="profileModal"><div class="modal-box profile-box"><button aria-label="إغلاق" class="close" id="closeProfile">×</button><div class="login-head"><div class="google-mark">✓</div><h2>معلومات الحساب</h2><p>عدّل اسمك وأضف رقم هاتفك من حسابك في FENK.</p></div><form id="profileForm"><label>الاسم<input autocomplete="given-name" id="firstName" placeholder="الاسم" required="" type="text"/></label><label>اللقب<input autocomplete="family-name" id="lastName" placeholder="اللقب" required="" type="text"/></label><label>رقم الهاتف<div class="phone-field"><span>+213</span><input autocomplete="tel" id="phone" inputmode="tel" placeholder="5 XX XX XX XX" required="" type="tel"/></div></label><button class="send" id="saveProfile" type="submit">حفظ البيانات</button><p id="profileMsg" role="status"></p></form></div></div>
+<div class="modal" id="accountModal"><div class="modal-box account-box"><button aria-label="إغلاق" class="close account-close" id="closeAccount">×</button><div class="account-hero"><div class="account-avatar"><i data-lucide="user-round"></i></div><div class="account-identity"><h2>حسابي</h2><b id="accountName">مستخدم FENK</b><small id="accountPhone" dir="ltr">أضف رقم هاتفك</small><small id="accountEmail"></small></div><button class="account-edit-btn" id="accountEditProfile" type="button"><i data-lucide="pencil"></i><span>تعديل</span></button></div><section class="account-section" aria-labelledby="account-main-heading"><h4 id="account-main-heading">الحساب</h4><div class="account-list"><button id="accountOrders"><span><i data-lucide="package"></i></span><b>طلباتي</b><small id="accountOrdersState">عرض طلباتك</small><i aria-hidden="true">‹</i></button><button id="accountMessages"><span><i data-lucide="messages-square"></i></span><b>رسائلي</b><small id="accountMessagesState">محادثاتك مع FENK</small><i aria-hidden="true">‹</i></button><button id="accountAddresses"><span><i data-lucide="map-pin"></i></span><b>عناوين التوصيل</b><small id="accountAddressesState">لم تتم إضافة عنوان</small><i aria-hidden="true">‹</i></button><button id="accountNotifications"><span><i data-lucide="bell"></i></span><b>الإشعارات</b><em id="accountNotifCount"></em><i aria-hidden="true">‹</i></button><button id="accountPhoneEdit" type="button"><span><i data-lucide="phone"></i></span><b>رقم الهاتف</b><small id="accountPhoneRow" dir="ltr">أضف رقم هاتفك</small><i aria-hidden="true">‹</i></button></div></section><section class="account-section" aria-labelledby="account-settings-heading"><h4 id="account-settings-heading">الإعدادات</h4><div class="account-list"><button id="accountSettings"><span><i data-lucide="settings"></i></span><b>إعدادات الحساب</b><i aria-hidden="true">‹</i></button><button id="accountData"><span><i data-lucide="shield-check"></i></span><b>الأمان وإدارة البيانات</b><i aria-hidden="true">‹</i></button></div></section><section class="account-section" aria-labelledby="account-help-heading"><h4 id="account-help-heading">المساعدة</h4><div class="account-list"><button id="accountAI"><span><i data-lucide="bot"></i></span><b>FENK AI</b><small>المساعدة في البحث والطلب</small><i aria-hidden="true">‹</i></button><button id="accountHelp"><span><i data-lucide="circle-help"></i></span><b>مركز المساعدة</b><small>الأسئلة والدعم</small><i aria-hidden="true">‹</i></button><button id="accountWhatsApp"><span><i data-lucide="phone-call"></i></span><b>تواصل معنا</b><small>خدمة عملاء FENK</small><i aria-hidden="true">‹</i></button></div></section><section class="account-section account-logout-section" aria-labelledby="account-logout-heading"><h4 id="account-logout-heading">الخروج</h4><button class="logout-btn" id="accountLogout" type="button"><i data-lucide="log-out"></i><span>تسجيل الخروج</span></button></section></div></div>
+<div class="modal" id="settingsModal"><div class="modal-box settings-box"><button class="close" id="closeSettings">×</button><h2><i data-lucide="settings"></i> الإعدادات</h2><div class="settings-row language-settings-row"><div><b>اللغة / Language</b><small>غيّر لغة واجهة FENK في أي وقت</small></div><select id="settingsLanguage" aria-label="اختيار لغة FENK" onchange="window.FENKSetLanguageV84(this.value)"><option value="ar">العربية</option><option value="dz">الدارجة الجزائرية</option><option value="kab">ⵜⴰⵇⴱⴰⵢⵍⵉⵜ · القبائلية</option><option value="fr">Français</option><option value="en">English</option></select></div><div class="settings-row"><div><b>إشعارات الطلبات</b><small>تنبيهات تغيير حالة طلباتك</small></div><input checked="" id="settingsNotifications" type="checkbox"/></div><div class="settings-row"><div><b>المظهر</b><small>اختر مظهر FENK على هاتفك</small></div><div class="theme-options"><label><input name="fenkTheme" type="radio" value="light"/>☀️ فاتح</label><label><input name="fenkTheme" type="radio" value="dark"/>🌙 داكن</label><label><input name="fenkTheme" type="radio" value="system"/>⚙️ تلقائي</label></div></div><div class="settings-note" id="settingsLanguageNote">لغة FENK تُحفظ على جهازك ولا تغيّر بيانات حسابك.</div></div></div>
+<div class="modal" id="addressesModal"><div class="modal-box addresses-box"><button class="close" id="closeAddresses">×</button><h2><i data-lucide="map-pin"></i> عناوين التوصيل</h2><p>احفظ عنوانك مرة واحدة ثم استخدمه عند إنشاء الطلب.</p><div class="addresses-list" id="addressesList"></div><button class="send" id="addAddress" type="button">＋ إضافة عنوان</button></div></div>
+<div class="modal" id="addressEditModal"><div class="modal-box"><button class="close" id="closeAddressEdit">×</button><h2>إضافة عنوان</h2><form class="address-form" id="addressForm"><label>اسم العنوان<input id="addressLabel" placeholder="المنزل" value="العنوان الرئيسي"/></label><div class="two-fields"><label>الاسم<input id="addressFirstName" required=""/></label><label>اللقب<input id="addressLastName" required=""/></label></div><label>الهاتف<div class="phone-field"><span>+213</span><input autocomplete="tel" id="addressPhone" inputmode="tel" placeholder="5/6/7 XX XX XX XX" required=""/></div></label><label>الولاية<select id="addressWilaya" required=""><option value="">اختر الولاية</option></select></label><label>البلدية<input id="addressCommune" required=""/></label><label>العنوان بالتفصيل<textarea id="addressText" required="" rows="3"></textarea></label><label>الرمز البريدي<input id="addressPostal" inputmode="numeric" maxlength="5" placeholder="الرمز البريدي"/></label><label class="check-line"><input id="addressPrimary" type="checkbox"/> اجعله العنوان الرئيسي</label><button class="send" type="submit">حفظ العنوان</button><p id="addressMsg"></p></form></div></div>
+<div class="modal" id="customerOrderDetailModal"><div class="modal-box order-detail-box"><button class="close" id="closeCustomerOrderDetail">×</button><h2>تفاصيل الطلب <span id="customerOrderDetailNumber"></span></h2><div id="customerOrderDetailContent"></div></div></div>
+<div aria-hidden="true" class="modal" id="fenkInfoModal"><div aria-labelledby="fenkInfoTitle" aria-modal="true" class="modal-box info-modal-box" role="dialog"><button aria-label="إغلاق" class="close" id="closeFenkInfo" type="button">×</button><div class="login-head"><div class="google-mark"><i data-lucide="info"></i></div><h2 id="fenkInfoTitle">معلومات FENK</h2></div><div class="info-modal-content" id="fenkInfoContent"></div></div></div>
+<div class="modal" id="customerTrackingModal"><div class="modal-box tracking-box"><button aria-label="إغلاق" class="close" id="closeCustomerTracking">×</button><div class="tracking-head"><button class="tracking-back" id="trackingBack" type="button">←</button><div><h2>تتبع الطلب</h2><small id="trackingOrderNumber"></small></div></div><div class="tracking-summary" id="trackingSummary"></div><div class="tracking-events" id="trackingEvents"></div><div class="tracking-order-link"><button class="detail-btn" id="trackingOrderDetails" type="button">تفاصيل الطلب</button><a class="whatsapp-order-btn" id="trackingWhatsapp" rel="noopener noreferrer" target="_blank">تواصل عبر WhatsApp</a></div></div></div>
+<div class="modal" id="paymentProofModal"><div class="modal-box"><button class="close" id="closePaymentProof">×</button><h2><i data-lucide="receipt"></i> إرسال وصل الدفع</h2><p>اختر صورة واضحة لوصل الدفع عبر بريد موب.</p><form id="paymentProofForm"><input id="paymentProofOrderId" type="hidden"/><label class="upload-proof"><i data-lucide="image-plus"></i> اختر صورة الوصل<input accept="image/jpeg,image/png,image/webp" id="paymentProofFile" required="" type="file"/></label><button class="send" type="submit">إرسال الوصل</button><p id="paymentProofMsg"></p></form></div></div>
+<div class="modal" id="fenkAiModal"><div class="modal-box ai-box"><button class="close" id="closeFenkAi">×</button><div class="login-head"><div class="google-mark"><i data-lucide="bot"></i></div><h2>FENK AI</h2><p>مساعد FENK للطلب والسعر والدفع والشحن.</p></div><div class="ai-chat" id="aiChat"><div class="ai-bubble">مرحبًا، اطلب منتجك أو اسألني عن السعر والدفع وطلبك.</div></div><form class="chat-form" id="aiForm"><textarea id="aiInput" placeholder="اكتب سؤالك أو ألصق رابط المنتج..." rows="2"></textarea><div class="ai-voice-row" aria-label="التحكم الصوتي"><button type="button" class="secondary ai-voice-btn" id="aiMicBtn" title="تحدث مع FENK AI" aria-label="تحدث مع FENK AI"><i data-lucide="mic"></i><span>تحدث</span></button><button type="button" class="secondary ai-voice-btn" id="aiSpeakBtn" title="تشغيل صوت FENK AI" aria-label="تشغيل صوت FENK AI"><i data-lucide="volume-2"></i><span>الصوت: تشغيل</span></button><span id="aiVoiceStatus" class="ai-voice-status" aria-live="polite">اضغط «تحدث» وقل سؤالك</span></div><div class="ai-attach-row"><input id="aiImage" type="file" accept="image/png,image/jpeg,image/webp" hidden><button type="button" class="secondary" id="aiImageBtn">📷 صورة</button><span id="aiImageName">بدون صورة</span><button class="send" type="submit">إرسال إلى FENK AI</button></div></form></div></div>
+<div class="modal" id="messagesModal"><div class="modal-box messages-box"><button aria-label="إغلاق" type="button" class="close" id="closeMessages">×</button><div class="login-head"><div class="google-mark"><i data-lucide="message-circle"></i></div><h2>تواصل مع FENK</h2><p>أرسل رسالتك وسيتواصل معك فريق FENK.</p></div><div class="chat-list" id="messagesList"></div><div id="messageReplyPreview" class="message-reply-preview" hidden></div><form class="chat-form" id="messageForm"><textarea id="messageInput" maxlength="4000" placeholder="اكتب رسالتك هنا..." rows="3"></textarea><button class="send" type="submit">إرسال الرسالة <span>→</span></button><p id="messageMsg" role="status"></p><button type="button" id="retryMessages" class="send" style="display:none;margin-top:8px;background:#eef7f3;color:#087c5b">إعادة تحميل الرسائل</button></form></div></div><div class="modal" id="customerOrdersModal"><div class="modal-box notifications-box"><button aria-label="إغلاق" class="close" id="closeCustomerOrders">×</button><div class="login-head"><div class="google-mark"><i data-lucide="package"></i></div><h2>طلباتي</h2><p>تابع حالة طلباتك في FENK</p></div><div class="notifications-list" id="customerOrdersList"></div></div></div><div class="modal" id="notificationsModal"><div class="modal-box notifications-box"><button aria-label="إغلاق" type="button" class="close" id="closeNotifications">×</button><div class="login-head"><div class="google-mark"><i data-lucide="messages-square"></i></div><h2>الإشعارات</h2><p>تحديثات FENK الخاصة بطلباتك</p></div><div class="notifications-list" id="notificationsList"></div></div></div><div class="market-modal" id="marketModal"><div class="market-box"><button class="close" id="closeMarket">×</button><h2>متاجر عالمية</h2><p>اختر الموقع الذي تريد البحث فيه ثم أرسل الرابط إلى FENK.</p><div class="market-cards"><a href="https://www.alibaba.com" rel="noopener noreferrer" target="_blank">Alibaba<span>الشراء من الموردين</span></a><a href="https://www.aliexpress.com" rel="noopener noreferrer" target="_blank">AliExpress<span>ملايين المنتجات</span></a><a href="https://www.amazon.com" rel="noopener noreferrer" target="_blank">Amazon<span>تسوق عالمي</span></a><a href="https://www.ebay.com" rel="noopener noreferrer" target="_blank">eBay<span>جديد ومستعمل</span></a><a href="https://www.temu.com" rel="noopener noreferrer" target="_blank">TEMU<span>عروض متنوعة</span></a><a href="https://www.shein.com" rel="noopener noreferrer" target="_blank">SHEIN<span>أزياء وجمال</span></a></div></div></div>
+
+</div>
+<style>
+.fenk-watch-card{margin:14px 0;background:#fff;border:1px solid #e6e8ee;border-radius:22px;box-shadow:0 8px 25px rgba(20,32,52,.06);padding:18px}.fenk-watch-form{display:grid;grid-template-columns:1.6fr .8fr auto;gap:10px}.fenk-watch-form label{display:flex;flex-direction:column;gap:6px;font-weight:800}.fenk-watch-form input{border:1px solid #dddfe7;border-radius:13px;padding:12px;min-width:0}.fenk-watch-form button{border:0;border-radius:13px;background:#16a34a;color:#fff;font-weight:900;padding:12px 16px}.fenk-watch-msg{min-height:24px;margin-top:10px;font-weight:800}.fenk-watch-list{display:grid;gap:8px;margin-top:8px}.fenk-watch-item{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid #edf0f4;border-radius:15px;padding:11px}.fenk-watch-item .meta{min-width:0}.fenk-watch-item a{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#166534;font-weight:900}.fenk-watch-item small{color:#777}.fenk-watch-remove{border:1px solid #fecaca;background:#fff5f5;color:#b91c1c;border-radius:10px;padding:7px 10px;font-weight:800}@media(max-width:700px){.fenk-watch-form{grid-template-columns:1fr}.fenk-watch-card{padding:14px}.fenk-watch-item{align-items:flex-start}.fenk-watch-remove{flex:0 0 auto}}
+</style>
+<script id="fenk-v64-mobile-magic">
+(function(){
+  function goOrder(kind){
+    const order=document.getElementById('order');
+    if(!order)return;
+    order.scrollIntoView({behavior:'smooth',block:'start'});
+    setTimeout(function(){
+      if(kind==='link') document.getElementById('productUrl')?.focus();
+      if(kind==='text') document.getElementById('productName')?.focus();
+      if(kind==='image') document.getElementById('productImage')?.click();
+    },450);
+  }
+  document.addEventListener('click',function(e){
+    const b=e.target.closest('[data-magic-action]');
+    if(b){goOrder(b.dataset.magicAction);return;}
+    const fab=e.target.closest('#mobileFab');
+    if(fab){
+      const menu=document.getElementById('mobileFabMenu');
+      if(!menu)return;
+      const open=fab.getAttribute('aria-expanded')==='true';
+      fab.setAttribute('aria-expanded',String(!open));
+      menu.hidden=open;
+      return;
+    }
+    const action=e.target.closest('[data-fab-action]');
+    if(action){
+      const a=action.dataset.fabAction;
+      const menu=document.getElementById('mobileFabMenu'), fab=document.getElementById('mobileFab');
+      if(menu)menu.hidden=true;if(fab)fab.setAttribute('aria-expanded','false');
+      if(a==='order')goOrder('link');
+      else if(a==='game')location.href='game-topup.html?v=130';
+      else if(a==='ai')document.querySelector('[data-open-ai]')?.click();
+      else if(a==='ad')document.getElementById('accountBtn')?.click();
+    }
+  });
+  document.addEventListener('DOMContentLoaded',function(){
+    document.querySelectorAll('.fenk-magic-actions button').forEach(function(b){
+      b.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();b.click();}});
+    });
+  });
+})();
+</script>
+<script id="fenk-intelligence-v1">
+(function(){
+  const form=document.getElementById('intelForm'), urlEl=document.getElementById('intelUrl'), btn=document.getElementById('intelAnalyze'), status=document.getElementById('intelStatus'), result=document.getElementById('intelResult'), file=document.getElementById('intelImage'), fileBtn=document.getElementById('intelImageBtn'), fileName=document.getElementById('intelImageName');
+  if(!form||!urlEl||!btn||!status||!result)return;
+  const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  let selectedImage=null;
+  fileBtn?.addEventListener('click',()=>file?.click());
+  file?.addEventListener('change',()=>{selectedImage=file.files?.[0]||null;fileName.textContent=selectedImage?`تم اختيار: ${selectedImage.name}`:'الصورة تُستخدم كمرجع بصري ويمكن إرفاقها بالطلب.';});
+  function domain(u){try{return new URL(u).hostname.replace(/^www\./,'')}catch{return ''}}
+  function show(data){
+    const image=data.image?`<img class="intel-product-image" src="${esc(data.image)}" alt="صورة المنتج المستخرجة" loading="lazy">`:'<div class="intel-product-image intel-placeholder">🦊</div>';
+    result.hidden=false;
+    result.innerHTML=`<div class="intel-card">${image}<div class="intel-info"><span class="intel-site">${esc(data.site||domain(data.url)||'الموقع')}</span><h3>${esc(data.title||'منتج يحتاج مراجعة')}</h3>${data.price?`<b class="intel-price">${esc(data.price)}</b>`:''}<p>${esc(data.description||'تم استخراج المعلومات الأساسية من الصفحة. راجع التفاصيل قبل تأكيد الطلب.')}</p><div class="intel-facts"><span>🔗 ${esc(data.url)}</span>${data.currency?`<span>💱 ${esc(data.currency)}</span>`:''}</div><div class="intel-actions"><button type="button" class="send" id="intelUse">🛒 جهّز طلب هذا المنتج</button><button type="button" class="secondary" id="intelWatch">🔔 راقب السعر</button></div></div></div>`;
+    document.getElementById('intelUse')?.addEventListener('click',()=>{document.getElementById('productUrl').value=data.url||'';document.getElementById('productName').value=data.title||'';if(data.description&&document.getElementById('productInfo'))document.getElementById('productInfo').value=data.description;document.getElementById('order')?.scrollIntoView({behavior:'smooth',block:'start'});setTimeout(()=>document.getElementById('productName')?.focus({preventScroll:true}),450);});
+    document.getElementById('intelWatch')?.addEventListener('click',()=>{document.getElementById('watchUrl')?.scrollIntoView({behavior:'smooth',block:'center'});if(document.getElementById('watchUrl'))document.getElementById('watchUrl').value=data.url||'';document.getElementById('watchTarget')?.focus();});
+  }
+  form.addEventListener('submit',async e=>{e.preventDefault();const url=urlEl.value.trim();if(!/^https?:\/\//i.test(url)){status.textContent='أدخل رابطًا صحيحًا يبدأ بـ https://';return;}btn.disabled=true;status.textContent='🦊 FENK يفحص الصفحة ويستخرج معلومات المنتج…';result.hidden=true;try{const user=await getCurrentUser();if(!user)throw new Error('سجّل الدخول إلى FENK لتحليل الرابط.');const {data:d,error}=await db.functions.invoke('product-inspect',{body:{url}});if(error)throw new Error(error.message||'تعذر تحليل الرابط');if(!d)throw new Error('لم تصل بيانات من محلل المنتج.');show(d);status.textContent=d.partial?'🟡 تم استخراج ما أمكن. قد يمنع الموقع القراءة التلقائية.':'🟢 تم تحليل الصفحة بنجاح.';}catch(err){status.textContent='⚠️ تعذر قراءة الصفحة تلقائيًا. يمكنك متابعة الطلب بالرابط مباشرة.';result.hidden=false;result.innerHTML=`<div class="intel-fallback"><b>${esc(err.message||'تعذر التحليل')}</b><button type="button" class="send" id="intelFallback">متابعة الطلب بهذا الرابط</button></div>`;document.getElementById('intelFallback')?.addEventListener('click',()=>{document.getElementById('productUrl').value=url;document.getElementById('order')?.scrollIntoView({behavior:'smooth'});});}finally{btn.disabled=false;}});
+})();
+</script>
+<script src="app-v27.js?v=20260926-notification-routing-v3"></script>
+<script src="fenk-neon-auth.js?v=1"></script>
+<script id="fenk-language-v84-real">
+(function(){
+'use strict';
+const KEY='fenk_language_v1', RTL=new Set(['ar','dz']);
+const M={
+fr:{'الجزائر':'Algérie','بحث':'Recherche','الرئيسية':'Accueil','الطلبات':'Commandes','الرسائل':'Messages','رسائل':'Messages','الإشعارات':'Notifications','حسابي':'Mon compte','الإعدادات':'Paramètres','المظهر':'Apparence','فاتح':'Clair','داكن':'Sombre','تلقائي':'Automatique','جميع الأقسام':'Toutes les catégories','عقارات':'Immobilier','سيارات':'Voitures','هواتف وإكسسوارات':'Téléphones & accessoires','أزياء وجمال':'Mode & beauté','أجهزة إلكترونية':'Électronique','منتجات منزلية':'Maison','مستلزمات':'Fournitures','حيوانات':'Animaux','خدمات أخرى':'Autres services','شحن ألعاب':'Recharge jeux','كل الألعاب':'Tous les jeux','اشحن ألعابك':'Rechargez vos jeux','اختر لعبتك للشحن':'Choisissez votre jeu à recharger','اطلب منتجك':'Commandez votre produit','اسأل FENK AI':'Demander à FENK AI','طلب منتج':'Commander un produit','شحن لعبة':'Recharger un jeu','نشر إعلان':'Publier une annonce','محتار ماذا تشتري؟':'Vous ne savez pas quoi acheter ?','خلّي FENK يتكفل بالباقي':'Laissez FENK s’occuper du reste','كيف أدفع؟':'Comment payer ?','الدفع محليًا في الجزائر 🇩🇿 • بريد موب فقط':'Paiement local en Algérie 🇩🇿 • Baridimob uniquement','فتح WhatsApp':'Ouvrir WhatsApp','دعم دائم':'Support permanent','نحن معك في كل خطوة':'Nous sommes avec vous à chaque étape','أسعار شفافة':'Prix transparents','بدون رسوم خفية':'Sans frais cachés','سرعة في المعالجة':'Traitement rapide','وتحديث مستمر لطلبك':'Mise à jour continue de votre commande','توصيل إلى كل الولايات':'Livraison dans toutes les wilayas','بأمان وموثوقية':'En toute sécurité et fiabilité','مراحل الطلب':'Étapes de la commande','من الرابط إلى باب منزلك':'Du lien jusqu’à votre porte','إرسال الرابط':'Envoyer le lien','أو الصورة':'ou une image','التحقق من المنتج':'Vérification du produit','وحساب السعر':'et calcul du prix','تأكيد السعر':'Confirmation du prix','من طرف الإدارة':'par l’administration','دفع عبر بريد موب':'Paiement via Baridimob','ورفع إثبات الدفع':'et envoi de la preuve de paiement','شراء المنتج':'Achat du produit','بواسطة FENK':'par FENK','الشحن':'Expédition','ومتابعة التتبع':'et suivi','وصول إلى الجزائر':'Arrivée en Algérie','وتسليمه لك':'et livraison chez vous','المساعدة':'Aide','مركز المساعدة':'Centre d’aide','تواصل معنا':'Nous contacter','الخروج':'Déconnexion','تسجيل الخروج':'Se déconnecter','العربية':'Arabe','اللغة / Language':'Langue','غيّر لغة واجهة FENK في أي وقت':'Changez la langue de FENK à tout moment'},
+en:{'الجزائر':'Algeria','بحث':'Search','الرئيسية':'Home','الطلبات':'Orders','الرسائل':'Messages','رسائل':'Messages','الإشعارات':'Notifications','حسابي':'My account','الإعدادات':'Settings','المظهر':'Appearance','فاتح':'Light','داكن':'Dark','تلقائي':'System','جميع الأقسام':'All categories','عقارات':'Real estate','سيارات':'Cars','هواتف وإكسسوارات':'Phones & accessories','أزياء وجمال':'Fashion & beauty','أجهزة إلكترونية':'Electronics','منتجات منزلية':'Home','مستلزمات':'Supplies','حيوانات':'Pets','خدمات أخرى':'Other services','شحن ألعاب':'Game top-up','كل الألعاب':'All games','اشحن ألعابك':'Top up your games','اختر لعبتك للشحن':'Choose a game to top up','اطلب منتجك':'Order your product','اسأل FENK AI':'Ask FENK AI','طلب منتج':'Order a product','شحن لعبة':'Top up a game','نشر إعلان':'Post an ad','محتار ماذا تشتري؟':'Not sure what to buy?','خلّي FENK يتكفل بالباقي':'Let FENK handle the rest','كيف أدفع؟':'How do I pay?','الدفع محليًا في الجزائر 🇩🇿 • بريد موب فقط':'Local payment in Algeria 🇩🇿 • Baridimob only','فتح WhatsApp':'Open WhatsApp','دعم دائم':'Ongoing support','نحن معك في كل خطوة':'We are with you every step','أسعار شفافة':'Transparent prices','بدون رسوم خفية':'No hidden fees','سرعة في المعالجة':'Fast processing','وتحديث مستمر لطلبك':'Continuous order updates','توصيل إلى كل الولايات':'Delivery to all wilayas','بأمان وموثوقية':'Safely and reliably','مراحل الطلب':'Order stages','من الرابط إلى باب منزلك':'From the link to your door','إرسال الرابط':'Send the link','أو الصورة':'or an image','التحقق من المنتج':'Verify the product','وحساب السعر':'and calculate the price','تأكيد السعر':'Price confirmation','من طرف الإدارة':'by the FENK team','دفع عبر بريد موب':'Pay via Baridimob','ورفع إثبات الدفع':'and upload payment proof','شراء المنتج':'Product purchase','بواسطة FENK':'by FENK','الشحن':'Shipping','ومتابعة التتبع':'and tracking','وصول إلى الجزائر':'Arrives in Algeria','وتسليمه لك':'and delivered to you','المساعدة':'Help','مركز المساعدة':'Help center','تواصل معنا':'Contact us','الخروج':'Sign out','تسجيل الخروج':'Sign out','العربية':'Arabic','اللغة / Language':'Language','غيّر لغة واجهة FENK في أي وقت':'Change FENK interface language anytime'},
+dz:{'الجزائر':'الجزاير','بحث':'قلب','الرئيسية':'الرئيسية','الطلبات':'الطلبات','الرسائل':'الرسايل','رسائل':'رسايل','الإشعارات':'النوتيفيكاسيونات','حسابي':'حسابي','الإعدادات':'الإعدادات','المظهر':'المظهر','فاتح':'فاتح','داكن':'داكن','تلقائي':'أوتوماتيك','جميع الأقسام':'كامل الأقسام','عقارات':'عقارات','سيارات':'طوموبيلات','هواتف وإكسسوارات':'تليفونات وإكسسوارات','أزياء وجمال':'لبسة وجمال','أجهزة إلكترونية':'أجهزة إلكترونيك','منتجات منزلية':'حوايج للدار','مستلزمات':'لوازم','حيوانات':'حيوانات','خدمات أخرى':'خدمات خرا','شحن ألعاب':'شحن الألعاب','كل الألعاب':'كامل الألعاب','اشحن ألعابك':'شحن ألعابك','اختر لعبتك للشحن':'اختار لعبتك للشحن','اطلب منتجك':'أطلب منتوجك','اسأل FENK AI':'سقسي FENK AI','طلب منتج':'أطلب منتوج','شحن لعبة':'شحن لعبة','نشر إعلان':'حط إعلان','محتار ماذا تشتري؟':'ماكش عارف واش تشري؟','خلّي FENK يتكفل بالباقي':'خلّي FENK يتكفل بالباقي','كيف أدفع؟':'كيفاش نخلص؟','الدفع محليًا في الجزائر 🇩🇿 • بريد موب فقط':'الخلص فالجزاير 🇩🇿 • بريد موب برك','فتح WhatsApp':'حل واتساب','دعم دائم':'مساعدة دايمة','نحن معك في كل خطوة':'حنا معاك في كل خطوة','أسعار شفافة':'أسعار واضحة','بدون رسوم خفية':'بلا مصاريف مخفية','سرعة في المعالجة':'معالجة سريعة','وتحديث مستمر لطلبك':'وتحيين مستمر للطلب','توصيل إلى كل الولايات':'توصيل لكل الولايات','بأمان وموثوقية':'بأمان وثقة','مراحل الطلب':'مراحل الطلب','من الرابط إلى باب منزلك':'من الرابط حتى لباب دارك','إرسال الرابط':'صيفط الرابط','أو الصورة':'ولا الصورة','التحقق من المنتج':'نتحققو من المنتوج','وحساب السعر':'ونحسبو السعر','تأكيد السعر':'تأكيد السعر','من طرف الإدارة':'من عند إدارة FENK','دفع عبر بريد موب':'الخلص ببريد موب','ورفع إثبات الدفع':'وصيفط إثبات الخلاص','شراء المنتج':'نشريو المنتوج','بواسطة FENK':'بواسطة FENK','الشحن':'الشحن','ومتابعة التتبع':'ونتبّعو الطلب','وصول إلى الجزائر':'يوصل للجزاير','وتسليمه لك':'ونسلموهولك','المساعدة':'المساعدة','مركز المساعدة':'مركز المساعدة','تواصل معنا':'تواصل معانا','الخروج':'خروج','تسجيل الخروج':'خرج من الحساب','العربية':'العربية','اللغة / Language':'اللغة','غيّر لغة واجهة FENK في أي وقت':'بدّل لغة FENK في أي وقت'},
+kab:{'الجزائر':'Lezzayer','بحث':'Nadi','الرئيسية':'Agejdan','الطلبات':'Tladin','الرسائل':'Izen','رسائل':'Izen','الإشعارات':'Tilɣa','حسابي':'Ami','الإعدادات':'Iɣewwaren','المظهر':'Udmawan','فاتح':'Acebḥan','داكن':'Aberkan','تلقائي':'Awurman','جميع الأقسام':'Akk taggayin','عقارات':'Imensawen','سيارات':'Tnuma','هواتف وإكسسوارات':'Tiliɣriyin d yiferdisen','أزياء وجمال':'Ccuya d tazmert','أجهزة إلكترونية':'Iɣawasen ilektrunen','منتجات منزلية':'Iferdisen n uxxam','مستلزمات':'Iferdisen','حيوانات':'Iɣersiwen','خدمات أخرى':'Imeẓla nniḍen','شحن ألعاب':'Asali n wuraren','كل الألعاب':'Meṛṛa wuraren','اشحن ألعابك':'Aččar wuraren-ik','اختر لعبتك للشحن':'Fren awrar ara teččareḍ','اطلب منتجك':'Suter afares-ik','اسأل FENK AI':'Steqsi FENK AI','طلب منتج':'Suter afares','شحن لعبة':'Aseččar n wurar','نشر إعلان':'Sers adlis','محتار ماذا تشتري؟':'Ur teẓriḍ ara acu ara teɣeḍ?','خلّي FENK يتكفل بالباقي':'Eǧǧ FENK ad ikemmel ayen i d-yellan','كيف أدفع؟':'Amek ara xelseɣ?','الدفع محليًا في الجزائر 🇩🇿 • بريد موب فقط':'Lexlas s Baridimob deg Lezzayer 🇩🇿','توصيل إلى كل الولايات':'Asiweḍ ɣer meṛṛa n lwilayat','دعم دائم':'Tallalt dima','نحن معك في كل خطوة':'Nella yid-k deg yal asurif','أسعار شفافة':'Isal n wazal fessusen','بدون رسوم خفية':'Ulac tixxamin uffiren','سرعة في المعالجة':'Arured deg useqdec','مراحل الطلب':'Isurifen n usteqsi','إرسال الرابط':'Azen aseɣwen','أو الصورة':'neɣ tugna','التحقق من المنتج':'Senqed afares','وحساب السعر':'Sseḍreḍ azal','تأكيد السعر':'Sentem azal','دفع عبر بريد موب':'Xelles s Baridimob','الشحن':'Asiweḍ','فتح WhatsApp':'Ldi WhatsApp','المساعدة':'Tallalt','مركز المساعدة':'Ammas n tallalt','تواصل معنا':'Nermes yid-neɣ','الخروج':'Ffeɣ','تسجيل الخروج':'Ffeɣ seg umiḍan','العربية':'Taɛrabt','اللغة / Language':'Tutlayt','غيّر لغة واجهة FENK في أي وقت':'Beddel tutlayt n FENK melmi tebɣiḍ'}};
+const labels={ar:{ar:'العربية',dz:'الدارجة الجزائرية',kab:'ⵜⴰⵇⴱⴰⵢⵍⵉⵜ · القبائلية',fr:'Français',en:'English'},fr:{ar:'Arabe',dz:'Darija algérienne',kab:'Kabyle',fr:'Français',en:'Anglais'},en:{ar:'Arabic',dz:'Algerian Darija',kab:'Kabyle',fr:'French',en:'English'},dz:{ar:'العربية',dz:'الدارجة الجزائرية',kab:'القبائلية',fr:'Français',en:'English'},kab:{ar:'Taɛrabt',dz:'Taqbaylit n Lezzayer',kab:'ⵜⴰⵇⴱⴰⵢⵍⵉⵜ',fr:'Tafransist',en:'Taglizit'}};
+const original=new WeakMap();
+function nodes(){const a=[];const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode(n){if(!n.nodeValue.trim())return NodeFilter.FILTER_REJECT;const p=n.parentElement;if(!p||p.closest('script,style,option'))return NodeFilter.FILTER_REJECT;return NodeFilter.FILTER_ACCEPT}});while(w.nextNode())a.push(w.currentNode);return a}
+function setLang(lang){if(!M[lang]&&lang!=='ar')lang='ar';document.documentElement.lang=lang;document.documentElement.dir=RTL.has(lang)?'rtl':'ltr';document.body.classList.toggle('fenk-ltr',!RTL.has(lang));const map=M[lang]||{};nodes().forEach(n=>{if(!original.has(n))original.set(n,n.nodeValue);const base=original.get(n).trim();const out=lang==='ar'?base:(map[base]||base);n.nodeValue=n.nodeValue.replace(n.nodeValue.trim(),out)});document.querySelectorAll('#languageSelect,#mobileLanguageSelect,#settingsLanguage').forEach(e=>e.value=lang);document.querySelectorAll('#languageSelect option,#mobileLanguageSelect option,#settingsLanguage option').forEach(o=>{const l=labels[lang]?.[o.value];if(l)o.textContent=l});const ph={'ابحث عن منتج، رابط أو صورة ...':{fr:'Recherchez un produit, un lien ou une image…',en:'Search for a product, link or image…'},'ابحث عن منتج أو الصق الرابط...':{fr:'Recherchez un produit ou collez le lien…',en:'Search for a product or collez le lien…'}};document.querySelectorAll('input,textarea').forEach(e=>{if(!e.dataset.fenkPh)e.dataset.fenkPh=e.placeholder||'';const b=e.dataset.fenkPh;e.placeholder=lang==='ar'?b:(ph[b]?.[lang]||b)});localStorage.setItem(KEY,lang);window.FENK_LANGUAGE=lang}
+window.FENKSetLanguageV84=setLang;
+const run=()=>{document.querySelectorAll('#languageSelect,#mobileLanguageSelect,#settingsLanguage').forEach(e=>{e.onchange=()=>setLang(e.value)});setLang(localStorage.getItem(KEY)||'ar')};
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run,{once:true});else run();
+})();
+</script>
+<script id="fenk-price-watch-v1">
+(function(){
+  const btn=document.getElementById('addPriceWatch'),urlEl=document.getElementById('watchUrl'),targetEl=document.getElementById('watchTarget'),msg=document.getElementById('priceWatchMsg'),list=document.getElementById('priceWatchList');
+  if(!btn||!window.db)return;
+  const esc=s=>String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  async function render(){const {data:{session}}=await db.auth.getSession();if(!session){list.innerHTML='<div class="fenk-watch-item"><div class="meta"><b>سجّل الدخول لمتابعة أسعار منتجاتك</b><small>بعد تسجيل الدخول ستجد قائمتك هنا.</small></div></div>';return;}const {data,error}=await db.from('price_watchlist').select('id,product_url,target_price_dzd,created_at,last_checked_at').eq('user_id',session.user.id).eq('is_active',true).order('created_at',{ascending:false}).limit(10);if(error){list.innerHTML='';return;}list.innerHTML=(data||[]).map(x=>`<div class="fenk-watch-item"><div class="meta"><a href="${esc(x.product_url)}" target="_blank" rel="noopener noreferrer">${esc(x.product_url)}</a><small>🎯 الهدف: ${Number(x.target_price_dzd).toLocaleString('fr-FR')} دج</small></div><button type="button" class="fenk-watch-remove" data-watch-id="${esc(x.id)}">إزالة</button></div>`).join('')||'<div class="fenk-watch-item"><div class="meta"><b>لا توجد منتجات تحت المراقبة بعد.</b><small>أضف رابطًا وحدد السعر الذي تريده.</small></div></div>';list.querySelectorAll('[data-watch-id]').forEach(b=>b.onclick=async()=>{await db.from('price_watchlist').update({is_active:false}).eq('id',b.dataset.watchId);render();});}
+  btn.addEventListener('click',async()=>{const u=urlEl.value.trim(),t=Number(targetEl.value);if(!/^https?:\/\//i.test(u)){msg.textContent='أدخل رابطًا صحيحًا يبدأ بـ https://';return}if(!Number.isFinite(t)||t<=0){msg.textContent='أدخل سعرًا مستهدفًا أكبر من 0.';return}const {data:{session}}=await db.auth.getSession();if(!session){msg.textContent='سجّل الدخول أولًا حتى نحفظ مراقبة السعر في حسابك.';return}btn.disabled=true;msg.textContent='جارٍ حفظ المنتج…';const {error}=await db.from('price_watchlist').insert({user_id:session.user.id,product_url:u,target_price_dzd:Math.round(t)});btn.disabled=false;if(error){console.error(error);msg.textContent='تعذر حفظ المنتج. تأكد من تطبيق Migration الخاصة بمراقبة السعر.';return}msg.textContent='تمت إضافة المنتج إلى مراقبة السعر ✓';urlEl.value='';targetEl.value='';render();});
+  render();
+})();
+</script>
+  <script src="fenk-global-share.js?v=1"></script>
+<script src="fenk-site-config.js?v=20260924-v195-global-logo"></script>
+<script src="fenk-login-page-control.js?v=20260926-v3"></script>
+<script src="fenk-home-game-shortcuts.js?v=20260924-v1"></script>
+</body></html>

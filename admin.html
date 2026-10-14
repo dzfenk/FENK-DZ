@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="robots" content="noindex,nofollow,noarchive"><meta name="referrer" content="strict-origin-when-cross-origin"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>FENK — لوحة الإدارة</title>
+<link rel="icon" href="assets/logo-clean.webp"><link rel="stylesheet" href="style.css">
+<style>
+body.admin-page{background:#07111f;min-height:100vh}.admin-login{min-height:100vh;display:grid;place-items:center;padding:24px}.admin-login-box{width:min(430px,100%);background:#fff;border-radius:24px;padding:28px;box-shadow:0 20px 70px #0006;text-align:center}.admin-login-box img{width:90px;height:90px;object-fit:contain}.admin-login-box h1{margin:10px 0 6px}.admin-login-box p{color:#667085;line-height:1.7}.admin-telegram{width:100%;border:1px solid #cfe8ff;background:#f7fbff;border-radius:14px;padding:14px 16px;font-size:16px;cursor:pointer;color:#1677c8;font-weight:700}.admin-msg{min-height:24px;margin-top:12px} .warning{color:#9a6700}.admin-panel{position:fixed!important;inset:0!important;z-index:9999;display:none!important}.admin-panel.show{display:flex!important}.admin-top-actions{display:flex;gap:8px;align-items:center}.admin-top-actions button{border:0;border-radius:10px;padding:9px 13px;cursor:pointer}.admin-logout{background:#fff1f2;color:#b42318}.admin-back{background:#eef2f6}.admin-brand img{object-fit:contain}
+<style>.mp-ad-gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0}.mp-ad-gallery .mp-ad-proof{width:100%;height:90px;object-fit:cover;border-radius:8px}@media(max-width:600px){.mp-ad-gallery{grid-template-columns:repeat(3,1fr)}.mp-ad-gallery .mp-ad-proof{height:75px}}.game-editor-selected{display:flex;align-items:center;gap:14px;border:1px solid #dbe7e3;background:#f7fcfa;border-radius:16px;padding:12px;margin-bottom:14px}.game-editor-thumb{width:92px;height:72px;border-radius:14px;background:#fff;border:1px solid #dbe7e3;display:flex;align-items:center;justify-content:center;overflow:hidden;flex:0 0 auto}.game-editor-thumb img{width:100%;height:100%;object-fit:contain;padding:5px}.game-editor-selected-info{display:flex;flex-direction:column;gap:3px}.game-editor-selected-info strong{font-size:18px;color:#173c4c}.game-editor-selected-info span{font-size:12px;color:#087b56;font-weight:800}.game-editor-selected-info small{color:#73817f}@media(max-width:430px){.game-editor-selected{padding:10px}.game-editor-thumb{width:76px;height:64px}.game-editor-selected-info strong{font-size:16px}}
+</style>
+<style>
+.admin-section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}.admin-section-head h3{margin:0 0 5px}.admin-section-head p{margin:0;color:#73817f;font-size:13px;line-height:1.6}.admin-secondary-btn{border:1px solid #cfe0db;background:#fff;color:#075c43;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer}.admin-lock{font-size:12px;background:#eaf8f2;color:#087b56;border-radius:999px;padding:7px 10px;font-weight:800}.package-form,.payment-settings-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.package-form label,.payment-settings-form label{font-size:13px;font-weight:800;color:#173c4c}.package-form input,.package-form select,.payment-settings-form input,.payment-settings-form textarea{width:100%;margin-top:6px;padding:12px;border:1px solid #d7e1df;border-radius:10px;background:#fff;font:inherit}.package-check{display:flex!important;align-items:center;gap:8px}.package-check input{width:auto!important;margin:0!important}.package-form-actions{display:flex;gap:8px;align-items:center}.package-form-actions>*{flex:1}.packages-admin-table{width:100%;border-collapse:collapse}.packages-admin-table th,.packages-admin-table td{padding:10px 8px;border-bottom:1px solid #edf1f0;text-align:right;vertical-align:middle}.package-status{display:inline-flex;padding:5px 8px;border-radius:999px;font-size:11px;font-weight:800;background:#eaf8f2;color:#087b56}.package-status.off{background:#f2f4f4;color:#78827f}.package-actions{display:flex;gap:6px;flex-wrap:wrap}.package-actions button{border:1px solid #d5e0dd;background:#fff;color:#075c43;border-radius:8px;padding:7px 9px;cursor:pointer}.package-actions .danger{color:#b42318;border-color:#f0c9c5}.full-field{grid-column:1/-1}.package-image-preview{margin-top:8px;min-height:72px;display:flex;align-items:center;gap:10px}.package-image-preview img{width:88px;height:66px;object-fit:contain;border:1px solid #d7e1df;border-radius:10px;background:#f7fbf9;padding:4px}.package-image-preview .no-image{padding:12px 14px;border:1px dashed #cfe0db;border-radius:10px;color:#73817f;font-size:12px}.games-admin-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.game-admin-card{border:1px solid #dbe7e3;border-radius:18px;background:#fff;overflow:hidden;box-shadow:0 5px 18px rgba(8,55,45,.05)}.game-admin-card .game-admin-image{height:145px;background:#f2fbf7;display:flex;align-items:center;justify-content:center;padding:12px}.game-admin-card .game-admin-image img{width:100%;height:100%;object-fit:contain;border-radius:14px}.game-admin-card .game-admin-body{padding:12px}.game-admin-card h4{margin:0 0 5px;font-size:17px;color:#173c4c}.game-admin-card .game-admin-slug{font-size:12px;color:#7a8884;direction:ltr;text-align:right}.game-admin-card .game-admin-status{display:inline-flex;margin-top:8px;padding:4px 8px;border-radius:999px;background:#eaf8f2;color:#087b56;font-size:11px;font-weight:800}.game-admin-card .game-admin-status.off{background:#f2f4f4;color:#78827f}.game-admin-card .game-admin-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px}.game-admin-card .game-admin-actions button{border:1px solid #d5e0dd;background:#fff;color:#075c43;border-radius:9px;padding:8px 10px;font-weight:800;cursor:pointer}.game-admin-card .game-admin-actions .danger{color:#b42318;border-color:#f0c9c5}.game-admin-card .game-admin-actions .primary{background:#087b56;color:#fff;border-color:#087b56}.game-admin-empty{padding:25px;text-align:center;color:#73817f;border:1px dashed #cfe0db;border-radius:14px}@media(max-width:800px){.games-admin-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.game-admin-card .game-admin-image{height:120px}.game-admin-card .game-admin-actions button{flex:1;min-width:80px}}@media(max-width:430px){.games-admin-grid{grid-template-columns:1fr}}
+@media(max-width:800px){.package-form,.payment-settings-form{grid-template-columns:1fr}.admin-section-head{align-items:flex-start}.packages-admin-table,.packages-admin-table tbody,.packages-admin-table tr,.packages-admin-table td{display:block;width:100%}.packages-admin-table thead{display:none}.packages-admin-table tr{padding:12px 0;border-bottom:1px solid #edf1f0}.packages-admin-table td{border:0;padding:4px 0}.packages-admin-table td[data-label]::before{content:attr(data-label);display:inline-block;min-width:90px;color:#73817f;font-weight:700}.package-actions{margin-top:8px}.package-form-actions{flex-direction:column}.package-form-actions>*{width:100%}}
+</style><style>.game-order-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px}.game-order-fields>div{border:1px solid #e5e9e7;border-radius:10px;padding:9px;background:#fafcfb}.game-order-fields b{display:block;margin-bottom:4px}.order-secret{font-family:monospace;direction:ltr;display:inline-block}.reveal-secret{margin-inline-start:8px;border:1px solid #cbdad6;background:#fff;border-radius:7px;padding:4px 7px;font-size:11px;cursor:pointer}@media(max-width:700px){.game-order-fields{grid-template-columns:1fr}}</style>
+<style>
+.marketplace-ad-stats{margin-bottom:14px}.mp-ad-row{border:1px solid #dfe8e4;border-radius:14px;padding:12px;margin:8px 0;background:#fff}.mp-ad-head{display:flex;justify-content:space-between;gap:10px}.mp-ad-head h4{margin:0 0 4px}.mp-ad-head small{color:#71807b}.mp-ad-badges{display:flex;gap:5px;flex-wrap:wrap}.mp-badge{padding:5px 8px;border-radius:999px;font-size:10px;font-weight:900;background:#fff3d6;color:#7b5600}.mp-badge.ok{background:#eaf8f2;color:#087b56}.mp-badge.bad{background:#fff0f0;color:#a52828}.mp-ad-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.mp-ad-actions button{border:1px solid #d4e0dc;background:#fff;border-radius:8px;padding:7px 9px;color:#075c43;font-weight:800;cursor:pointer}.mp-ad-actions button.danger{color:#a52828}.mp-ad-proof{max-width:180px;max-height:100px;object-fit:cover;border-radius:8px;margin-top:8px;border:1px solid #dfe8e4}
+
+.ad-payment-settings-form{display:grid;grid-template-columns:1fr 1fr;gap:9px}.ad-payment-settings-form label{font-size:10px;font-weight:900}.ad-payment-settings-form input,.ad-payment-settings-form textarea{width:100%;margin-top:5px;padding:10px;border:1px solid #d6e2de;border-radius:9px}.ad-payment-settings-form .wide{grid-column:1/-1}.ad-payment-settings-form button{background:#087c5b;color:#fff;border:0;border-radius:9px;padding:10px;font-weight:900}.ad-payment-settings-form span{font-size:11px;font-weight:800;align-self:center}@media(max-width:650px){.ad-payment-settings-form{grid-template-columns:1fr}.ad-payment-settings-form .wide{grid-column:auto}}
+</style>
+<style>
+.mp-create-modal{display:none;position:fixed;inset:0;background:#0009;z-index:10000;padding:12px;align-items:flex-end;justify-content:center}.mp-create-modal.show{display:flex}.mp-create-sheet{width:min(900px,100%);max-height:94vh;overflow:auto;background:#fff;border-radius:20px;padding:16px;box-shadow:0 20px 60px #0005}.mp-create-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mp-create-field{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:800;color:#173c4c}.mp-create-field.full{grid-column:1/-1}.mp-create-field input,.mp-create-field select,.mp-create-field textarea{width:100%;padding:10px;border:1px solid #d6e2de;border-radius:10px;font:inherit}.mp-create-field textarea{min-height:90px;resize:vertical}.mp-create-actions{display:flex;gap:8px;margin-top:14px;position:sticky;bottom:0;background:#fff;padding-top:10px}.mp-create-actions button{flex:1}.mp-create-images{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-top:8px}.mp-create-images img{width:100%;height:85px;object-fit:cover;border-radius:9px;border:1px solid #d6e2de}.mp-create-note{font-size:10px;color:#657773;line-height:1.6}@media(max-width:650px){.mp-create-grid{grid-template-columns:1fr}.mp-create-field.full{grid-column:auto}.mp-create-images{grid-template-columns:repeat(3,1fr)}}
+</style>
+<style>
+.mp-editor-modal{display:none;position:fixed;inset:0;background:#0009;z-index:9999;padding:12px;align-items:flex-end;justify-content:center}.mp-editor-modal.show{display:flex}.mp-editor-sheet{width:min(900px,100%);max-height:92vh;overflow:auto;background:#fff;border-radius:20px;padding:16px;box-shadow:0 20px 60px #0005}.mp-editor-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}.mp-editor-head h3{margin:0 0 5px}.mp-editor-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mp-edit-field{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:800}.mp-edit-field.full{grid-column:1/-1}.mp-edit-field input,.mp-edit-field select,.mp-edit-field textarea{width:100%;padding:10px;border:1px solid #d6e2de;border-radius:10px;font:inherit}.mp-edit-field textarea{min-height:90px;resize:vertical}.mp-editor-actions{display:flex;gap:8px;margin-top:14px;position:sticky;bottom:0;background:#fff;padding-top:10px}.mp-editor-actions button{flex:1}.mp-editor-images{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:7px}.mp-editor-images img{width:100%;height:80px;object-fit:cover;border-radius:9px;border:1px solid #d6e2de}.mp-editor-note{font-size:10px;color:#657773;line-height:1.6}.mp-editor-danger{color:#b42318}.admin-msg{margin-top:8px;font-size:12px;font-weight:800}@media(max-width:650px){.mp-editor-grid{grid-template-columns:1fr}.mp-edit-field.full{grid-column:auto}.mp-editor-images{grid-template-columns:repeat(3,1fr)}}
+</style>
+
+<style>
+.product-admin-thumb{width:70px;height:70px;border-radius:12px;object-fit:cover;border:1px solid #dce7e3}.product-admin-row{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #edf1f0}.product-admin-info{flex:1;min-width:0}.product-admin-info b{display:block}.product-admin-info small{display:block;color:#6d7d79;line-height:1.6}.product-admin-actions{display:flex;gap:6px;flex-wrap:wrap}.product-admin-actions button{border:1px solid #d5e0dd;background:#fff;color:#075c43;border-radius:8px;padding:7px 9px;cursor:pointer}.product-admin-actions .danger{color:#b42318;border-color:#f0c9c5}.product-option-row{display:grid;grid-template-columns:1.1fr 2fr auto;gap:7px;align-items:center;margin-bottom:7px}.product-option-row input{width:100%;padding:10px;border:1px solid #d7e1df;border-radius:9px}.product-option-row label{font-size:12px;display:flex;gap:5px;align-items:center}.product-option-row label input{width:auto}@media(max-width:650px){.product-admin-row{align-items:flex-start;flex-wrap:wrap}.product-admin-thumb{width:58px;height:58px}.product-admin-actions{width:100%}.product-option-row{grid-template-columns:1fr}.product-option-row label{padding:4px 0}}
+</style>
+
+<style>
+@media(max-width:800px){#tab-dash.admin-view:not(.hidden){display:block!important}.admin-main>.admin-view#tab-dash{min-height:200px!important}.admin-main>.admin-view#tab-dash .stat-grid{display:grid!important}.admin-main>.admin-view#tab-dash .admin-card{display:block!important}}
+</style>
+  <link rel="stylesheet" href="fenk-global-share.css?v=1">
+<style>
+.sb-image-tools{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.sb-image-tools input[type=text]{flex:1;min-width:180px}.sb-upload-btn{border:1px solid #b7d9cf;background:#eefaf6;color:#087f5b;border-radius:9px;padding:8px 10px;font-weight:800;cursor:pointer}.sb-hidden-file{display:none!important}.sb-image-preview{margin-top:7px}.sb-image-preview img{display:block;max-width:180px;width:auto;height:90px;object-fit:contain;border:1px solid #d6e2de;border-radius:10px;background:#f7fbfa}.sb-row-rich{position:relative}.sb-row-preview{display:block;width:90px;height:60px;object-fit:cover;border:1px solid #d6e2de;border-radius:8px;margin-top:5px}.sb-delete-row{border:1px solid #f0b9b9;background:#fff5f5;color:#b42318;border-radius:9px;padding:8px 10px;font-weight:800;cursor:pointer}.sb-row-actions{margin-top:10px}.sb-video-row{display:grid;grid-template-columns:auto 1fr;gap:7px;align-items:center;border:1px solid #dfeae7;border-radius:12px;padding:10px;margin-top:7px}.sb-video-row .sb-image-tools{grid-column:1/-1}.sb-video-row .sb-row-preview{grid-column:1/-1}@media(max-width:650px){.sb-image-tools input[type=text]{min-width:130px}.sb-video-row{grid-template-columns:auto 1fr}}
+</style>
+<style>
+.messages-bulk-tools{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:8px}
+.messages-select-all{display:inline-flex;align-items:center;gap:7px;padding:10px 12px;border:1px solid #d8e6e1;border-radius:12px;background:#f7fbfa;font-weight:700;cursor:pointer}
+.messages-select-all input{width:20px;height:20px;accent-color:#10b981}
+.admin-chat-head-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}.admin-delete-customer{border:1px solid #f0b9b9;background:#fff5f5;color:#b42318;border-radius:9px;padding:7px 10px;font-weight:800;cursor:pointer;white-space:nowrap}.admin-delete-customer:hover{background:#ffe8e8}.admin-delete-customer:disabled{opacity:.6;cursor:wait}
+.admin-danger-btn{border:1px solid #f2b8b8;background:#fff5f5;color:#b42318;border-radius:12px;padding:10px 14px;font-weight:800;cursor:pointer}
+.admin-danger-btn:disabled{opacity:.45;cursor:not-allowed}
+.admin-message-select{position:absolute;top:10px;left:10px;width:21px;height:21px;accent-color:#10b981;z-index:2}
+.admin-chat-bubble-wrap{position:relative}
+@media(max-width:600px){.messages-bulk-tools{width:100%;justify-content:space-between}.admin-danger-btn,.messages-select-all{font-size:14px}.admin-chat-bubble-wrap{padding-top:6px}}
+</style>
+</head>
+<body class="admin-page">
+<div id="adminLogin" class="admin-login">
+ <div class="admin-login-box">
+  <img src="assets/logo-clean.webp" alt="FENK">
+  <h1>لوحة إدارة FENK</h1>
+  <p>هذه صفحة خاصة بالإدارة فقط. سجّل الدخول بحساب الإدارة المصرّح له.</p>
+  <button id="adminGoogleLogin" class="admin-telegram admin-google-btn" type="button" style="margin-top:14px">
+    <span style="display:inline-flex;align-items:center;justify-content:center;gap:10px"><b style="font-size:21px;color:#4285f4">G</b> المتابعة باستخدام Google</span>
+  </button>
+  <small style="display:block;margin-top:12px;color:#667085;line-height:1.7">سجّل الدخول بحساب Google المرتبط بصلاحية Admin. بعد تسجيل الدخول يتم التحقق من الحساب في قاعدة بيانات FENK قبل فتح لوحة الإدارة.</small>
+  <div id="adminLoginMsg" class="admin-msg" role="status"></div>
+ </div>
+</div>
+
+<div class="admin-panel" id="adminPanel" aria-hidden="true">
+<div class="admin-mobile-topbar">
+  <button type="button" id="adminMenuBtn" class="admin-menu-btn" aria-label="فتح قائمة الإدارة" aria-expanded="false">
+    <i data-lucide="menu"></i>
+  </button>
+  <div class="admin-mobile-title">
+    <img src="assets/logo-clean.webp" alt="FENK">
+    <div><b>FENK</b><small>لوحة الإدارة</small></div>
+  </div>
+  <button type="button" id="adminMobileRefresh" class="admin-menu-btn" aria-label="تحديث">
+    <i data-lucide="refresh-cw"></i>
+  </button>
+</div>
+<div class="admin-side-backdrop" id="adminSideBackdrop"></div>
+ <aside class="admin-side">
+  <div class="admin-brand"><img src="assets/logo-clean.webp" alt="FENK"><small>لوحة الإدارة</small></div>
+  <button class="admin-tab active" data-tab="dash"><i data-lucide="layout-dashboard"></i> الرئيسية</button>
+  <button class="admin-tab" data-tab="orders"><i data-lucide="package"></i> الطلبات</button>
+  <button class="admin-tab" data-tab="messages"><i data-lucide="messages-square"></i> الرسائل</button>
+  <button class="admin-tab" data-tab="users"><i data-lucide="users"></i> المستخدمون</button>
+  <button class="admin-tab" data-tab="games"><i data-lucide="settings-2"></i> إعدادات الألعاب</button>
+  <button class="admin-tab" data-tab="packages"><i data-lucide="gamepad-2"></i> باقات الألعاب</button>
+  <button class="admin-tab" data-tab="payment"><i data-lucide="credit-card"></i> إعدادات الدفع</button>
+  <button class="admin-tab" data-tab="marketplaceAds"><i data-lucide="megaphone"></i> إعلانات Marketplace</button>
+  <button class="admin-tab" data-tab="products"><i data-lucide="shopping-bag"></i> إدارة المنتجات</button>
+  <button class="admin-tab" data-tab="siteBuilder"><i data-lucide="layout-template"></i> تحكم كامل في الصفحة</button>
+  <button class="admin-tab" data-tab="loginPage"><i data-lucide="log-in"></i> تسجيل دخول</button>
+  <button class="admin-tab" data-tab="marketplaceControl"><i data-lucide="store"></i> تحكم في سوق</button>
+  <button class="admin-tab" data-tab="gamePageControl"><i data-lucide="gamepad-2"></i> تحكم في شحن الألعاب</button>
+  
+  
+  <button class="admin-close" id="adminSiteBtn">العودة للموقع</button>
+  <button class="admin-close" id="adminLogoutBtn">تسجيل الخروج</button>
+ </aside>
+ <section class="admin-main">
+  <div class="admin-top"><div><h2>لوحة تحكم FENK</h2><small class="admin-top-subtitle">إدارة الطلبات والعملاء والدفع عبر بريد موب</small></div><div class="admin-top-actions"><span id="adminEmail"></span><button id="adminTelegramTest" class="admin-secondary-btn admin-telegram-test" type="button">✈️ اختبار Telegram</button></div></div>
+  <div class="admin-view" id="tab-dash"><div class="stat-grid">
+<div class="stat-total stat-filter" data-filter="" role="button" tabindex="0" aria-label="عرض كل الطلبات"><b id="sTotal">0</b><small>كل الطلبات</small></div>
+<div class="stat-new stat-filter" data-filter="processing" role="button" tabindex="0" aria-label="عرض الطلبات قيد المعالجة"><b id="sNew">0</b><small>قيد المعالجة</small></div>
+<div class="stat-wait stat-filter" data-filter="awaiting_payment" role="button" tabindex="0" aria-label="عرض الطلبات بانتظار الدفع"><b id="sAwaiting">0</b><small>بانتظار الدفع</small></div>
+<div class="stat-proof stat-filter" data-filter="payment_submitted" role="button" tabindex="0" aria-label="عرض الطلبات التي أرسل فيها وصل الدفع"><b id="sProof">0</b><small>وصل الدفع</small></div>
+<div class="stat-paid stat-filter" data-filter="payment_confirmed" role="button" tabindex="0" aria-label="عرض الطلبات المؤكد دفعها"><b id="sPaid">0</b><small>تم تأكيد الدفع</small></div>
+<div class="stat-done stat-filter" data-filter="delivered" role="button" tabindex="0" aria-label="عرض الطلبات التي تم تسليمها"><b id="sDone">0</b><small>تم التسليم</small></div>
+<div class="stat-cancelled stat-filter" data-filter="cancelled" role="button" tabindex="0" aria-label="عرض الطلبات الملغاة"><b id="sCancelled">0</b><small>الطلبات الملغاة</small></div>
+</div><div class="admin-card"><h3>آخر الطلبات</h3><div id="recentOrders"></div></div></div>
+  <div class="admin-view hidden" id="tab-orders"><div class="admin-card"><div class="toolbar"><input id="orderSearch" placeholder="بحث برقم الطلب أو الهاتف..."><small style="display:block;color:#7a8582;font-weight:700;line-height:1.5">💡 عند اختيار «الطلبات الملغاة» يظهر زر «حذف نهائي» لكل طلب ملغى.</small><select id="statusFilter"><option value="">كل الطلبات النشطة</option><option value="processing">🟡 قيد المعالجة</option><option value="failed">🔴 فشل فلكسي</option><option value="received">تم استلام الطلب</option><option value="pricing">تم تحديد السعر</option><option value="awaiting_payment">بانتظار الدفع</option><option value="payment_submitted">تم إرسال وصل الدفع</option><option value="payment_confirmed">تم تأكيد الدفع</option><option value="purchasing">جارٍ شراء المنتج</option><option value="shipped">تم شحن المنتج</option><option value="arrived_algeria">وصل إلى الجزائر</option><option value="out_for_delivery">خرج للتوصيل</option><option value="delivered">تم التسليم</option><option value="cancelled">الطلبات الملغاة</option></select></div><div id="ordersTable"></div></div></div>
+  <div class="admin-view hidden" id="tab-messages"><div class="admin-card"><div class="admin-section-head"><div><h3>رسائل العملاء</h3><p style="margin:4px 0 0;color:#73817f">يمكنك تحديد رسالة أو عدة رسائل وحذفها للجميع.</p></div><div class="messages-bulk-tools"><label class="messages-select-all"><input type="checkbox" id="selectAllMessages"> تحديد الكل</label><button type="button" class="admin-danger-btn" id="deleteSelectedMessagesBtn" disabled>🗑️ حذف المحدد <span id="selectedMessagesCount">0</span></button></div></div><div id="adminMessagesList"></div></div></div>
+  <div class="admin-view hidden" id="tab-users"><div class="admin-card"><h3>المستخدمون</h3><div id="usersTable"></div></div></div>
+
+  <div class="admin-view hidden" id="tab-packages">
+    <div class="admin-card">
+      <div class="admin-section-head"><div><h3>إدارة باقات الألعاب</h3><p>تحكم في صورة وكتابة وسعر وترتيب كل باقة. التعديلات محفوظة في Supabase وتظهر للعميل.</p></div><button type="button" class="admin-secondary-btn" id="reloadPackagesBtn">تحديث</button></div>
+      <form id="packageForm" class="package-form">
+        <input type="hidden" id="packageId">
+        <label>اللعبة<select id="packageGame" required></select></label>
+        <label>الباقة الموجودة في حسابك
+  <select id="packageSelect" aria-label="اختر الباقة الموجودة للتعديل"><option value="">— اختر الباقة التي تريد تعديلها —</option></select>
+  <small style="display:block;color:#73817f;margin-top:6px">اختر الباقة الموجودة عندك، وعند الضغط عليها ستظهر بياناتها هنا لتعديل الاسم والكتابة والكمية والسعر والصورة.</small>
+</label>
+<label>اسم الباقة<input id="packageName" maxlength="120" placeholder="مثال: 400 Robux" required></label>
+        <label class="full-field">وصف / كتابة الباقة<textarea id="packageDescription" rows="3" maxlength="500" placeholder="مثال: باقة Luis Suarez + 300 كوينز"></textarea></label>
+        <label>الكمية / القيمة<input id="packageAmount" maxlength="120" placeholder="مثال: 400 Robux"></label>
+        <label>السعر عبر بريد موب (دج)<input id="packagePriceDzd" type="number" min="0" step="1" required placeholder="0"></label><label>السعر عبر فلكسي (دج)<input id="packageFlexyPriceDzd" type="number" min="0" step="1" placeholder="مثال: 259"></label><label>السعر قبل الخصم (اختياري)<input id="packageOriginalPriceDzd" type="number" min="0" step="1" placeholder="مثال: 1030"></label>
+        <label>الترتيب<input id="packageSort" type="number" min="0" step="1" value="0"></label>
+        <label class="full-field">🖼️ صورة الباقة<input id="packageImage" type="file" accept="image/jpeg,image/png,image/webp"><small style="display:block;color:#73817f;margin-top:6px">يمكنك رفع صورة جديدة من الهاتف أو الكمبيوتر. إذا لم ترفع صورة، تبقى الصورة الحالية.</small><div id="packageImagePreview" class="package-image-preview"></div></label>
+        <label class="package-check"><input id="packageActive" type="checkbox" checked> باقة مفعلة للعميل</label>
+        <div class="package-form-actions"><button class="send" type="submit" id="savePackageBtn">إضافة الباقة</button><button class="admin-secondary-btn" type="button" id="cancelPackageEdit">إلغاء</button></div>
+      </form>
+      <p id="packageMsg" class="admin-msg" role="status"></p>
+    </div>
+    <div class="admin-card">
+      <div class="admin-section-head">
+        <div><h3>الباقات الحالية</h3><p>اختر لعبة لعرض باقاتها فقط، ثم عدّل الصورة أو الاسم أو الكمية أو السعر.</p></div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 12px">
+        <label style="margin:0;min-width:220px;flex:1">عرض باقات اللعبة
+          <select id="packageGameFilter" style="width:100%"><option value="">كل الألعاب</option></select>
+        </label>
+      </div>
+      <div id="packagesTable"></div>
+    </div>
+  </div>
+
+
+  <div class="admin-view hidden" id="tab-games">
+    <div class="admin-card">
+      <div class="admin-section-head"><div><h3>🎮 الألعاب الحالية</h3><p>تظهر صورة كل لعبة واسمها مثل أقسام Marketplace. اضغط «تعديل» لتحميل بياناتها، أو غيّر الصورة والاسم ثم احفظ.</p></div><button type="button" class="admin-secondary-btn" id="refreshGamesCardsBtn">تحديث</button></div>
+      <div id="gamesAdminGrid" class="games-admin-grid"></div>
+    </div>
+    <div class="admin-card">
+      <div class="admin-section-head"><div><h3>إعدادات كل لعبة</h3><p>تعديل اسم اللعبة، الوصف، الصورة، الترتيب والحالة من Supabase. لا تتأثر بيانات الطلبات القديمة.</p></div><span class="admin-lock">Admin فقط</span></div>
+      <div class="game-editor-selected" id="gameEditorSelected">
+        <div class="game-editor-thumb"><img id="gameEditorSelectedImg" src="assets/logo-clean.webp" alt="صورة اللعبة"></div>
+        <div class="game-editor-selected-info"><strong id="gameEditorSelectedName">اختر لعبة للتعديل</strong><span id="gameEditorSelectedStatus">—</span><small>غيّر الاسم والصورة ثم اضغط حفظ</small></div>
+      </div>
+      <form id="gameSettingsForm" class="package-form">
+        <label class="full-field">اللعبة<select id="gameSettingsGame" required></select></label>
+        <label>اسم اللعبة<input id="gameSettingsName" maxlength="120" required></label>
+        <label>Slug / الرابط<input id="gameSettingsSlug" maxlength="120" required></label>
+        <label class="full-field">صورة اللعبة / الأيقونة<input id="gameSettingsLogoFile" type="file" accept="image/png,image/jpeg,image/webp"></label>
+        <label class="full-field">رابط/مسار صورة اللعبة<input id="gameSettingsLogo" type="url" placeholder="رابط الصورة الحالي أو اختياري" inputmode="url"></label>
+        <label class="full-field">مسار صورة HD / Banner<input id="gameSettingsBanner" type="text" placeholder="assets/game-hd/pubg-mobile.webp"></label>
+        <label>التصنيف<select id="gameSettingsCategory"><option value="games">الألعاب</option><option value="app">التطبيقات</option><option value="card">البطاقات الرقمية</option><option value="account">حسابات الألعاب</option></select></label><label class="full-field">وصف اللعبة<textarea id="gameSettingsDescription" rows="4" placeholder="الوصف الذي سيظهر في صفحة الشحن"></textarea></label>
+        <label>الترتيب<input id="gameSettingsSort" type="number" min="0" step="1" value="0"></label>
+        <label>حجم صورة اللعبة
+          <select id="gameSettingsImageSize"><option value="small">صغير</option><option value="medium" selected>متوسط</option><option value="large">كبير</option></select>
+        </label>
+        <label>طريقة عرض الصورة
+          <select id="gameSettingsImageFit"><option value="contain" selected>كاملة بدون قص</option><option value="cover">ملء الإطار مع قص</option></select>
+        </label>
+        <label>تقسيم الكمبيوتر
+          <select id="gameSettingsDesktopCols"><option value="2" selected>عمودان</option><option value="3">3 أعمدة</option><option value="4">4 أعمدة</option></select>
+        </label>
+        <label>تقسيم الهاتف
+          <select id="gameSettingsMobileCols"><option value="1">عمود واحد</option><option value="2" selected>عمودان</option></select>
+        </label>
+        <label>مسافة الصورة داخل الإطار
+          <select id="gameSettingsImagePadding"><option value="0">بدون</option><option value="8" selected>8px</option><option value="16">16px</option><option value="24">24px</option></select>
+        </label>
+        <label class="package-check"><input id="gameSettingsActive" type="checkbox" checked> اللعبة مفعلة</label>
+        <div class="package-image-preview" id="gameSettingsPreview"></div>
+        <div class="package-form-actions"><button class="send" type="submit" id="saveGameSettingsBtn">حفظ إعدادات اللعبة</button><button class="admin-secondary-btn" type="button" id="newGameBtn">＋ إضافة لعبة</button><button class="admin-secondary-btn" type="button" id="reloadGameSettingsBtn">تحديث</button></div>
+      </form>
+      <p id="gameSettingsMsg" class="admin-msg" role="status"></p>
+    </div>
+    <div class="admin-card">
+      <div class="admin-section-head"><div><h3>حقول الشحن الخاصة باللعبة</h3><p>كل لعبة يمكن أن تملك حقولًا مختلفة: Player ID، Server، Email، Password، نوع الهاتف…</p></div></div>
+      <form id="checkoutFieldForm" class="package-form">
+        <input type="hidden" id="checkoutFieldId">
+        <label>اسم الحقل الداخلي<input id="checkoutFieldKey" maxlength="80" placeholder="player_id" required></label>
+        <label>اسم الحقل للعميل<input id="checkoutFieldLabel" maxlength="120" placeholder="Player ID" required></label>
+        <label>نوع الحقل<select id="checkoutFieldType"><option value="text">نص</option><option value="password">كلمة سر</option><option value="number">رقم</option><option value="select">اختيار</option></select></label>
+        <label>Placeholder<input id="checkoutFieldPlaceholder" maxlength="180"></label>
+        <label class="full-field">خيارات الاختيار (لـ Select فقط)<input id="checkoutFieldOptions" maxlength="1000" placeholder="Android, iPhone"></label>
+        <label>الترتيب<input id="checkoutFieldSort" type="number" min="0" step="1" value="0"></label>
+        <label class="package-check"><input id="checkoutFieldRequired" type="checkbox" checked> إجباري</label>
+        <label class="package-check"><input id="checkoutFieldActive" type="checkbox" checked> مفعّل</label>
+        <div class="package-form-actions"><button class="send" type="submit" id="saveCheckoutFieldBtn">إضافة الحقل</button><button class="admin-secondary-btn" type="button" id="cancelCheckoutFieldEdit">إلغاء</button></div>
+      </form>
+      <p id="checkoutFieldMsg" class="admin-msg" role="status"></p>
+      <div id="checkoutFieldsTable"></div>
+    </div>
+  </div>
+
+  <div class="admin-view hidden" id="tab-payment">
+    <div class="admin-card">
+      <div class="admin-section-head"><div><h3>إعدادات بريد موب</h3><p>هذا الحساب يظهر للعميل عند وصول الطلب إلى مرحلة الدفع.</p></div><span class="admin-lock">Admin فقط</span></div>
+      <form id="paymentSettingsForm" class="payment-settings-form">
+        <label>طريقة الدفع<input value="بريد موب" readonly></label>
+        <label>اسم الحساب<input id="baridDisplayName" maxlength="80" placeholder="مثال: FENK DZ"></label>
+        <label>RIP / رقم الحساب<input id="baridAccountNumber" inputmode="numeric" maxlength="32" placeholder="أدخل RIP"></label>
+        <label>رقم الهاتف المرتبط<input id="baridPhoneNumber" inputmode="tel" maxlength="20" placeholder="اختياري"></label>
+        <label class="full-field">تعليمات الدفع<textarea id="baridInstructions" rows="4" placeholder="اكتب تعليمات الدفع للعميل"></textarea></label>
+        <label class="package-check"><input id="baridActive" type="checkbox" checked> الدفع عبر بريد موب متاح</label>
+        <button class="send" type="submit" id="savePaymentSettingsBtn">حفظ إعدادات الدفع</button>
+      </form>
+      <p id="paymentSettingsMsg" class="admin-msg" role="status"></p>
+    </div>
+    <div class="admin-card">
+      <div class="admin-section-head"><div><h3>📱 إعدادات فلكسي لشحن الألعاب</h3><p>حدد رقم كل متعامل. الأرقام هنا هي التي تظهر للعميل عند اختيار فلكسي.</p></div><span class="admin-lock">Admin فقط</span></div>
+      <form id="gameFlexySettingsForm" class="payment-settings-form">
+        <div class="full-field" style="background:#f7fbf9;border:1px solid #dbe9e4;border-radius:12px;padding:12px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <label>🟢 موبيليس<input id="gameFlexyMobilisPhone" inputmode="tel" placeholder="06XXXXXXXX"></label>
+            <label>🔴 جازي<input id="gameFlexyDjezzyPhone" inputmode="tel" placeholder="07XXXXXXXX"></label>
+            <label>🔴 أوريدو<input id="gameFlexyOoredooPhone" inputmode="tel" placeholder="05XXXXXXXX"></label>
+          </div>
+        </div>
+        <button class="send" type="submit" id="saveGameFlexySettingsBtn">حفظ أرقام فلكسي لشحن الألعاب</button>
+      </form>
+      <p id="gameFlexySettingsMsg" class="admin-msg" role="status"></p>
+    </div>
+    <div class="admin-card">
+      <div class="admin-section-head"><div><h3>💰 رسوم إعلان Marketplace</h3><p>حدد المبلغ الذي يدفعه العميل لنشر الإعلان. لا يظهر اختيار المدة للعميل؛ المدة الافتراضية يديرها النظام.</p></div><span class="admin-lock">Admin فقط</span></div>
+      <form id="marketplaceFeeForm" class="payment-settings-form">
+        <div class="full-field" style="background:#f7fbf9;border:1px solid #dbe9e4;border-radius:12px;padding:12px">
+          <b style="display:block;margin-bottom:8px">رسوم نشر الإعلانات</b>
+          <label style="display:flex;gap:8px;align-items:center;margin:6px 0"><input id="adPostingFree" name="adPostingPaymentMode" type="radio" value="free" checked> 🟢 النشر المجاني</label>
+          <label style="display:flex;gap:8px;align-items:center;margin:6px 0"><input id="adPostingPaid" name="adPostingPaymentMode" type="radio" value="paid"> 🔴 الدفع مطلوب</label>
+          <small style="display:block;color:#6d7d79;margin-top:6px">عند اختيار الدفع، ستظهر للزبون رسوم الإعلان وبيانات بريد موب التي تحددها هنا.</small>
+        </div>
+        <div id="marketplacePaidSettings" class="full-field" style="display:none;background:#fff8e8;border:1px solid #f1d79a;border-radius:12px;padding:12px">
+          <b style="display:block;margin-bottom:10px">🔴 إعدادات الدفع التي تظهر للزبون</b>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <label>💰 مبلغ الإعلان (دج)<input id="marketplaceAdFee" type="number" min="1" step="1" placeholder="مثال: 300"></label>
+            <label>📱 رقم حساب / RIP بريد موب<input id="marketplaceBaridAccount" inputmode="numeric" maxlength="32" placeholder="أدخل رقم الحساب أو RIP"></label>
+            <label>اسم حساب بريد موب<input id="marketplaceBaridName" maxlength="80" placeholder="مثال: FENK DZ"></label>
+            <label>رقم الهاتف المرتبط<input id="marketplaceBaridPhone" inputmode="tel" maxlength="20" placeholder="اختياري"></label>
+          </div>
+          <label style="display:block;margin-top:10px">تعليمات الدفع<textarea id="marketplaceBaridInstructions" rows="3" placeholder="تعليمات تظهر للزبون عند الدفع"></textarea></label>
+          <small style="display:block;color:#7a6330;margin-top:8px">هذه البيانات تُحفظ في إعدادات بريد موب نفسها، ولا ننسخها إلى كود صفحة الزبون.</small>
+        </div>
+        <label>المدة الداخلية<input value="30 يوم" readonly></label>
+        <label class="package-check"><input id="marketplaceAdsEnabled" type="checkbox" checked> استقبال إعلانات Marketplace مفعّل</label>
+        <button class="send" type="submit" id="saveMarketplaceFeeBtn">حفظ إعدادات الإعلانات</button>
+      </form>
+      <p id="marketplaceFeeMsg" class="admin-msg" role="status"></p>
+    </div>
+  </div>
+
+
+ 
+<div class="admin-view hidden" id="tab-marketplaceAds">
+  <div class="admin-section-head">
+    <div><h3>📢 إعلانات FENK Marketplace</h3><p>راجع الدفع والمحتوى قبل نشر أي إعلان.</p></div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button type="button" class="send" id="openMarketplaceCreate">➕ نشر إعلان</button><span class="admin-lock">Admin فقط</span></div>
+  </div>
+  <div class="stat-grid marketplace-ad-stats">
+    <div class="stat-total"><b id="mpAdsRevenue">0 دج</b><small>إجمالي المدفوع المقبول</small></div>
+    <div class="stat-waiting"><b id="mpAdsPending">0</b><small>قيد المراجعة</small></div>
+    <div class="stat-paid"><b id="mpAdsPublished">0</b><small>منشور</small></div>
+  </div>
+  <div class="admin-card">
+    <div class="admin-section-head"><div><h3>طلبات الإعلانات</h3><p>قبول الدفع وحده لا ينشر الإعلان. بعد قبول الدفع اضغط «نشر» للموافقة على المحتوى.</p></div>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap"><select id="mpAdsFilter" class="admin-secondary-btn" style="padding:8px"><option value="all">جميع الإعلانات</option><option value="pending_payment">بانتظار الدفع</option><option value="payment_review">مراجعة الدفع</option><option value="pending_review">قيد مراجعة المحتوى</option><option value="approved">مقبولة</option><option value="rejected">مرفوضة</option><option value="draft">مسودات</option><option value="hidden">مخفية</option></select><button type="button" class="admin-secondary-btn" id="refreshMarketplaceAds">تحديث</button></div></div>
+    <div id="marketplaceAdsTable"></div>
+    <div id="mpCreateModal" class="mp-create-modal" aria-hidden="true">
+      <div class="mp-create-sheet">
+        <div class="mp-editor-head"><div><h3>➕ نشر إعلان جديد</h3><small>إنشاء إعلان Marketplace مباشرة من لوحة Admin ونشره فورًا.</small></div><button type="button" id="mpCreateClose" class="admin-secondary-btn">×</button></div>
+        <form id="mpCreateForm">
+          <div class="mp-create-grid">
+            <label class="mp-create-field">نوع الإعلان<select id="mpCreateCategory"></select></label>
+            <label class="mp-create-field">العنوان / اسم السيارة<input id="mpCreateTitle" maxlength="160" required placeholder="مثال: سيمبول 2011"></label>
+            <label class="mp-create-field">السعر (دج)<input id="mpCreatePrice" type="number" min="0" step="1" required placeholder="13000"></label>
+            <label class="mp-create-field">رقم الهاتف<input id="mpCreatePhone" inputmode="tel" placeholder="05xxxxxxxx"></label>
+            <label class="mp-create-field">الولاية<input id="mpCreateWilaya" placeholder="مثال: غليزان"></label>
+            <label class="mp-create-field">البلدية<input id="mpCreateMunicipality" placeholder="اسم البلدية"></label>
+            <label class="mp-create-field full">الوصف<textarea id="mpCreateDescription" placeholder="وصف الإعلان..."></textarea></label>
+            <label class="mp-create-field full">صور الإعلان <input id="mpCreateImages" type="file" accept="image/*" multiple><span class="mp-create-note">يمكن اختيار عدة صور. سيتم رفعها إلى تخزين Marketplace واستخدامها في الإعلان.</span><div id="mpCreateImagePreview" class="mp-create-images"></div></label>
+            <label class="mp-create-field full">روابط صور إضافية <textarea id="mpCreateImageUrls" placeholder="رابط صورة في كل سطر — اختياري"></textarea></label>
+            <label class="mp-create-field full">تفاصيل إضافية JSON <textarea id="mpCreateDetails" spellcheck="false" placeholder='{"car_year":"2011","fuel":"بنزين","gear":"يدوية"}'>{}</textarea><span class="mp-create-note">اختياري. يجب أن يكون JSON صالحًا.</span></label>
+          </div>
+          <div class="mp-create-actions"><button type="button" class="admin-secondary-btn" id="mpCreateCancel">إلغاء</button><button type="submit" class="send" id="mpCreateSubmit">📢 نشر الإعلان الآن</button></div>
+          <div id="mpCreateMsg" class="admin-msg"></div>
+        </form>
+      </div>
+    </div>
+    <div id="mpEditorModal" class="mp-editor-modal" aria-hidden="true">
+      <div class="mp-editor-sheet">
+        <div class="mp-editor-head"><div><h3>✏️ محرر إعلان FENK الكامل</h3><small>تعديل جميع بيانات الإعلان والصور والموقع والتواصل والحالة.</small></div><button type="button" id="mpEditorClose" class="admin-secondary-btn">×</button></div>
+        <form id="mpEditorForm">
+          <input type="hidden" id="mpEditId">
+          <div id="mpEditorFields" class="mp-editor-grid"></div>
+          <div class="mp-editor-actions"><button type="button" class="admin-secondary-btn" id="mpEditorCancel">إلغاء</button><button type="submit" class="send">💾 حفظ كل التعديلات</button></div>
+          <div id="mpEditorMsg" class="admin-msg"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="admin-view hidden" id="tab-products">
+    <div class="admin-section-head">
+      <div><h3>🛍️ إدارة منتجات FENK</h3><p>أضف منتجات Temu / AliExpress / Amazon وغيرها. المنتجات المفعّلة تظهر تلقائيًا في قسم «منتجات».</p></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><button type="button" class="send" id="openProductCreate">➕ إضافة منتج</button><span class="admin-lock">Admin فقط</span></div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-total"><b id="productCountAll">0</b><small>كل المنتجات</small></div>
+      <div class="stat-paid"><b id="productCountActive">0</b><small>مفعّل في المتجر</small></div>
+      <div class="stat-wait"><b id="productCountStock">0</b><small>منتجات متوفرة</small></div>
+    </div>
+    <div class="admin-card"><div class="admin-section-head"><div><h3>المنتجات الحالية</h3><p>تعديل، إخفاء، حذف، أو فتح المنتج كما يراه العميل.</p></div><button type="button" class="admin-secondary-btn" id="refreshProductsAdmin">تحديث</button></div><div id="productsAdminTable"></div></div>
+    <div id="productAdminModal" class="mp-create-modal" aria-hidden="true">
+      <div class="mp-create-sheet" style="max-width:900px">
+        <div class="mp-editor-head"><div><h3 id="productModalTitle">➕ إضافة منتج</h3><small>بيانات المنتج الحقيقية تُحفظ في Supabase.</small></div><button type="button" id="productAdminClose" class="admin-secondary-btn">×</button></div>
+        <form id="productAdminForm">
+          <input type="hidden" id="productAdminId">
+          <div class="mp-create-grid">
+            <label class="mp-create-field">اسم المنتج<input id="productTitle" maxlength="180" required placeholder="مثال: فستان دانتيل نسائي"></label>
+            <label class="mp-create-field">منصة المصدر<select id="productPlatform"><option value="Temu">Temu</option><option value="AliExpress">AliExpress</option><option value="Amazon">Amazon</option><option value="eBay">eBay</option><option value="SHEIN">SHEIN</option><option value="Other">أخرى</option></select></label>
+            <label class="mp-create-field">قسم العرض<select id="productCatalogSection"><option value="products">🛍️ منتجات</option><option value="spare_parts">🚗 قطع غيار السيارات</option></select></label>
+            <label class="mp-create-field" id="productPartCategoryWrap" style="display:none">نوع قطعة الغيار<select id="productPartCategory">
+              <option value="">اختر النوع</option><option value="engines">محركات</option><option value="gearbox">ناقل الحركة</option><option value="tires_rims">إطارات وجنوط</option><option value="brakes">فرامل</option><option value="electrical">كهرباء</option><option value="lighting">إضاءة</option><option value="cooling">تبريد</option><option value="oils_filters">زيوت وفلاتر</option><option value="batteries">بطاريات</option><option value="body">هيكل</option><option value="interior">داخلية</option><option value="exhaust">عادم</option><option value="other">أخرى</option>
+            </select><span class="mp-create-note">للبطارية مثلًا أضف خيارات: الأمبير، المقاس، توافق السيارة.</span></label>
+            <label class="mp-create-field">السعر الأصلي (دج/اختياري)<input id="productOriginalPrice" type="number" min="0" step="0.01"></label>
+            <label class="mp-create-field">سعر FENK (دج)<input id="productPrice" type="number" min="0" step="0.01" required></label>
+            <label class="mp-create-field">الخصم %<input id="productDiscount" type="number" min="0" max="100" step="0.01" value="0"></label>
+            <label class="mp-create-field">التقييم ⭐<input id="productRating" type="number" min="0" max="5" step="0.1" value="0"></label>
+            <label class="mp-create-field">المخزون / الكمية<input id="productStock" type="number" min="0" step="1" value="0"></label>
+            <label class="mp-create-field">عدد المبيعات<input id="productSold" type="number" min="0" step="1" value="0"></label>
+            <label class="mp-create-field full">رابط المنتج الأصلي<input id="productSourceUrl" type="url" inputmode="url" placeholder="https://..."></label>
+            <label class="mp-create-field full">وصف المنتج<textarea id="productDescription" rows="4" placeholder="وصف المنتج ومميزاته..."></textarea></label>
+            <label class="mp-create-field full">صور المنتج <input id="productImages" type="file" accept="image/jpeg,image/png,image/webp" multiple><span class="mp-create-note">حتى 10 صور. أول صورة هي الصورة الرئيسية.</span><div id="productImagePreview" class="mp-create-images"></div></label>
+            <label class="mp-create-field full">روابط صور إضافية<textarea id="productImageUrls" rows="3" placeholder="رابط صورة في كل سطر"></textarea></label>
+            <div class="mp-create-field full" style="border:1px solid #dbe9e4;border-radius:12px;padding:12px;background:#f8fcfa">
+              <b>خيارات المنتج</b><small class="mp-create-note" style="display:block;margin:5px 0 10px">مثال: اللون، المقاس، الخامة. ضع القيم مفصولة بفاصلة، وحدد «إجباري» إذا كان الزبون يجب أن يختارها.</small>
+              <div id="productOptionsRows"></div>
+              <button type="button" class="admin-secondary-btn" id="addProductOption">➕ إضافة خيار</button>
+            </div>
+            <label class="package-check"><input id="productActive" type="checkbox" checked> المنتج مفعّل</label>
+            <label class="package-check"><input id="productShow" type="checkbox" checked> يظهر في القسم المحدد</label>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:14px"><button type="button" class="admin-secondary-btn" id="productAdminCancel">إلغاء</button><button type="submit" class="send" id="productAdminSave">💾 حفظ المنتج</button></div>
+          <div id="productAdminMsg" class="admin-msg"></div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-view hidden" id="tab-siteBuilder">
+    <div class="admin-section-head">
+      <div><h3>🎛️ تحكم كامل في صفحة FENK — Hero صورة أو فيديو</h3><p>غيّر أسماء الأقسام، الأيقونات، صور الـHero، الإعلانات، النصوص، الروابط، إظهار/إخفاء الأقسام والتنسيق من مكان واحد. الإعدادات تُحفظ في Supabase وتطبّق على الصفحة الرئيسية بدون حذف أي وظيفة.</p></div>
+      <span class="admin-lock">Admin فقط</span>
+    </div>
+    <div class="admin-card sb-toolbar-card">
+      <div class="sb-toolbar">
+        <button type="button" class="send" id="saveSiteBuilder">💾 حفظ كل التغييرات</button>
+        <button type="button" class="admin-secondary-btn" id="reloadSiteBuilder">↻ تحديث</button>
+        <button type="button" class="admin-secondary-btn" id="exportSiteBuilder">⬇️ تصدير الإعدادات</button>
+        <label class="admin-secondary-btn sb-import-label">⬆️ استيراد JSON<input id="importSiteBuilderFile" type="file" accept="application/json,.json" hidden></label>
+        <button type="button" class="admin-secondary-btn" id="importSiteBuilder">تطبيق الملف</button>
+      </div>
+      <p id="siteBuilderMsg" class="admin-msg" role="status"></p>
+    </div>
+    <div class="admin-card">
+      <form id="siteBuilderForm"></form>
+    </div>
+  </div>
+
+
+  <div class="admin-view hidden" id="tab-loginPage">
+    <div class="admin-section-head"><div><h3>🔐 تحكم في صفحة تسجيل الدخول</h3><p>أضف إعلانًا أو صورة أو فيديو أو كتابة تظهر أعلى خيارات Google وTelegram في نافذة تسجيل الدخول. ويمكنك أيضًا إظهار أو إخفاء صورة Telegram داخل خيار تسجيل الدخول.</p></div><span class="admin-lock">Admin فقط</span></div>
+    <div class="admin-card">
+      <div class="flpc-toolbar"><button type="button" class="send" id="saveLoginPage">💾 حفظ إعدادات تسجيل الدخول</button><button type="button" class="admin-secondary-btn" id="reloadLoginPage">↻ تحديث</button><button type="button" class="admin-secondary-btn" id="addLoginPromo">＋ إضافة إعلان</button></div>
+      <p id="loginPageMsg" class="admin-msg" role="status"></p>
+      <div id="loginPageForm"></div>
+    </div>
+  </div>
+
+  <div class="admin-view hidden" id="tab-gamePageControl">
+    <div class="admin-section-head"><div><h3>⚙️ تحكم في مقياس شحن الألعاب</h3><p>تحكم كامل في طول الصفحة، حجم وكتابة النصوص، الأيقونات، الألوان، الإعلانات، طريقة الشحن وحقول بيانات العميل لكل لعبة.</p></div><span class="admin-lock">Admin فقط</span></div>
+    <div class="admin-card"><div class="sb-toolbar"><button type="button" class="send" id="saveGamePageControl">💾 حفظ كل تغييرات شحن الألعاب</button><button type="button" class="admin-secondary-btn" id="reloadGamePageControl">↻ تحديث</button></div><p id="gamePageControlMsg" class="admin-msg" role="status"></p></div>
+    <div class="admin-card"><form id="gamePageControlForm"></form></div>
+  </div>
+
+  <div class="admin-view hidden" id="tab-marketplaceControl">
+    <div class="admin-section-head">
+      <div><h3>🛍️ تحكم في سوق</h3><p>تحكم في اسم صفحة Marketplace، الصورة الرئيسية، شرائح الإعلانات، وأقسام السوق والصفحات من لوحة Admin بدون تعديل الكود.</p></div>
+      <span class="admin-lock">Admin فقط</span>
+    </div>
+    <div class="admin-card">
+      <div class="sb-toolbar">
+        <button type="button" class="send" id="saveMarketplaceControl">💾 حفظ تغييرات السوق</button>
+        <button type="button" class="admin-secondary-btn" id="reloadMarketplaceControl">↻ تحديث</button>
+      </div>
+      <p id="marketplaceControlMsg" class="admin-msg" role="status"></p>
+    </div>
+    <div class="admin-card"><form id="marketplaceControlForm"></form></div>
+  </div>
+
+ </section>
+</div>
+
+
+<div class="modal" id="orderDetailModal"><div class="modal-box order-detail-box"><button class="close" id="closeOrderDetail">×</button><h2>تفاصيل الطلب <span id="detailOrderNumber"></span></h2><div id="orderDetailContent"></div><div class="admin-edit-grid"><label>سعر المنتج (دج)<input id="detailProductPrice" type="number" min="0" step="0.01"></label><label>رسوم الشحن (دج)<input id="detailShipping" type="number" min="0" step="0.01"></label><label>خدمة FENK (دج)<input id="detailService" type="number" min="0" step="0.01"></label><label>المجموع (دج)<input id="detailTotalPrice" type="number" readonly></label><label>الحالة<select id="detailStatus"><option value="received">تم استلام الطلب</option><option value="pricing">تم تحديد السعر</option><option value="awaiting_payment">بانتظار الدفع</option><option value="payment_submitted">تم إرسال وصل الدفع</option><option value="payment_confirmed">تم تأكيد الدفع</option><option value="purchasing">جارٍ شراء المنتج</option><option value="shipped">تم شحن المنتج</option><option value="arrived_algeria">وصل إلى الجزائر</option><option value="out_for_delivery">خرج للتوصيل</option><option value="delivered">تم التسليم</option><option value="completed">تم شحن اللعبة</option><option value="cancelled">الطلبات الملغاة</option></select></label><label>شركة الشحن<input id="detailCarrierName"></label><label>رقم التتبع<input id="detailTrackingNumber"></label><label class="full-field">رابط التتبع<input id="detailTrackingUrl" type="url"></label><label class="full-field">معلومات الدفع<input id="detailPaymentInfo"></label><label class="full-field">ملاحظة الإدارة<textarea id="detailAdminNote" rows="3"></textarea></label><div id="flexyFailureHint" class="full-field" style="display:none;background:#fff7ed;border:1px solid #fed7aa;border-radius:12px;padding:10px;color:#9a3412">عند اختيار 🔴 فشل لطلب فلكسي، سيطلب منك النظام تحديد إجراء المعالجة: إرجاع المبلغ أو إعادة تنفيذ الطلب.</div></div><div class="detail-actions"><button class="send" id="saveOrderDetail">حفظ التعديلات</button><a id="whatsappOrder" class="whatsapp-order-btn" href="#" target="_blank" rel="noopener noreferrer">WhatsApp</a></div><p id="orderDetailMsg"></p></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.116.0"></script>
+<script src="https://unpkg.com/lucide@1.46.0"></script>
+<script src="admin.js?v=20260926-admin-oauth-fix"></script>
+<script src="admin-site-builder.js?v=20260924-v195-global-logo"></script>
+<script src="admin-login-page-control.js?v=20260926-v2"></script>
+<script src="admin-marketplace-control.js?v=20260923-v2"></script>
+<script src="admin-game-page-control.js?v=20260924-v186-home-shortcuts"></script>  <script src="fenk-global-share.js?v=1"></script>
+
+<style>
+.sb-toolbar-card{position:sticky;top:0;z-index:5}.sb-toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.sb-import-label{display:inline-flex;align-items:center;justify-content:center;cursor:pointer}.sb-group{border:1px solid #e2ebe8;border-radius:16px;padding:14px;margin:12px 0;background:#fbfdfc}.sb-group-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px}.sb-group-head h4{margin:0;color:#075c43;font-size:17px}.sb-group-head p{margin:4px 0 0;color:#74827e;font-size:12px;line-height:1.6}.sb-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.sb-field{display:block;font-size:12px;font-weight:800;color:#173c4c}.sb-field span{display:block;margin-bottom:5px}.sb-field input,.sb-field textarea{width:100%;box-sizing:border-box;border:1px solid #d5e1dd;border-radius:10px;background:#fff;padding:11px;font:inherit;color:#173c4c}.sb-wide{grid-column:1/-1}.sb-check{display:flex;align-items:center;gap:8px;border:1px solid #dbe8e3;background:#f6fbf9;padding:10px 12px;border-radius:10px;font-weight:800;color:#075c43}.sb-check input{accent-color:#08a873}.sb-check-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.sb-row{display:grid;grid-template-columns:36px repeat(4,minmax(0,1fr));gap:8px;align-items:end;border:1px solid #e1e9e6;background:#fff;border-radius:12px;padding:10px;margin:8px 0}.sb-row b{color:#087c5b;align-self:center}.sb-row label{font-size:11px;font-weight:800;color:#53635f}.sb-row input{width:100%;margin-top:4px;box-sizing:border-box;border:1px solid #d5e1dd;border-radius:8px;padding:9px;font:inherit}.sb-row:nth-child(n){ }.sb-group textarea#sbRawJson{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;direction:ltr;text-align:left}.sb-toolbar button{min-height:40px}.sb-toolbar-card .admin-msg{margin:8px 0 0}.sb-import-label{border:1px solid #cfe0db;background:#fff;color:#075c43;border-radius:10px;padding:10px 14px;font-weight:800}.sb-import-label input{display:none}
+@media(max-width:800px){.sb-grid{grid-template-columns:1fr}.sb-check-grid{grid-template-columns:1fr 1fr}.sb-row{grid-template-columns:28px 1fr 1fr}.sb-row label:nth-of-type(3),.sb-row label:nth-of-type(4){grid-column:2/-1}.sb-toolbar-card{position:static}}
+</style>
+
+<style>
+.mc-group{border:1px solid #e2ebe8;border-radius:16px;padding:14px;margin:12px 0;background:#fbfdfc}.mc-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:12px}.mc-head h4{margin:0;color:#075c43;font-size:17px}.mc-head p{margin:4px 0 0;color:#74827e;font-size:12px;line-height:1.6}.mc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.mc-field{display:block;font-size:12px;font-weight:800;color:#173c4c}.mc-field>span{display:block;margin-bottom:5px}.mc-field input,.mc-field select,.mc-field textarea{width:100%;box-sizing:border-box;border:1px solid #d5e1dd;border-radius:10px;background:#fff;padding:11px;font:inherit;color:#173c4c}.mc-wide{grid-column:1/-1}.mc-check{display:flex;align-items:center;gap:8px;border:1px solid #dbe8e3;background:#f6fbf9;padding:10px 12px;border-radius:10px;font-weight:800;color:#075c43}.mc-row{display:grid;grid-template-columns:28px 1.5fr 1fr 1fr 1fr auto;gap:8px;align-items:end;border:1px solid #e1e9e6;background:#fff;border-radius:12px;padding:10px;margin:8px 0}.mc-row img{width:72px;height:52px;object-fit:cover;border-radius:8px;border:1px solid #dbe6e2}.mc-row label{font-size:11px;font-weight:800;color:#53635f}.mc-row input{width:100%;margin-top:4px;box-sizing:border-box;border:1px solid #d5e1dd;border-radius:8px;padding:9px;font:inherit}.mc-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.mc-upload{display:flex;gap:6px;align-items:center}.mc-upload input[type=file]{display:none}.mc-btn{border:1px solid #cfe0db;background:#fff;color:#075c43;border-radius:9px;padding:8px 10px;font-weight:800;cursor:pointer}.mc-delete{color:#a52828!important;border-color:#efcaca!important}.mc-preview{max-width:220px;max-height:110px;object-fit:cover;border-radius:12px;margin-top:8px;border:1px solid #dbe6e2}.mc-small{font-size:10px;color:#71807b}.mc-order{display:flex;gap:5px;align-items:center}.mc-order button{border:1px solid #d5e1dd;background:#fff;border-radius:7px;padding:5px 8px;cursor:pointer}
+@media(max-width:800px){.mc-grid{grid-template-columns:1fr}.mc-wide{grid-column:auto}.mc-row{grid-template-columns:25px 1fr 1fr}.mc-row label:nth-of-type(3),.mc-row label:nth-of-type(4),.mc-row .mc-upload{grid-column:2/-1}.mc-row img{width:100%;height:120px}.mc-head{flex-direction:column}}
+</style>
+<style>
+.gpc-group{border:1px solid #e2ebe8;border-radius:16px;padding:14px;margin:12px 0;background:#fbfdfc}.gpc-head{margin-bottom:12px}.gpc-head h4{margin:0;color:#075c43;font-size:17px}.gpc-head p{margin:4px 0;color:#74827e;font-size:12px}.gpc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.gpc-color-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.gpc-field{display:block;font-size:12px;font-weight:800;color:#173c4c}.gpc-field>span{display:block;margin-bottom:5px}.gpc-field input,.gpc-field select,.gpc-select{width:100%;box-sizing:border-box;border:1px solid #d5e1dd;border-radius:10px;background:#fff;padding:11px;font:inherit;color:#173c4c}.gpc-color{display:grid;grid-template-columns:48px 1fr;gap:6px}.gpc-color input[type=color]{padding:3px;height:43px}.gpc-upload{display:flex;gap:6px;margin-top:6px}.gpc-upload input{margin-top:0!important}.gpc-btn{border:1px solid #cfe0db;background:#fff;color:#075c43;border-radius:9px;padding:9px 11px;font-weight:800;cursor:pointer}.gpc-danger{color:#a52828;border-color:#efcaca}.gpc-preview{display:block;width:100%;max-width:260px;height:120px;object-fit:cover;border-radius:10px;margin-top:7px;border:1px solid #dbe6e2}.gpc-check{display:flex;align-items:center;gap:8px;border:1px solid #dbe8e3;background:#f6fbf9;padding:10px;border-radius:10px}.gpc-check-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.gpc-checkout-fields{margin-top:12px;border:1px solid #dbe8e3;border-radius:12px;padding:12px;background:#fff}.gpc-field-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-bottom:10px}.gpc-check small{color:#71807b;font-weight:600}@media(max-width:800px){.gpc-check-grid,.gpc-field-list{grid-template-columns:1fr}}.gpc-promo{border:1px solid #dbe7e3;border-radius:14px;padding:10px;margin:9px 0;background:#fff}.gpc-note{padding:12px;border:1px dashed #cfe0db;border-radius:10px;color:#71807b}@media(max-width:800px){.gpc-grid,.gpc-color-grid{grid-template-columns:1fr}}
+</style>
+
+
+
+<style>
+.order-row-actions{display:flex;gap:6px;align-items:center;justify-content:flex-start;flex-wrap:wrap}.order-hard-delete{border:1px solid #f0b9b9;background:#fff5f5;color:#b42318;border-radius:9px;padding:8px 10px;font-weight:800;cursor:pointer;white-space:nowrap}.order-hard-delete:hover{background:#ffe8e8}.order-hard-delete:disabled{opacity:.6;cursor:wait}.cancelled-bulk-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:10px 0;padding:10px 12px;border:1px solid #d9e8e2;border-radius:12px;background:#f7fbf9;color:#164b3b;font-weight:800}.cancelled-select-all{display:flex;align-items:center;gap:8px;cursor:pointer}.cancelled-select-all input,.cancelled-order-check{width:18px;height:18px;accent-color:#16a34a}.cancelled-bulk-bar span{font-size:12px;color:#687772}.cancelled-bulk-bar .order-hard-delete{margin-inline-start:auto}.cancelled-check-head{white-space:nowrap}@media(max-width:650px){.order-row-actions{flex-direction:column;align-items:stretch}.order-row-actions button{width:100%}}
+</style>
+<script src="fenk-site-config.js?v=20260924-v195-global-logo"></script>
+<style>
+.flpc-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px}.flpc-group{border:1px solid #e1ebe7;border-radius:16px;background:#fbfdfc;padding:14px;margin:12px 0}.flpc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.flpc-field{display:block;font-size:12px;font-weight:800;color:#173c4c}.flpc-field>span{display:block;margin-bottom:5px}.flpc-field input,.flpc-field textarea,.flpc-field select{width:100%;box-sizing:border-box;border:1px solid #d5e1dd;border-radius:10px;background:#fff;padding:11px;font:inherit;color:#173c4c}.flpc-wide{grid-column:1/-1}.flpc-check{display:flex;align-items:center;gap:8px;border:1px solid #dbe8e3;background:#f6fbf9;padding:10px 12px;border-radius:10px;font-weight:800;color:#075c43}.flpc-item{border:1px solid #dbe7e3;border-radius:14px;background:#fff;padding:12px;margin:10px 0}.flpc-item-head{display:flex;justify-content:space-between;align-items:center;gap:8px}.flpc-item-head b{color:#075c43}.flpc-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.flpc-btn{border:1px solid #cfe0db;background:#fff;color:#075c43;border-radius:9px;padding:8px 10px;font-weight:800;cursor:pointer}.flpc-danger{color:#a52828;border-color:#efcaca}.flpc-preview{display:block;max-width:300px;max-height:150px;border-radius:10px;margin-top:8px;object-fit:cover;border:1px solid #dbe6e2}.flpc-note{padding:10px;border:1px dashed #cfe0db;border-radius:10px;color:#687772;line-height:1.7;margin-top:8px}@media(max-width:800px){.flpc-grid{grid-template-columns:1fr}.flpc-wide{grid-column:auto}}
+</style></body></html>

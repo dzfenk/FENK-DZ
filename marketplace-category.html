@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>FENK Marketplace 🛍️</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--g:#063d33;--g2:#087c5b;--mint:#eaf8f3;--line:#dbe9e4;--ink:#173c4c;--muted:#6d7d79;--red:#d92d4c}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f5faf8;color:var(--ink);font-family:Arial,"Noto Sans Arabic",sans-serif}a{text-decoration:none;color:inherit}.wrap{width:min(1180px,calc(100% - 24px));margin:auto}
+.topbar{height:52px;background:#032c25;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;z-index:20}.brand{font-size:19px;font-weight:1000}.brand span{color:#19d394}.back{border:1px solid #ffffff33;border-radius:10px;padding:8px 11px;font-size:11px}
+.hero{margin:16px 0 12px;background:linear-gradient(135deg,#063d33,#087c5b);border-radius:20px;color:#fff;padding:22px 18px;box-shadow:0 15px 35px #063d331c}.hero h1{margin:0 0 7px;font-size:28px}.hero p{margin:0;color:#d8f4eb;font-size:12px;line-height:1.8}.hero-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}.hero-actions a{background:#fff;color:#075d47;padding:10px 13px;border-radius:10px;font-size:11px;font-weight:900}.hero-actions a.secondary{background:#ffffff12;color:#fff;border:1px solid #ffffff33}
+.categories{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin:12px 0}.cat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 8px;text-align:center;font-weight:900;font-size:11px;box-shadow:0 5px 16px #063d3308;transition:.2s}.cat:hover,.cat.active{border-color:#10aa7a;transform:translateY(-2px)}.cat .ico{font-size:24px;display:block;margin-bottom:5px}
+.publish-card{margin:16px 0;background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;align-items:center;justify-content:space-between;gap:12px}.publish-card h2{font-size:16px;margin:0 0 4px}.publish-card p{font-size:10px;color:var(--muted);margin:0}.publish-btn{border:0;background:linear-gradient(135deg,#0b9a6b,#087c5b);color:#fff;border-radius:11px;padding:11px 14px;font-weight:900;white-space:nowrap;cursor:pointer}
+.head{display:flex;justify-content:space-between;align-items:end;margin:20px 0 10px}.head h2{margin:0;font-size:20px}.head small{color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}.card{background:#fff;border:1px solid var(--line);border-radius:15px;overflow:hidden}.card img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:#eef5f2}.body{padding:11px}.type{font-size:9px;color:#087c5b;font-weight:900}.body h3{font-size:13px;margin:5px 0;line-height:1.5}.body p{font-size:10px;color:var(--muted);line-height:1.7;margin:0;min-height:34px}.contact{display:inline-block;margin-top:8px;background:var(--mint);color:#075d47;border-radius:8px;padding:7px 9px;font-size:9px;font-weight:900}
+.empty{grid-column:1/-1;background:#fff;border:1px dashed #cfe0da;border-radius:15px;text-align:center;padding:28px;color:var(--muted);font-size:11px}
+.prices{background:#f0faf6;border:1px solid #d7ebe4;border-radius:13px;padding:10px;margin-top:9px;color:#075d47}.prices b{font-size:11px;color:#075d47}.prices .chips{color:#075d47}.prices .chip{color:#075d47}.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}.chip{background:#fff;border:1px solid #dbe9e4;border-radius:999px;padding:6px 8px;font-size:9px;font-weight:800}
+.modal{display:none;position:fixed;inset:0;background:#0009;z-index:100;align-items:flex-end;justify-content:center;padding:8px}.modal.show{display:flex}.sheet{background:#fff;width:min(720px,100%);max-height:94vh;overflow:auto;border-radius:20px 20px 0 0;padding:16px}.close{float:left;border:0;background:#eef2f0;border-radius:50%;width:34px;height:34px;font-size:20px;cursor:pointer}.form{display:grid;grid-template-columns:1fr 1fr;gap:9px;clear:both;padding-top:8px}.field{font-size:10px;font-weight:900}.field.full{grid-column:1/-1}.field input,.field textarea,.field select{width:100%;margin-top:5px;padding:10px;border:1px solid #d6e2de;border-radius:9px;font:inherit}.field textarea{min-height:80px}.pay{grid-column:1/-1;background:#f2faf7;border:1px solid #d7ebe4;padding:10px;border-radius:11px;font-size:10px;line-height:1.7}.submit{grid-column:1/-1;border:0;background:#087c5b;color:#fff;border-radius:10px;padding:12px;font-weight:900;cursor:pointer}.msg{grid-column:1/-1;font-size:11px;font-weight:800;min-height:18px}
+@media(max-width:800px){.categories{grid-template-columns:repeat(3,1fr)}.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.wrap{width:min(100% - 18px,1180px)}.topbar{height:48px}.brand{font-size:17px}.hero{padding:18px 14px;border-radius:16px}.hero h1{font-size:23px}.hero p{font-size:10px}.categories{grid-template-columns:repeat(2,1fr);gap:7px}.cat{padding:11px 6px}.publish-card{align-items:flex-start}.publish-card h2{font-size:14px}.publish-btn{padding:9px 10px;font-size:10px}.grid{gap:8px}.body{padding:9px}.body h3{font-size:11px}.form{grid-template-columns:1fr}.field.full,.pay,.submit,.msg{grid-column:auto}}
+
+/* V90 Marketplace visual category cards */
+.categories{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:15px 0 18px}
+.cat{background:#fff;border:1px solid #dce9e4;border-radius:18px;padding:0 0 11px;text-align:center;font-weight:900;font-size:12px;overflow:hidden;box-shadow:0 7px 20px rgba(6,61,51,.07);transition:transform .18s,border-color .18s,box-shadow .18s}
+.cat:hover,.cat.active{border-color:#10b981;transform:translateY(-2px);box-shadow:0 10px 25px rgba(6,61,51,.12)}
+.cat img{display:block;width:100%;height:105px;object-fit:cover;background:#eaf5f1}
+.cat span{display:block;padding:9px 5px 0;color:#173c4c}
+@media(max-width:600px){.categories{grid-template-columns:repeat(2,1fr);gap:9px}.cat img{height:94px}.cat{border-radius:15px;font-size:11px}}
+.hero{padding:25px 18px;border-radius:22px;background:linear-gradient(135deg,#063d33,#087c5b 70%,#10a879);position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:190px;height:190px;border-radius:50%;background:#fff1;right:-70px;top:-70px}
+.publish-card{border-radius:18px;padding:15px 16px}
+
+
+.details-panel{grid-column:1/-1;background:#f7fbf9;border:1px solid #d9e9e4;border-radius:12px;padding:11px;display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.details-panel .detail-title{grid-column:1/-1;font-size:12px;font-weight:1000;color:#075d47}
+.details-panel label{font-size:10px;font-weight:900}.details-panel input,.details-panel textarea,.details-panel select{width:100%;margin-top:4px;padding:9px;border:1px solid #d6e2de;border-radius:9px;font:inherit;background:#fff}.details-panel .wide{grid-column:1/-1}.payment-account{margin-top:8px;padding:10px;background:#fff;border:1px dashed #b9d8ce;border-radius:10px;color:#075d47;line-height:1.8}
+@media(max-width:600px){.details-panel{grid-template-columns:1fr}.details-panel .wide{grid-column:auto}}
+
+
+.optional-label{font-size:9px;color:#0a8a64;font-weight:800;margin-right:4px}
+.field input[type=file]{background:#fbfdfc}
+<style>/* V94 fixes */
+.prices,.prices b,.prices .chip{color:#075d47 !important}
+.prices{background:#f0faf6 !important;opacity:1 !important}
+.prices .chip{background:#fff !important;border-color:#bfe4d7 !important;display:inline-flex;align-items:center;min-height:28px}
+.cat{cursor:pointer;text-decoration:none}
+.cat img{width:100%;height:132px;object-fit:cover;display:block;border-radius:12px 12px 0 0}
+@media(max-width:520px){.cat img{height:150px}.categories{gap:8px}.cat{padding:0 0 10px;overflow:hidden}.cat span{display:block;padding-top:8px;font-size:12px}}
+
+/* V95 — real Marketplace category image */
+.cat img{
+  width:100%;
+  height:150px;
+  display:block;
+  object-fit:cover;
+  object-position:center;
+  background:#063d33;
+}
+@media(max-width:600px){
+  .cat img{height:150px;object-fit:cover}
+}
+
+
+/* V96 — Marketplace has exactly four category cards */
+.categories{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:18px 0}
+.categories .cat{min-width:0}
+.categories .cat img{width:100%;height:145px;object-fit:cover;display:block}
+@media(max-width:600px){.categories{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.categories .cat img{height:125px}}
+
+
+.delete-own-ad{display:block;margin-top:9px;width:100%;border:1px solid #f0b9b9;background:#fff5f5;color:#a92c2c;border-radius:9px;padding:8px;font-size:10px;font-weight:900;cursor:pointer}
+.delete-own-ad:active{transform:scale(.98)}
+
+.error-chip{color:#b42318!important;border-color:#f3c1bc!important;background:#fff7f6!important}
+
+/* V101 — Marketplace promotional banners: neutral presentation to match FENK */
+.promo-wrap{margin:14px 0 18px;background:#fff;border:1px solid #dfe9e5;border-radius:20px;padding:10px;box-shadow:0 8px 24px rgba(6,61,51,.06)}
+.promo-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:2px 5px 9px}
+.promo-head h2{margin:0;font-size:15px;color:#173c4c}
+.promo-head span{font-size:9px;color:#6d7d79}
+.promo-slider{position:relative;overflow:hidden;border-radius:15px;background:#101214;aspect-ratio:3/2}
+.promo-track{display:flex;direction:ltr;width:100%;height:100%;transition:transform .45s ease}
+.promo-slide{min-width:100%;height:100%;position:relative;display:block;background:#111}
+.promo-slide img{width:100%;height:100%;display:block;object-fit:cover}
+.promo-slide:after{content:"";position:absolute;inset:auto 0 0;height:28%;background:linear-gradient(transparent,rgba(0,0,0,.38));pointer-events:none}
+.promo-nav{position:absolute;left:10px;right:10px;top:50%;transform:translateY(-50%);display:flex;justify-content:space-between;pointer-events:none}
+.promo-arrow{pointer-events:auto;border:0;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.9);color:#173c4c;font-size:20px;cursor:pointer;box-shadow:0 4px 12px #0004}
+.promo-dots{display:flex;justify-content:center;gap:6px;padding:9px 0 2px;direction:ltr}
+.promo-dot{width:7px;height:7px;border:0;border-radius:50%;background:#cbd8d4;padding:0;cursor:pointer}
+.promo-dot.active{background:#087c5b;transform:scale(1.25)}
+@media(max-width:600px){.promo-wrap{margin:11px 0 14px;padding:8px;border-radius:17px}.promo-slider{border-radius:13px}.promo-head h2{font-size:13px}.promo-head span{font-size:8px}.promo-arrow{width:30px;height:30px;font-size:17px}.promo-dots{padding-top:7px}}
+
+/* V102 — Automotive spare-parts icon strip, matched to FENK automotive banners */
+.parts-strip{margin:14px 0 20px;background:#f7faf9;border:1px solid #dce9e4;border-radius:20px;padding:12px;box-shadow:0 8px 24px rgba(6,61,51,.05)}
+.parts-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px;padding:0 4px}
+.parts-head h2{margin:0;color:#173c4c;font-size:16px}
+.parts-head span{font-size:9px;color:#6d7d79}
+.parts-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:9px}
+.part-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;min-height:104px;padding:10px 6px;background:linear-gradient(145deg,#102c28,#183b35);border:1px solid #28594f;border-radius:15px;color:#fff;text-decoration:none;box-shadow:0 6px 16px rgba(6,61,51,.10);transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.part-item:hover{transform:translateY(-2px);border-color:#63c6a6;box-shadow:0 9px 20px rgba(6,61,51,.16)}
+.part-icon{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:#f4f7f6;border:2px solid #a7d7c8;color:#173c4c;box-shadow:inset 0 0 0 5px #e4eeeb}
+.part-icon svg{width:29px;height:29px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.part-item b{font-size:10px;text-align:center;line-height:1.2}
+@media(max-width:800px){.parts-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.part-item{min-height:98px}.parts-grid .part-item:last-child{grid-column:1/-1;width:calc((100% - 16px)/3);justify-self:center}}
+@media(max-width:520px){.parts-grid .part-item:last-child{grid-column:1/-1;width:calc((100% - 7px)/3);justify-self:center}.parts-strip{padding:9px;border-radius:17px}.parts-head h2{font-size:13px}.parts-head span{font-size:8px}.parts-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.part-item{min-height:91px;padding:8px 4px;border-radius:13px}.part-icon{width:46px;height:46px}.part-icon svg{width:25px;height:25px}.part-item b{font-size:9px}}
+
+
+/* V103 — promotional hero is the first Marketplace content */
+.promo-wrap{margin:12px 0 14px}
+.publish-first-cta{margin:0 0 16px}
+.publish-first-cta h2{margin:0 0 3px;font-size:15px}
+.publish-first-cta p{margin:0;color:#6d7d79;font-size:10px}
+@media(max-width:520px){.promo-wrap{margin:8px 0 10px}.publish-first-cta{margin-bottom:12px}}
+
+/* V105 — simpler publish form with realistic category preview */
+.ad-reference{grid-column:1/-1;display:flex;gap:12px;align-items:center;background:#f6faf8;border:1px solid #d8e9e3;border-radius:16px;padding:10px;overflow:hidden}
+.ad-reference img{width:118px;height:82px;object-fit:cover;border-radius:12px;display:block}
+.ad-reference b{display:block;font-size:14px;color:#0b3e36;margin-bottom:4px}
+.ad-reference small{display:block;color:#71817d;font-size:9px;line-height:1.6}
+@media(max-width:520px){.ad-reference img{width:105px;height:76px}.ad-reference b{font-size:13px}.ad-reference small{font-size:8px}}
+.ai-ad-tools{padding:10px;background:#f1faf7;border:1px dashed #b8d8ce;border-radius:11px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}.ai-analyze-btn{border:0;background:#0b8a68;color:#fff;border-radius:10px;padding:9px 12px;font-weight:900;cursor:pointer}.ai-analyze-btn:disabled{opacity:.6}.ai-ad-tools small{color:#56706a;font-size:9px}.ad-details{margin-top:8px;display:grid;gap:4px;background:#f6faf8;border-radius:10px;padding:8px;font-size:10px;color:#425e57}.ad-details span{line-height:1.5}.ad-details b{color:#0b6d54}
+/* V140 — Mobile Marketplace/category cards: Facebook-style compact grid.
+   Desktop remains unchanged. Mobile cards show ONLY image + title + price. */
+@media (max-width: 600px){
+  .category-card{min-width:0;overflow:hidden}
+  .category-card .body{padding:8px 9px 10px!important}
+  .category-card .body > .type,
+  .category-card .body > div[style],
+  .category-card .body > p,
+  .category-card .body > .detail-list,
+  .category-card .body > .contact,
+  .category-card .body > .delete-own-ad{display:none!important}
+  .category-card .body > a[style]{display:block!important}
+  .category-card .body > a[style] h3{
+    margin:0!important;
+    font-size:13px!important;
+    line-height:1.35!important;
+    font-weight:900!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    text-align:right;
+  }
+  .category-card .body > .chip{
+    display:block!important;
+    width:max-content;
+    max-width:100%;
+    margin:5px 0 0!important;
+    padding:5px 7px!important;
+    font-size:11px!important;
+    line-height:1.2!important;
+    white-space:nowrap!important;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .category-card > a:first-child{display:block;overflow:hidden}
+  .category-card > a:first-child img{
+    width:100%!important;
+    aspect-ratio:1/1!important;
+    height:auto!important;
+    object-fit:cover!important;
+    object-position:center!important;
+    display:block!important;
+  }
+  .category-card{border-radius:15px!important}
+}
+
+/* V142 — Mobile Marketplace: compact 2-column listing cards. */
+.market-card-link{display:block;color:inherit;text-decoration:none;height:100%}
+.category-card{min-width:0}
+.category-card .market-card-link{height:100%}
+.category-card img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:#eef5f2}
+.category-card .body{padding:7px 8px 9px;background:#fff}
+.category-card .body h3{margin:0;font-size:13px;line-height:1.3;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.market-card-price{margin-top:4px;font-size:12px;line-height:1.25;font-weight:900;color:#075d47;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:600px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:7px}
+  .category-card{border-radius:0;border:0;box-shadow:none}
+  .category-card img{aspect-ratio:1/1;height:auto}
+  .category-card .body{padding:7px 8px 9px}
+  .category-card .body h3{font-size:12px;line-height:1.3}
+  .market-card-price{font-size:12px}
+  .marketplace-mobile-compact .hero,.marketplace-mobile-compact .categories,.marketplace-mobile-compact .publish-card{display:none}
+}
+</style>
+
+<style>
+.category-page{min-height:100vh}.category-hero{margin:18px 0;padding:22px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(135deg,#063d33,#0b8a68);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:16px}.category-hero h1{margin:6px 0;font-size:28px}.category-hero p{margin:0;color:#e7f7f2;line-height:1.8}.eyebrow{font-size:12px;opacity:.8}.category-actions{display:flex;gap:8px;flex-wrap:wrap}.category-actions a{display:inline-flex;align-items:center;justify-content:center;padding:11px 15px;border-radius:12px;font-weight:800}.back-main{background:#fff;color:#063d33}.publish-link{background:#0b8a68;color:#fff;border:1px solid rgba(255,255,255,.3)}.category-section{margin:18px 0}.category-section .head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.category-section .head h2{margin:0}.category-page .grid{margin-top:8px}.category-page .empty{min-height:150px;display:flex;align-items:center;justify-content:center;text-align:center}.category-card{overflow:hidden}.category-card img{width:100%;aspect-ratio:16/10;object-fit:cover;display:block;background:#eaf8f3}.category-card .body{padding:13px}.category-card h3{margin:6px 0}.category-card p{line-height:1.7;color:#536b65;font-size:13px}.detail-list{display:grid;gap:5px;background:#f6faf8;border-radius:12px;padding:10px;margin-top:8px;font-size:12px}.detail-list b{color:#0b6d54}.delete-own-ad{margin-top:9px}.category-footer{padding:20px 0 40px;text-align:center;color:var(--muted);font-size:12px}@media(max-width:620px){.category-hero{display:block}.category-actions{margin-top:14px}.category-hero h1{font-size:23px}}
+</style>
+<style id="fenk-mobile-marketplace-grid-v141">
+/* V141 — Mobile Marketplace cards: image + title + price only. Desktop untouched. */
+@media (max-width: 600px){
+  .category-page .grid{
+    display:grid !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:2px !important;
+    margin:0 -9px !important;
+  }
+  .category-page .category-card{
+    min-width:0 !important;
+    width:100% !important;
+    margin:0 !important;
+    padding:0 !important;
+    border:0 !important;
+    border-radius:0 !important;
+    box-shadow:none !important;
+    background:#fff !important;
+    overflow:hidden !important;
+  }
+  .category-page .category-card > a:first-child{
+    display:block !important;
+    width:100% !important;
+    margin:0 !important;
+    padding:0 !important;
+    overflow:hidden !important;
+  }
+  .category-page .category-card > a:first-child img{
+    display:block !important;
+    width:100% !important;
+    height:auto !important;
+    aspect-ratio:1 / 1 !important;
+    object-fit:cover !important;
+    object-position:center !important;
+    border-radius:0 !important;
+    margin:0 !important;
+  }
+  .category-page .category-card .body{
+    display:block !important;
+    width:100% !important;
+    min-height:68px !important;
+    height:68px !important;
+    padding:7px 8px 8px !important;
+    margin:0 !important;
+    background:#fff !important;
+    overflow:hidden !important;
+    text-align:right !important;
+  }
+  .category-page .category-card .body > .type,
+  .category-page .category-card .body > div[style],
+  .category-page .category-card .body > p,
+  .category-page .category-card .body > .detail-list,
+  .category-page .category-card .body > .contact,
+  .category-page .category-card .body > .delete-own-ad{
+    display:none !important;
+  }
+  .category-page .category-card .body > a[style]{
+    display:block !important;
+    width:100% !important;
+    margin:0 !important;
+    padding:0 !important;
+    color:#173c4c !important;
+    text-decoration:none !important;
+  }
+  .category-page .category-card .body > a[style] h3{
+    display:block !important;
+    width:100% !important;
+    height:20px !important;
+    margin:0 !important;
+    padding:0 !important;
+    font-size:13px !important;
+    line-height:20px !important;
+    font-weight:800 !important;
+    color:#173c4c !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    text-align:center !important;
+  }
+  .category-page .category-card .body > .chip{
+    display:block !important;
+    width:100% !important;
+    max-width:100% !important;
+    height:22px !important;
+    margin:2px 0 0 !important;
+    padding:0 !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    color:#173c4c !important;
+    font-size:12px !important;
+    line-height:22px !important;
+    font-weight:800 !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    text-align:center !important;
+  }
+}
+</style>
+<link rel="stylesheet" href="marketplace-mobile-unified.css">
+<style id="fenk-v150-category-polish">
+.category-hero{margin:12px 0 14px;padding:16px 18px;border-radius:18px;min-height:0}
+.category-hero h1{font-size:25px;margin:4px 0 5px;line-height:1.3}
+.category-hero p{font-size:12px;line-height:1.65}
+.category-actions{margin-top:10px}
+.category-actions a{padding:9px 12px;font-size:11px}
+.category-section{margin:12px 0 18px}
+.category-section .head{margin-bottom:9px}
+.category-section .head h2{font-size:20px}
+.category-section .head small{font-size:11px;color:#71817d}
+.category-page .grid{gap:9px}
+.category-card{border:1px solid #dce9e4!important;border-radius:14px!important;box-shadow:0 5px 16px rgba(6,61,51,.06)!important;background:#fff;overflow:hidden}
+.category-card img{aspect-ratio:4/3!important;object-fit:cover!important;background:#edf5f2}
+.category-card.category-products img{aspect-ratio:1/1!important}
+.category-card .body{padding:9px 9px 10px!important}
+.category-card .body h3{font-size:12px!important;margin:0!important;line-height:1.4!important;min-height:34px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.market-card-meta{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px;min-height:19px}
+.market-card-meta span{background:#f1f8f5;border-radius:7px;padding:3px 5px;color:#42645b;font-size:9px;line-height:1.2;white-space:nowrap}
+.market-card-price{margin-top:6px!important;font-size:12px!important;color:#087c5b!important;font-weight:900!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.market-card-price.is-contact{color:#6d7d79!important;font-size:10px!important}
+.card-no-image{aspect-ratio:4/3;background:#eef5f2;display:grid;place-items:center;color:#8aa09a;font-size:24px}
+.category-page .empty{min-height:120px;border-radius:14px;padding:22px}
+@media(max-width:600px){
+ .category-hero{margin:9px 0 11px;padding:13px 14px;border-radius:15px}
+ .category-hero h1{font-size:21px}
+ .category-hero p{font-size:10px}
+ .category-actions{gap:6px;margin-top:9px}
+ .category-actions a{padding:8px 10px;font-size:10px}
+ .category-section .head h2{font-size:18px}
+ .category-page .grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
+ .category-card{border-radius:10px!important}
+ .category-card .body{padding:7px 7px 8px!important}
+ .category-card .body h3{font-size:11px!important;min-height:30px}
+ .market-card-meta{gap:3px;margin-top:3px;min-height:17px}
+ .market-card-meta span{font-size:8px;padding:3px 4px}
+ .market-card-price{font-size:10.5px!important;margin-top:4px!important}
+ .market-card-price.is-contact{font-size:9px!important}
+ .parts-filter-scroll{overflow-x:auto;display:flex!important;flex-wrap:nowrap!important;gap:7px;padding-bottom:3px;scrollbar-width:none}
+ .parts-filter-scroll::-webkit-scrollbar{display:none}
+}
+</style>
+
+<style id="fenk-v152-search-location">
+.mp-tools{display:grid;gap:9px;margin:12px 0 14px}
+.mp-search-row{display:flex;gap:8px;align-items:center;background:#fff;border:1px solid #dce9e4;border-radius:15px;padding:8px;box-shadow:0 6px 18px rgba(6,61,51,.05)}
+.mp-search-row input{flex:1;min-width:0;border:0;outline:0;background:transparent;font:inherit;font-size:12px;color:#173c4c;padding:8px 5px}
+.mp-search-row button,.mp-filter-btn{border:0;background:#087c5b;color:#fff;border-radius:10px;padding:9px 11px;font-weight:900;font-size:10px;cursor:pointer;white-space:nowrap}
+.mp-filter-row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}.mp-filter-row::-webkit-scrollbar{display:none}
+.mp-filter-btn{background:#fff;color:#173c4c;border:1px solid #dbe9e4}.mp-filter-btn.active{background:#eaf8f3;color:#075d47;border-color:#9ed8c5}
+.mp-location-card{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#f0faf6;border:1px solid #cfe7dd;border-radius:13px;padding:9px 11px;font-size:10px}
+.mp-location-card b{font-size:12px}.mp-location-card small{display:block;color:#6d7d79;margin-top:2px}
+.mp-recent{background:#fff;border:1px solid #dce9e4;border-radius:15px;padding:10px}.mp-recent h3{font-size:12px;margin:0 0 7px}.mp-recent-list{display:flex;flex-wrap:wrap;gap:6px}.mp-recent-item{display:inline-flex;align-items:center;gap:4px;background:#f5faf8;border:1px solid #dbe9e4;border-radius:999px;padding:6px 8px;font-size:10px}.mp-recent-item button{border:0;background:transparent;color:#8a9995;padding:0 2px;font-size:15px;line-height:1;cursor:pointer}.mp-price-panel{display:none;background:#fff;border:1px solid #dce9e4;border-radius:13px;padding:9px;gap:7px;grid-template-columns:1fr 1fr}.mp-price-panel.show{display:grid}.mp-price-panel label{font-size:9px;font-weight:900}.mp-price-panel input{width:100%;margin-top:4px;border:1px solid #d6e2de;border-radius:8px;padding:8px;font:inherit}
+.market-card-meta{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}.market-card-meta span{font-size:8px;color:#58736c;background:#f2f8f6;border-radius:999px;padding:3px 5px}.market-card-distance{font-size:8px;color:#6d7d79;margin-top:5px}.market-card-price{font-size:11px;font-weight:1000;color:#075d47;margin-top:6px}.market-card-price.is-contact{font-size:9px;color:#6d7d79}
+@media(max-width:520px){.mp-search-row input{font-size:11px}.mp-filter-btn{padding:8px 9px;font-size:9px}.mp-location-card{padding:8px 9px}.category-page .grid{gap:6px!important}.category-card .body{padding:6px!important}.category-card .body h3{font-size:10px!important;min-height:27px}.category-card img{aspect-ratio:1/1!important}.market-card-meta span{font-size:7px}.market-card-price{font-size:9px}.market-card-distance{font-size:7px}}
+@media(min-width:380px) and (max-width:520px){.category-page.cars-density .grid{grid-template-columns:repeat(4,minmax(0,1fr))!important}.category-page.cars-density .category-card{border-radius:9px!important}.category-page.cars-density .category-card .body h3{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.category-page.cars-density .market-card-meta{display:none}.category-page.cars-density .category-card .body{padding:5px!important}}
+</style>
+  <link rel="stylesheet" href="fenk-global-share.css?v=1">
+</head>
+<body class="category-page marketplace-mobile-compact">
+<header class="mp-header"><a class="mp-back" href="marketplace.html">← رجوع</a><a class="mp-brand" href="marketplace.html"><span>FENK</span> Marketplace</a><a class="mp-cart" href="product-cart.html" aria-label="السلة">🛒 <span class="mp-cart-count" id="headerCartCount"></span></a></header>
+<main class="wrap">
+<section class="category-hero">
+  <div><span class="eyebrow">FENK Marketplace</span><h1 id="categoryHeroTitle">القسم</h1><p id="categoryHeroText">تصفح هذا القسم فقط — بدون خلط مع الإعلانات العامة.</p></div>
+  <div class="category-actions"><a class="back-main" href="marketplace.html">← رجوع</a><a class="publish-link" href="./marketplace-publish.html?v=199">📢 انشر إعلانك</a></div>
+</section>
+<section class="mp-tools" aria-label="بحث وفلاتر Marketplace">
+  <div class="mp-search-row">
+    <button type="button" id="openSearch">بحث</button>
+    <input id="categorySearch" type="search" autocomplete="off" placeholder="ما الذي تريد شراءه؟" aria-label="ما الذي تريد شراءه؟">
+  </div>
+  <div class="mp-filter-row">
+    <button class="mp-filter-btn" id="filterSearch" type="button">🔎 بحث</button>
+    <button class="mp-filter-btn" id="filterCategories" type="button">☰ الفئات</button>
+    <a class="mp-filter-btn" id="filterLocation" href="marketplace-location.html">📍 الموقع</a>
+    <button class="mp-filter-btn" id="filterPrice" type="button">💰 السعر</button>
+    <button class="mp-filter-btn active" id="filterLatest" type="button">🕒 الأحدث</button>
+  </div>
+  <div class="mp-location-card"><div><b>📍 <span id="currentLocationName">الجزائر</span></b><small>النطاق: <span id="currentRadiusText">مقترح</span></small></div><a class="mp-filter-btn" href="marketplace-location.html">تغيير</a></div>
+  <div class="mp-recent" id="recentSearchesBox" hidden><h3>عمليات البحث الأخيرة</h3><div class="mp-recent-list" id="recentSearches"></div></div>
+  <div class="mp-price-panel" id="pricePanel"><label>السعر الأدنى<input id="minPrice" type="number" min="0" inputmode="numeric" placeholder="0"></label><label>السعر الأقصى<input id="maxPrice" type="number" min="0" inputmode="numeric" placeholder="بدون حد"></label></div>
+</section>
+<div id="categoryFilters" style="display:none" class="chips parts-filter-scroll" aria-label="تصنيف القسم"></div>
+<section class="category-section" aria-live="polite">
+  <div class="head"><h2 id="categoryTitle">القسم</h2><small id="count"></small></div>
+  <div id="grid" class="grid"><div class="empty">جارٍ تحميل القسم…</div></div>
+</section>
+<div class="category-footer">🦊 FENK — كل قسم له صفحته الخاصة.</div>
+</main>
+<script>
+const SUPABASE_URL='https://wqfnzahjwlukncxlxdkp.supabase.co';
+const SUPABASE_KEY='sb_publishable__QR4tJ9p5RYOQkIuHkoYKQ_mbDa9tuA';
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{flowType:'pkce',persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+const typeNames={product:'منتج',service:'خدمة',store:'متجر',car:'سيارة للبيع',realestate:'عقار للبيع',land:'أرض للبيع',app:'تطبيق',game:'لعبة',other:'إعلان'};
+const slugMap={products:'products',cars:'cars',realestate:'realestate',land:'land'};
+let currentUserId=null;
+async function getUser(){const {data:{session}}=await db.auth.getSession();currentUserId=session?.user?.id||null;}
+async function notifyTelegram(event,id,snapshot={}){try{const {data:{session}}=await db.auth.getSession();if(!session?.access_token)return;await fetch(`${SUPABASE_URL}/functions/v1/marketplace-telegram-notify`,{method:'POST',headers:{'content-type':'application/json',apikey:SUPABASE_KEY,Authorization:`Bearer ${session.access_token}`},body:JSON.stringify({event,ad_id:id,snapshot})})}catch(e){console.warn(e)}}
+async function cleanupAdFiles(row){const urls=Array.isArray(row.image_urls)?row.image_urls:(row.image_url?[row.image_url]:[]);const paths=urls.map(u=>{try{const x=new URL(u);const m=x.pathname.match(/\/storage\/v1\/object\/public\/marketplace-images\/(.+)$/);return m?decodeURIComponent(m[1]):null}catch{return null}}).filter(Boolean);if(paths.length)await db.storage.from('marketplace-images').remove(paths);if(row.payment_proof_path)await db.storage.from('marketplace-payment-proofs').remove([row.payment_proof_path]);}
+async function deleteMyAd(id){if(!currentUserId){alert('سجّل الدخول أولًا.');return}if(!confirm('هل أنت متأكد من حذف هذا الإعلان؟'))return;const {data:row,error:r}=await db.from('marketplace_ads').select('id,user_id,ad_code,title,image_url,image_urls,payment_proof_path,details,wilaya,municipality,price_dzd,payment_status,status').eq('id',id).maybeSingle();if(r||!row||row.user_id!==currentUserId){alert('لا يمكنك حذف هذا الإعلان.');return}const {error}=await db.from('marketplace_ads').delete().eq('id',id);if(error){alert('تعذر حذف الإعلان: '+error.message);return}await cleanupAdFiles(row);await notifyTelegram('deleted',id,row);loadCategory();}
+function cardMeta(a){const d=a.details&&typeof a.details==='object'?a.details:{};const meta=[];const isCar=d.type==='car'||d.model||d.year;if(isCar){if(d.year)meta.push(`السنة ${esc(d.year)}`);if(d.mileage)meta.push(`${Number(String(d.mileage).replace(/[^0-9]/g,'' )||0).toLocaleString('ar-DZ')} كم`);if(d.fuel)meta.push(esc(d.fuel));if(d.gear)meta.push(esc(d.gear));}else if(a.wilaya||a.municipality||a.commune){meta.push(esc(a.wilaya||a.municipality||a.commune));}else if(d.brand){meta.push(esc(d.brand));}return meta.slice(0,3).map(x=>`<span>${x}</span>`).join('')}
+function renderCard(a,label,cat){const urls=Array.isArray(a.image_urls)&&a.image_urls.length?a.image_urls:(a.image_url?[a.image_url]:[]);const href=`marketplace-ad.html?id=${encodeURIComponent(a.id)}`;const title=a.title||label;const meta=cardMeta(a);const price=a.price_dzd!=null&&Number(a.price_dzd)>0?money(a.price_dzd):'السعر عند التواصل';return `<article class="card category-card category-${esc(cat)}"><a class="market-card-link" href="${href}" aria-label="${esc(title)}">${urls[0]?`<img src="${esc(urls[0])}" alt="${esc(title)}" loading="lazy" onerror="this.closest('.market-card-link').classList.add('no-photo');this.remove()">`:`<div class="card-no-image">📷</div>`}<div class="body"><h3>${esc(title)}</h3>${meta?`<div class="market-card-meta">${meta}</div>`:''}<div class="market-card-price ${a.price_dzd==null?'is-contact':''}">${price}</div></div></a></article>`}
+const FENK_SEARCH_KEY='fenk_marketplace_recent_searches_v1';
+const FENK_LOC_KEY='fenk_marketplace_location_v1';
+const WILAYA_COORDS={
+'Alger':{lat:36.7538,lng:3.0588},'الجزائر':{lat:36.7538,lng:3.0588},'Oran':{lat:35.6971,lng:-0.6308},'وهران':{lat:35.6971,lng:-0.6308},'Relizane':{lat:35.7373,lng:0.55599},'غليزان':{lat:35.7373,lng:0.55599},'Blida':{lat:36.4700,lng:2.8277},'البليدة':{lat:36.4700,lng:2.8277},'Boumerdes':{lat:36.7564,lng:3.4728},'البويرة':{lat:36.3736,lng:3.9009},'Bouira':{lat:36.3736,lng:3.9009},'Tipaza':{lat:36.5897,lng:2.4470},'تيبازة':{lat:36.5897,lng:2.4470},'Tizi Ouzou':{lat:36.7118,lng:4.0459},'تيزي وزو':{lat:36.7118,lng:4.0459},'Setif':{lat:36.1898,lng:5.4108},'سطيف':{lat:36.1898,lng:5.4108},'Constantine':{lat:36.3650,lng:6.6147},'قسنطينة':{lat:36.3650,lng:6.6147},'Annaba':{lat:36.9000,lng:7.7667},'عنابة':{lat:36.9000,lng:7.7667},'Batna':{lat:35.5550,lng:6.1741},'باتنة':{lat:35.5550,lng:6.1741},'Djelfa':{lat:34.6728,lng:3.2630},'الجلفة':{lat:34.6728,lng:3.2630},'Medea':{lat:36.2642,lng:2.7539},'المدية':{lat:36.2642,lng:2.7539},'Chlef':{lat:36.1653,lng:1.3345},'الشلف':{lat:36.1653,lng:1.3345},'Mostaganem':{lat:35.9333,lng:0.0903},'مستغانم':{lat:35.9333,lng:0.0903},'Mascara':{lat:35.3966,lng:0.1403},'معسكر':{lat:35.3966,lng:0.1403},'Tlemcen':{lat:34.8828,lng:-1.3167},'تلمسان':{lat:34.8828,lng:-1.3167},'Bejaia':{lat:36.7509,lng:5.0567},'بجاية':{lat:36.7509,lng:5.0567},'Jijel':{lat:36.8206,lng:5.7667},'جيجل':{lat:36.8206,lng:5.7667},'Skikda':{lat:36.8762,lng:6.9092},'سكيكدة':{lat:36.8762,lng:6.9092},'Guelma':{lat:36.4621,lng:7.4261},'قالمة':{lat:36.4621,lng:7.4261},'Souk Ahras':{lat:36.2864,lng:7.9511},'سوق أهراس':{lat:36.2864,lng:7.9511},'El Oued':{lat:33.3683,lng:6.8674},'الوادي':{lat:33.3683,lng:6.8674},'Biskra':{lat:34.8504,lng:5.7281},'بسكرة':{lat:34.8504,lng:5.7281},'Laghouat':{lat:33.8000,lng:2.8651},'الأغواط':{lat:33.8000,lng:2.8651},'Ouargla':{lat:31.9520,lng:5.3330},'ورقلة':{lat:31.9520,lng:5.3330},'Ghardaia':{lat:32.4909,lng:3.6735},'غرداية':{lat:32.4909,lng:3.6735},'Adrar':{lat:27.8743,lng:-0.2939},'أدرار':{lat:27.8743,lng:-0.2939},'Tamanrasset':{lat:22.7850,lng:5.5228},'تمنراست':{lat:22.7850,lng:5.5228},'Bechar':{lat:31.6167,lng:-2.2167},'بشار':{lat:31.6167,lng:-2.2167},'Tiaret':{lat:35.3710,lng:1.3160},'تيارت':{lat:35.3710,lng:1.3160},'Saida':{lat:34.8303,lng:0.1517},'سعيدة':{lat:34.8303,lng:0.1517},'Sidi Bel Abbes':{lat:35.1899,lng:-0.6309},'سيدي بلعباس':{lat:35.1899,lng:-0.6309},'Ain Temouchent':{lat:35.2990,lng:-1.1400},'عين تموشنت':{lat:35.2990,lng:-1.1400},'Tissemsilt':{lat:35.6072,lng:1.8100},'تيسمسيلت':{lat:35.6072,lng:1.8100},'Ain Defla':{lat:36.2641,lng:1.9679},'عين الدفلى':{lat:36.2641,lng:1.9679},'Mila':{lat:36.4500,lng:6.2667},'ميلة':{lat:36.4500,lng:6.2667},'Oum El Bouaghi':{lat:35.8754,lng:7.1135},'أم البواقي':{lat:35.8754,lng:7.1135},'Khenchela':{lat:35.4358,lng:7.1433},'خنشلة':{lat:35.4358,lng:7.1433},'Tebessa':{lat:35.4042,lng:8.1242},'تبسة':{lat:35.4042,lng:8.1242},'Bordj Bou Arreridj':{lat:36.0737,lng:4.7611},'برج بوعريريج':{lat:36.0737,lng:4.7611},'M\'Sila':{lat:35.7058,lng:4.5419},'المسيلة':{lat:35.7058,lng:4.5419},'Bou Saada':{lat:35.2089,lng:4.1764},'Ain Beida':{lat:35.7964,lng:7.3928},'El Bayadh':{lat:33.6832,lng:1.0193},'البيض':{lat:33.6832,lng:1.0193},'Naama':{lat:33.2667,lng:-0.3167},'النعامة':{lat:33.2667,lng:-0.3167},'Tindouf':{lat:27.6742,lng:-8.1478},'تندوف':{lat:27.6742,lng:-8.1478},'Illizi':{lat:26.4833,lng:8.4667},'إليزي':{lat:26.4833,lng:8.4667},'Bordj Badji Mokhtar':{lat:21.3281,lng:0.9500},'برج باجي مختار':{lat:21.3281,lng:0.9500},'In Guezzam':{lat:19.5667,lng:5.7667},'عين قزام':{lat:19.5667,lng:5.7667},'In Salah':{lat:27.1936,lng:2.4600},'عين صالح':{lat:27.1936,lng:2.4600},'Djanet':{lat:24.5540,lng:9.4840},'جانت':{lat:24.5540,lng:9.4840},'Timimoun':{lat:29.2600,lng:0.2300},'تيميمون':{lat:29.2600,lng:0.2300},'Bordj Badji Mokhtar':{lat:21.3281,lng:0.9500},'El Meniaa':{lat:30.5833,lng:2.8833},'المنيعة':{lat:30.5833,lng:2.8833},'Touggourt':{lat:33.1000,lng:6.0667},'تقرت':{lat:33.1000,lng:6.0667},'El Meghaier':{lat:33.9500,lng:5.9167},'المغير':{lat:33.9500,lng:5.9167},'Beni Abbes':{lat:30.1300,lng:-2.1667},'بني عباس':{lat:30.1300,lng:-2.1667},'Ouled Djellal':{lat:34.4250,lng:5.0675},'أولاد جلال':{lat:34.4250,lng:5.0675},'M\'Ghair':{lat:33.9500,lng:5.9167}
+};
+const normalizeText=v=>String(v??'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[أإآٱ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/ؤ/g,'و').replace(/ئ/g,'ي').replace(/ـ/g,'').replace(/[ًٌٍَُِّْ]/g,'').replace(/[^\p{L}\p{N}]+/gu,' ').trim();
+function levenshtein(a,b){if(a===b)return 0;if(!a)return b.length;if(!b)return a.length;const m=Array.from({length:b.length+1},(_,i)=>i);for(let j=1;j<=a.length;j++){let prev=j;for(let i=1;i<=b.length;i++){const cur=m[i];m[i]=Math.min(m[i]+1,m[i-1]+1,prev+(a[j-1]===b[i-1]?0:1));prev=cur}}return prev}
+function fuzzyMatch(query,text){const q=normalizeText(query),t=normalizeText(text);if(!q)return true;if(t.includes(q))return true;const qt=q.split(' ').filter(Boolean),tt=t.split(' ').filter(Boolean);return qt.every(w=>tt.some(x=>x.includes(w)||levenshtein(w,x)<=Math.max(1,Math.floor(w.length*.3))))}
+function getRecent(){try{return JSON.parse(localStorage.getItem(FENK_SEARCH_KEY)||'[]').filter(Boolean)}catch{return[]}}
+function saveRecent(q){q=String(q||'').trim();if(!q)return;let a=getRecent().filter(x=>normalizeText(x)!==normalizeText(q));a.unshift(q);localStorage.setItem(FENK_SEARCH_KEY,JSON.stringify(a.slice(0,8)));renderRecent()}
+function removeRecent(q){localStorage.setItem(FENK_SEARCH_KEY,JSON.stringify(getRecent().filter(x=>x!==q)));renderRecent()}
+function renderRecent(){const box=document.getElementById('recentSearchesBox'),list=document.getElementById('recentSearches');if(!box||!list)return;const a=getRecent();box.hidden=!a.length;list.innerHTML=a.map(x=>`<span class="mp-recent-item"><button type="button" data-remove="${esc(x)}" aria-label="حذف">×</button><button type="button" data-run="${esc(x)}" style="border:0;background:transparent;font:inherit;cursor:pointer">${esc(x)}</button></span>`).join('');list.querySelectorAll('[data-remove]').forEach(b=>b.onclick=e=>{e.stopPropagation();removeRecent(b.dataset.remove)});list.querySelectorAll('[data-run]').forEach(b=>b.onclick=()=>{document.getElementById('categorySearch').value=b.dataset.run;saveRecent(b.dataset.run);loadCategory()})}
+function readLocation(){try{return JSON.parse(localStorage.getItem(FENK_LOC_KEY)||'{}')}catch{return{}}}
+function haversine(a,b){const R=6371,la=(b.lat-a.lat)*Math.PI/180,lo=(b.lng-a.lng)*Math.PI/180,x=Math.sin(la/2)**2+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(lo/2)**2;return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x))}
+function coordForName(name){const n=normalizeText(name).replace(/^ولاية\s*/,'');for(const [k,v] of Object.entries(WILAYA_COORDS)){if(normalizeText(k)===n||normalizeText(k).replace(/^ولاية\s*/,'')===n)return v}return null}
+function adPoint(a){const d=a.details&&typeof a.details==='object'?a.details:{};const lat=Number(d.latitude??d.lat??d.location?.lat),lng=Number(d.longitude??d.lng??d.location?.lng);if(Number.isFinite(lat)&&Number.isFinite(lng)&&Math.abs(lat)<=90&&Math.abs(lng)<=180)return{lat,lng,exact:true};return coordForName(a.wilaya)||null}
+function locationDistance(a,loc){const p=adPoint(a),center=loc&&Number.isFinite(Number(loc.lat))?{lat:Number(loc.lat),lng:Number(loc.lng)}:WILAYA_COORDS[loc?.wilaya]||WILAYA_COORDS['Alger'];return p&&center?haversine(center,p):null}
+function cardMeta(a,loc){const d=a.details&&typeof a.details==='object'?a.details:{};const meta=[];const isCar=d.type==='car'||d.model||d.year;if(isCar){if(d.year)meta.push(`السنة ${esc(d.year)}`);if(d.mileage)meta.push(`${Number(String(d.mileage).replace(/[^0-9]/g,'' )||0).toLocaleString('ar-DZ')} كم`);if(d.fuel)meta.push(esc(d.fuel));if(d.gear)meta.push(esc(d.gear));}else if(a.wilaya||a.municipality||a.commune){meta.push(esc(a.wilaya||a.municipality||a.commune));}else if(d.brand){meta.push(esc(d.brand));}const dist=locationDistance(a,loc);return {meta:meta.slice(0,2).map(x=>`<span>${x}</span>`).join(''),dist:dist!=null?`📍 ${dist<1?'<1':dist.toFixed(0)} كم`:''}}
+function renderCard(a,label,cat,loc){const urls=Array.isArray(a.image_urls)&&a.image_urls.length?a.image_urls:(a.image_url?[a.image_url]:[]);const href=`marketplace-ad.html?id=${encodeURIComponent(a.id)}`;const title=a.title||label;const m=cardMeta(a,loc);const price=a.price_dzd!=null&&Number(a.price_dzd)>0?money(a.price_dzd):'السعر عند التواصل';return `<article class="card category-card category-${esc(cat)}"><a class="market-card-link" href="${href}" aria-label="${esc(title)}">${urls[0]?`<img src="${esc(urls[0])}" alt="${esc(title)}" loading="lazy" onerror="this.closest('.market-card-link').classList.add('no-photo');this.remove()">`:`<div class="card-no-image">📷</div>`}<div class="body"><h3>${esc(title)}</h3>${m.meta?`<div class="market-card-meta">${m.meta}</div>`:''}${m.dist?`<div class="market-card-distance">${m.dist}</div>`:''}<div class="market-card-price ${a.price_dzd==null?'is-contact':''}">${price}</div></div></a></article>`}
+function applyLocalFilters(rows,search,loc,cat){const min=Number(document.getElementById('minPrice')?.value||0),maxRaw=document.getElementById('maxPrice')?.value,max=maxRaw===''?Infinity:Number(maxRaw);const mode=loc?.mode||'suggested';const radius=Number(loc?.radius_km||5);return rows.filter(a=>{const text=[a.title,a.description,a.wilaya,a.municipality,a.commune,JSON.stringify(a.details||{})].join(' ');if(search&&!fuzzyMatch(search,text))return false;if(Number(a.price_dzd||0)<min)return false;if(max!==Infinity&&Number(a.price_dzd||0)>max)return false;const dist=locationDistance(a,loc);if(mode==='custom'&&!(dist!=null&&dist<=radius))return false;return true})}
+async function loadCategory(){await getUser();const qs=new URLSearchParams(location.search);const cat=qs.get('category')||'products';if(cat==='products'){location.replace('products.html');return;}document.body.classList.toggle('cars-density',cat==='cars');const titles={products:'منتجات',cars:'سواق السيارات',realestate:'عقارات / أراضي',land:'أراضي للبيع',ads:'الإعلانات',spare_parts:'🚗 قطع غيار السيارات'};const partNames={engines:'🔧 محركات',gearbox:'⚙️ ناقل الحركة',tires_rims:'🛞 إطارات وجنوط',brakes:'🛑 فرامل',electrical:'🔌 كهرباء',lighting:'💡 إضاءة',cooling:'❄️ تبريد',oils_filters:'🛢️ زيوت وفلاتر',batteries:'🔋 بطاريات',body:'🚘 هيكل',interior:'🪑 داخلية',exhaust:'💨 عادم',other:'➕ أخرى'};const aliases={tires_rims:['tires_rims','tires'],engines:['engines'],gearbox:['gearbox'],brakes:['brakes'],electrical:['electrical'],lighting:['lighting'],cooling:['cooling'],oils_filters:['oils_filters'],batteries:['batteries'],body:['body'],interior:['interior'],exhaust:['exhaust'],other:['other','suspension']};const part=qs.get('part');const label=cat==='spare_parts'?(partNames[part]||'🚗 قطع غيار السيارات'):(titles[cat]||'منتجات');document.title='FENK — '+label;document.getElementById('categoryHeroTitle').textContent=label;document.getElementById('categoryTitle').textContent=label;document.getElementById('categoryHeroText').textContent=cat==='ads'?'تصفح جميع الإعلانات المنشورة في FENK Marketplace.':(cat==='spare_parts'?'اختر نوع القطعة للوصول بسرعة إلى الإعلانات المناسبة لسيارتك.':'تصفح إعلانات هذا القسم فقط، مع عرض أهم المعلومات بشكل مختصر وواضح.');const loc=readLocation();const locName=loc.wilaya||'الجزائر';document.getElementById('currentLocationName').textContent=locName;document.getElementById('currentRadiusText').textContent=loc.mode==='custom'?`${loc.radius_km||5} كم`:'مقترح';const filterBox=document.getElementById('categoryFilters');if(filterBox){if(cat==='spare_parts'){filterBox.style.display='flex';filterBox.innerHTML='<a class="chip" href="marketplace-category.html?category=spare_parts&part=engines">🔧 محركات</a><a class="chip" href="marketplace-category.html?category=spare_parts&part=gearbox">⚙️ ناقل الحركة</a><a class="chip" href="marketplace-category.html?category=spare_parts&part=tires_rims">🛞 إطارات وجنوط</a><a class="chip" href="marketplace-category.html?category=spare_parts&part=brakes">🛑 فرامل</a><a class="chip" href="marketplace-category.html?category=spare_parts&part=electrical">🔌 كهرباء</a><a class="chip" href="marketplace-category.html?category=spare_parts&part=lighting">💡 إضاءة</a><a class="chip" href="marketplace-category.html?category=spare_parts&part=cooling">❄️ تبريد</a><a class="chip" href="marketplace-category.html?category=spare_parts&part=oils_filters">🛢️ زيوت وفلاتر</a>'; }else if(cat==='cars'||cat==='realestate'||cat==='land'){filterBox.style.display='flex';filterBox.innerHTML='<a class="chip" href="marketplace-location.html">📍 '+esc(locName)+'</a>'; }else filterBox.style.display='none'}
+const grid=document.getElementById('grid');let q=db.from('marketplace_ads').select('id,ad_code,user_id,title,description,price_dzd,contact,phone,image_url,image_urls,status,payment_status,start_at,end_at,created_at,category_id,details,wilaya,wilaya_code,commune,municipality').eq('status','approved').order('created_at',{ascending:false});if(cat==='realestate'){const {data}=await db.from('marketplace_categories').select('id,slug').in('slug',['realestate','land']).eq('is_active',true);const ids=(data||[]).map(x=>x.id);if(!ids.length){grid.innerHTML='<div class="empty">لا توجد فئات عقارية مفعلة حاليًا.</div>';return}q=q.in('category_id',ids)}else if(cat==='spare_parts'){const {data,error}=await db.from('marketplace_categories').select('id').eq('slug','spare_parts').eq('is_active',true).maybeSingle();if(error||!data){grid.innerHTML='<div class="empty">تعذر العثور على قسم قطع الغيار.</div>';return}q=q.eq('category_id',data.id);if(part)q=q.in('details->>part_category',aliases[part]||[part])}else if(cat!=='ads'){const {data,error}=await db.from('marketplace_categories').select('id').eq('slug',slugMap[cat]||'products').eq('is_active',true).maybeSingle();if(error||!data){grid.innerHTML='<div class="empty">تعذر العثور على هذا القسم.</div>';return}q=q.eq('category_id',data.id)}const {data,error}=await q;if(error){grid.innerHTML=`<div class="empty"><b>تعذر تحميل القسم.</b><br><small>${esc(error.message)}</small></div>`;return}let rows=(data||[]).filter(a=>!a.end_at||new Date(a.end_at).getTime()>Date.now());const search=document.getElementById('categorySearch')?.value.trim()||'';rows=applyLocalFilters(rows,search,loc,cat);document.getElementById('count').textContent=rows.length+' إعلان';grid.innerHTML=rows.length?rows.map(a=>renderCard(a,label,cat,loc)).join(''):`<div class="empty"><div><b>لا توجد إعلانات مطابقة حاليًا.</b><br><small>جرّب تغيير الموقع أو النطاق أو البحث.</small><br><a class="publish-link" style="display:inline-flex;margin-top:12px" href="./marketplace-publish.html?v=199">📢 انشر أول إعلان</a></div></div>`}
+function setupFilters(){renderRecent();const input=document.getElementById('categorySearch');const run=()=>{const q=input.value.trim();if(q)saveRecent(q);loadCategory()};document.getElementById('openSearch')?.addEventListener('click',run);document.getElementById('filterSearch')?.addEventListener('click',run);input?.addEventListener('keydown',e=>{if(e.key==='Enter')run()});document.getElementById('filterCategories')?.addEventListener('click',()=>{location.href='marketplace.html#categories'});document.getElementById('filterPrice')?.addEventListener('click',()=>document.getElementById('pricePanel')?.classList.toggle('show'));['minPrice','maxPrice'].forEach(id=>document.getElementById(id)?.addEventListener('input',()=>loadCategory()));document.getElementById('filterLatest')?.addEventListener('click',()=>{document.getElementById('filterLatest').classList.toggle('active');loadCategory()})}
+setupFilters();
+
+loadCategory();
+</script>
+<script src="marketplace-cart-header.js"></script>
+  <script src="fenk-global-share.js?v=1"></script>
+</body></html>
+
+

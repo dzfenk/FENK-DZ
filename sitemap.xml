@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://fenk.site/</loc>
-  </url>
+  <url><loc>https://fenk.site/</loc></url>
+  <url><loc>https://fenk.site/marketplace.html</loc></url>
+  <url><loc>https://fenk.site/marketplace-category.html</loc></url>
+  <url><loc>https://fenk.site/marketplace-search.html</loc></url>
+  <url><loc>https://fenk.site/marketplace-ad.html</loc></url>
+  <url><loc>https://fenk.site/products.html</loc></url>
+  <url><loc>https://fenk.site/product.html</loc></url>
+  <url><loc>https://fenk.site/game-topup.html</loc></url>
+  <url><loc>https://fenk.site/spare-parts.html</loc></url>
+  <url><loc>https://fenk.site/terms.html</loc></url>
+  <url><loc>https://fenk.site/privacy-policy.html</loc></url>
 </urlset>
